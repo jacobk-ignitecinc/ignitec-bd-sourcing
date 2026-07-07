@@ -155,6 +155,28 @@
     <label class="hint"><input type="checkbox" id="hideNobid"> Hide no-bid</label>
     <span class="count" id="count"></span>
   </div>
+  <div class="filters">
+    <input type="text" id="fExclude" placeholder="Exclude keywords (comma separated)">
+    <select id="fNaics"><option value="">All NAICS</option></select>
+    <label class="hint">Value $M
+      <input type="number" id="fValMin" min="0" step="1" style="width:64px" placeholder="min">
+      <input type="number" id="fValMax" min="0" step="1" style="width:64px" placeholder="max">
+    </label>
+    <select id="fExpiry">
+      <option value="">Expiring: any</option>
+      <option value="90">Ends within 90d</option>
+      <option value="180">Ends within 180d</option>
+      <option value="365">Ends within 365d</option>
+      <option value="730">Ends within 730d</option>
+    </select>
+    <select id="fDue">
+      <option value="">Response due: any</option>
+      <option value="7">Due within 7d</option>
+      <option value="14">Due within 14d</option>
+      <option value="30">Due within 30d</option>
+    </select>
+    <button class="ghost" id="clearFilters" style="font-size:12px;padding:5px 10px">Clear filters</button>
+  </div>
 
   <div id="list"></div>
 </div>
@@ -452,7 +474,13 @@ function currentFilters(){
     posture: $("#fPosture").value,
     agency: $("#fAgency").value,
     sort: $("#fSort").value,
-    hideNobid: $("#hideNobid").checked
+    hideNobid: $("#hideNobid").checked,
+    exclude: $("#fExclude").value.trim().toLowerCase(),
+    naics: $("#fNaics").value,
+    valMin: parseFloat($("#fValMin").value),
+    valMax: parseFloat($("#fValMax").value),
+    expiry: $("#fExpiry").value,
+    due: $("#fDue").value
   };
 }
 function matches(l,f){
@@ -462,8 +490,19 @@ function matches(l,f){
   const s=scored(l);
   if(f.band && s.band!==f.band) return false;
   if(f.hideNobid && s.cls==="nobid") return false;
+  if(f.naics && String(l.naics||"")!==f.naics) return false;
+  const v = Number(l.value)||0;
+  if(!isNaN(f.valMin) && v < f.valMin*1e6) return false;
+  if(!isNaN(f.valMax) && f.valMax>0 && v > f.valMax*1e6) return false;
+  if(f.expiry){ const d=daysUntil(l.popEnd);
+    if(l.source!=="Expiring Contract" || d===null || d<0 || d>Number(f.expiry)) return false; }
+  if(f.due){ const d=daysUntil(l.nextActionDate);
+    if(d===null || d<0 || d>Number(f.due)) return false; }
   if(f.q){ const hay=(l.title+" "+l.agency+" "+l.prime+" "+l.solicitationNumber+" "+l.awardId+" "+l.notes).toLowerCase();
     if(!hay.includes(f.q)) return false; }
+  if(f.exclude){ const terms=f.exclude.split(",").map(t=>t.trim()).filter(Boolean);
+    const hay=(l.title+" "+l.agency+" "+l.prime+" "+l.notes).toLowerCase();
+    if(terms.some(t=>hay.includes(t))) return false; }
   return true;
 }
 function sortLeads(arr,key){
@@ -501,11 +540,13 @@ function refreshFilterOptions(){
   const all=Object.values(master);
   const sources=[...new Set(all.map(l=>l.source).filter(Boolean))].sort();
   const agencies=[...new Set(all.map(l=>l.agency).filter(Boolean))].sort();
-  const keepS=$("#fSource").value, keepA=$("#fAgency").value, keepP=$("#fPosture").value;
+  const naicsList=[...new Set(all.map(l=>String(l.naics||"")).filter(Boolean))].sort();
+  const keepS=$("#fSource").value, keepA=$("#fAgency").value, keepP=$("#fPosture").value, keepN=$("#fNaics").value;
   $("#fSource").innerHTML='<option value="">All sources</option>'+sources.map(s=>`<option>${esc(s)}</option>`).join("");
   $("#fAgency").innerHTML='<option value="">All agencies</option>'+agencies.map(s=>`<option>${esc(s)}</option>`).join("");
   $("#fPosture").innerHTML='<option value="">All postures</option>'+POSTURES.filter(Boolean).map(s=>`<option>${esc(s)}</option>`).join("");
-  $("#fSource").value=keepS; $("#fAgency").value=keepA; $("#fPosture").value=keepP;
+  $("#fNaics").innerHTML='<option value="">All NAICS</option>'+naicsList.map(s=>`<option>${esc(s)}</option>`).join("");
+  $("#fSource").value=keepS; $("#fAgency").value=keepA; $("#fPosture").value=keepP; $("#fNaics").value=keepN;
 }
 
 function render(){
@@ -551,8 +592,17 @@ function init(){
       $("#srcInfo").textContent="Local data cleared. Use Reload from crawler to pull leads again.";
     }
   });
-  ["#search","#fSource","#fBand","#fPosture","#fAgency","#fSort","#hideNobid"].forEach(sel=>{
-    const e=$(sel); e.addEventListener(e.tagName==="INPUT"&&e.type==="text"?"input":"change",render);
+  ["#search","#fSource","#fBand","#fPosture","#fAgency","#fSort","#hideNobid",
+   "#fExclude","#fNaics","#fValMin","#fValMax","#fExpiry","#fDue"].forEach(sel=>{
+    const e=$(sel);
+    const ev = (e.tagName==="INPUT" && (e.type==="text"||e.type==="number")) ? "input" : "change";
+    e.addEventListener(ev,render);
+  });
+  $("#clearFilters").addEventListener("click",()=>{
+    ["#search","#fExclude","#fValMin","#fValMax"].forEach(s=>$(s).value="");
+    ["#fSource","#fBand","#fPosture","#fAgency","#fNaics","#fExpiry","#fDue"].forEach(s=>$(s).value="");
+    $("#hideNobid").checked=false;
+    render();
   });
   window.addEventListener("beforeunload",e=>{ if(dirty){ e.preventDefault(); e.returnValue=""; } });
 
