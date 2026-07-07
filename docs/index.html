@@ -37,7 +37,9 @@
          padding:7px 12px;cursor:pointer;font-weight:bold}
   button.ghost{background:#fff;color:var(--navy)}
   button.warn{border-color:var(--red);background:#fff;color:var(--red)}
-  button:hover{filter:brightness(1.06)}
+  a.btn{display:inline-block;text-decoration:none;border:1px solid var(--navy);background:#fff;
+        color:var(--navy);border-radius:7px;padding:7px 12px;font-weight:bold;font-size:13px}
+  button:hover,a.btn:hover{filter:brightness(1.06)}
   button:disabled{opacity:.5;cursor:default}
 
   .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
@@ -119,6 +121,7 @@
     <label class="hint">Branch
       <input type="text" id="branchInput" style="width:230px;margin-left:6px" spellcheck="false">
     </label>
+    <a class="btn" href="report.html" target="_blank" rel="noopener">Open report</a>
     <button class="ghost" id="reloadBtn">Reload from crawler</button>
     <button class="ghost" id="fileBtn">Load JSON file</button>
     <input type="file" id="fileInput" accept="application/json,.json" class="hidden">

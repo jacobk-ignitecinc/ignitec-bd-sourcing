@@ -403,6 +403,12 @@ def main():
     with open(os.path.join(OUTPUT_DIR, "report_latest.html"), "w") as f:
         f.write(html_doc)
 
+    # Also publish a copy under docs/ so GitHub Pages (served from /docs)
+    # can show the report alongside the dashboard.
+    if os.path.isdir("docs"):
+        with open(os.path.join("docs", "report.html"), "w") as f:
+            f.write(html_doc)
+
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path:
         try:
