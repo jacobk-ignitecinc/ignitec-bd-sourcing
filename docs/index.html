@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ignitec BD Sourcing Cockpit</title>
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --red:#C0222C; --navy:#1F3864; --ink:#1a1a1a; --muted:#5b6472;
+    --line:#dfe3ea; --bg:#f4f6f9; --card:#ffffff;
+    --green:#1b7a43; --greenbg:#e6f4ec;
+    --teal:#0f6b7a; --tealbg:#e2f2f4;
+    --amber:#946200; --amberbg:#fbf1dc;
+    --grey:#5b6472; --greybg:#eceef2;
+    --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);
+       font-size:14px;line-height:1.45}
+  header.app{background:var(--card);border-bottom:3px solid var(--red);padding:16px 22px}
+  h1{color:var(--red);font-size:22px;margin:0 0 4px;letter-spacing:.2px}
+  header.app .sub{color:var(--muted);font-size:12.5px}
+  h2{color:var(--navy);font-size:15px;margin:0 0 8px}
+  .wrap{max-width:1280px;margin:0 auto;padding:18px 22px 60px}
+
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);
+       border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow);margin-bottom:14px}
+  .bar .grow{flex:1 1 auto}
+  .src{font-size:12px;color:var(--muted)}
+  .src b{color:var(--ink)}
+  input,select,button,textarea{font-family:inherit;font-size:13px}
+  input[type=text],input[type=date],select,textarea{
+    border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:#fff;color:var(--ink)}
+  input[type=text]:focus,select:focus,textarea:focus{outline:2px solid #c7d2fe;border-color:#9db0f0}
+  button{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:7px;
+         padding:7px 12px;cursor:pointer;font-weight:bold}
+  button.ghost{background:#fff;color:var(--navy)}
+  button.warn{border-color:var(--red);background:#fff;color:var(--red)}
+  button:hover{filter:brightness(1.06)}
+  button:disabled{opacity:.5;cursor:default}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+  .tile .n{font-size:24px;font-weight:bold;color:var(--navy);line-height:1}
+  .tile .l{font-size:11.5px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.4px}
+  .tile.pursue .n{color:var(--green)} .tile.sub .n{color:var(--teal)}
+  .tile.cond .n{color:var(--amber)} .tile.nobid .n{color:var(--red)}
+
+  .filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:12px}
+  .filters input[type=text]{min-width:230px}
+  .count{font-size:12px;color:var(--muted);margin-left:auto}
+
+  .lead{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);
+        margin-bottom:10px;overflow:hidden}
+  .lead .head{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;cursor:pointer}
+  .lead .head:hover{background:#fafbfc}
+  .lead .title{font-weight:bold;color:var(--ink);font-size:13.5px}
+  .lead .meta{color:var(--muted);font-size:12px;margin-top:3px}
+  .lead .headgrow{flex:1 1 auto;min-width:0}
+  .lead .title,.lead .meta{overflow-wrap:anywhere}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--greybg);color:var(--grey);white-space:nowrap}
+  .chip.src{background:#eef1fb;color:var(--navy)}
+  .badge{font-size:11.5px;font-weight:bold;padding:4px 9px;border-radius:20px;white-space:nowrap;align-self:center}
+  .b-pursue{background:var(--greenbg);color:var(--green)}
+  .b-sub{background:var(--tealbg);color:var(--teal)}
+  .b-cond{background:var(--amberbg);color:var(--amber)}
+  .b-nobid{background:#fbe7e8;color:var(--red)}
+  .b-unscored{background:var(--greybg);color:var(--grey)}
+  .flag{font-size:11px;color:var(--red);font-weight:bold;margin-top:5px}
+  .flag.rfi{color:var(--navy)}
+
+  .panel{border-top:1px solid var(--line);padding:14px;display:none;background:#fcfdff}
+  .lead.open .panel{display:block}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+  .fld label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+  .fld input,.fld select,.fld textarea{width:100%}
+  .fld textarea{min-height:60px;resize:vertical}
+  .ro{font-size:12.5px}
+  .ro .row{display:flex;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+  .ro .k{color:var(--muted);flex:0 0 120px}
+  .ro .v{color:var(--ink);overflow-wrap:anywhere}
+  .ro a{color:var(--navy)}
+
+  .gates{margin-top:6px}
+  .gate{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .gate .gn{flex:1 1 auto;font-size:12.5px}
+  .gate .gn small{color:var(--muted);display:block;font-size:11px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+  .seg button{border:none;border-radius:0;background:#fff;color:var(--ink);font-weight:normal;
+              padding:5px 10px;border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--navy);color:#fff;font-weight:bold}
+  .seg button.on.z{background:var(--red)}
+  .scoreline{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+  .avg{font-size:13px}.avg b{font-size:16px;color:var(--navy)}
+
+  .empty{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:40px;text-align:center;color:var(--muted)}
+  .dirty{color:var(--red);font-weight:bold}
+  .hint{font-size:11.5px;color:var(--muted)}
+  .hidden{display:none!important}
+  a.notelink{color:var(--navy)}
+  @media (max-width:640px){.lead .head{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header class="app">
+  <h1>Ignitec BD Sourcing Cockpit</h1>
+  <div class="sub">Layer 2 triage for crawled federal opportunities. Score the six gates, set posture and owner, and drive the next action.</div>
+</header>
+
+<div class="wrap">
+  <div class="bar">
+    <div class="grow">
+      <div class="src" id="srcInfo">Loading leads...</div>
+      <div class="hint" id="dirtyInfo"></div>
+    </div>
+    <label class="hint">Branch
+      <input type="text" id="branchInput" style="width:230px;margin-left:6px" spellcheck="false">
+    </label>
+    <button class="ghost" id="reloadBtn">Reload from crawler</button>
+    <button class="ghost" id="fileBtn">Load JSON file</button>
+    <input type="file" id="fileInput" accept="application/json,.json" class="hidden">
+    <button id="exportBtn">Export working set</button>
+    <button class="warn" id="resetBtn" title="Clear all local edits and accumulated leads">Reset local data</button>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Pipeline</h2>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search title, agency, prime, solicitation...">
+    <select id="fSource"><option value="">All sources</option></select>
+    <select id="fBand">
+      <option value="">All bands</option>
+      <option value="Pursue (prime/preferred sub)">Pursue (prime/sub)</option>
+      <option value="Pursue as sub">Pursue as sub</option>
+      <option value="Conditional">Conditional</option>
+      <option value="No-bid">No-bid</option>
+      <option value="Unscored">Unscored</option>
+    </select>
+    <select id="fPosture"><option value="">All postures</option></select>
+    <select id="fAgency"><option value="">All agencies</option></select>
+    <select id="fSort">
+      <option value="score">Sort: score (high to low)</option>
+      <option value="popEnd">Sort: period-of-performance end</option>
+      <option value="nextActionDate">Sort: next action date</option>
+      <option value="value">Sort: award value</option>
+      <option value="dateAdded">Sort: date added</option>
+    </select>
+    <label class="hint"><input type="checkbox" id="hideNobid"> Hide no-bid</label>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="list"></div>
+</div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------ config */
+const CONFIG = {
+  owner: "jacobk-ignitecinc",
+  repo:  "ignitec-bd-sourcing",
+  // Points at the branch that currently holds the crawler output. After you
+  // merge to main, change this in the Branch box to "main" (it is remembered).
+  branch: "claude/contract-expiration-tracking-r1qpia",
+  path:  "output/latest_new_leads.json"
+};
+const LS_MASTER = "ignitec-bd-master-v1";   // accumulated leads (id -> lead)
+const LS_BRANCH = "ignitec-bd-branch";
+
+const POSTURES = ["", "Shape", "Position", "Compete/Team", "Warm - route via channel", "Cold outreach"];
+const STATUSES = ["Tracking","Reviewing","Pursuing","RFI drafted","Responded","Submitted","Won","Lost","No-bid","Parked"];
+const GATES = [
+  ["Core Lane Alignment",""],
+  ["Past Performance Defensibility",""],
+  ["Clearance and Compliance",""],
+  ["Competitive Position",""],
+  ["Effort vs Probability of Win",""],
+  ["Team Capacity",""]
+];
+const SCHEMA_KEYS = ["id","source","title","prime","agency","subAgency","value","awardId",
+  "solicitationNumber","naics","psc","popStart","popEnd","posture","tier","lane","gates",
+  "status","owner","nextAction","nextActionDate","notes","dateAdded","lastTouched"];
+const EDITABLE = ["gates","tier","lane","posture","status","owner","nextAction","nextActionDate","notes"];
+
+/* ------------------------------------------------------------ state */
+let master = {};        // id -> lead object (source + user edits merged)
+let dirty = false;
+
+/* ------------------------------------------------------------ helpers */
+const $ = s => document.querySelector(s);
+const el = (t,c,txt) => { const e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e; };
+const esc = s => (s==null?"":String(s));
+const today = () => new Date().toISOString().slice(0,10);
+function fmtVal(v){ const n=Number(v); if(!v||isNaN(n))return ""; if(n>=1e9)return "$"+(n/1e9).toFixed(2)+"B";
+  if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M"; if(n>=1e3)return "$"+(n/1e3).toFixed(0)+"K"; return "$"+n; }
+function daysUntil(d){ if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null;
+  return Math.round((t-Date.now())/86400000); }
+
+function rawURL(branch){
+  return `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${encodeURIComponent(branch)}/${CONFIG.path}`;
+}
+
+/* ------------------------------------------------------------ scoring */
+function scored(lead){
+  const g = (lead.gates||[]).map(v => (v===0||v)?Number(v):null);
+  const nums = g.filter(v => v!==null && !isNaN(v));
+  if(nums.length < 6) return {band:"Unscored", cls:"unscored", avg:null, zero:false, rfi:false};
+  const avg = nums.reduce((a,b)=>a+b,0)/6;
+  const zero = nums.some(v => v===0);
+  let band,cls;
+  if(avg>=2.8){ band="Pursue (prime/preferred sub)"; cls="pursue"; }
+  else if(avg>=2.4){ band="Pursue as sub"; cls="sub"; }
+  else if(avg>=2.0){ band="Conditional"; cls="cond"; }
+  else { band="No-bid"; cls="nobid"; }
+  const tier = String(lead.tier||"").replace(/[^0-9]/g,"");
+  const rfi = lead.source==="RFI/Sources Sought" && (tier==="1"||tier==="2");
+  return {band, cls, avg, zero, rfi};
+}
+function bandClass(cls){ return {pursue:"b-pursue",sub:"b-sub",cond:"b-cond",nobid:"b-nobid",unscored:"b-unscored"}[cls]; }
+
+/* ------------------------------------------------------------ persistence */
+function saveMaster(){ try{ localStorage.setItem(LS_MASTER, JSON.stringify(master)); }catch(e){ console.warn(e); } }
+function loadMaster(){ try{ master = JSON.parse(localStorage.getItem(LS_MASTER)||"{}")||{}; }catch(e){ master={}; } }
+function setDirty(v){ dirty=v; $("#dirtyInfo").innerHTML = v
+  ? '<span class="dirty">Unsaved to file.</span> Edits are stored in this browser. Use Export working set to back up or share.'
+  : ''; }
+
+/* Merge a freshly loaded array into master without clobbering user edits. */
+function mergeLeads(arr){
+  let added=0, seen=0;
+  for(const raw of arr){
+    if(!raw || !raw.id) continue;
+    if(master[raw.id]){
+      seen++;
+      // refresh source-derived (read-only) fields; keep the user's triage fields
+      const cur = master[raw.id];
+      for(const k of SCHEMA_KEYS){ if(!EDITABLE.includes(k) && raw[k]!==undefined) cur[k]=raw[k]; }
+    } else {
+      const obj={}; for(const k of SCHEMA_KEYS) obj[k] = raw[k]!==undefined ? raw[k] : (k==="gates"?[null,null,null,null,null,null]:"");
+      if(!Array.isArray(obj.gates)||obj.gates.length!==6) obj.gates=[null,null,null,null,null,null];
+      master[raw.id]=obj; added++;
+    }
+  }
+  saveMaster();
+  return {added, seen, total:arr.length};
+}
+
+/* ------------------------------------------------------------ data load */
+async function fetchLeads(branch){
+  const candidates = ["../output/latest_new_leads.json", rawURL(branch)];
+  let lastErr;
+  for(const url of candidates){
+    try{
+      const r = await fetch(url, {cache:"no-store"});
+      if(!r.ok){ lastErr = url+" -> HTTP "+r.status; continue; }
+      const data = await r.json();
+      if(Array.isArray(data)) return {data, url};
+      lastErr = url+" -> not a JSON array";
+    }catch(e){ lastErr = url+" -> "+e.message; }
+  }
+  throw new Error(lastErr||"no source reachable");
+}
+
+async function reload(){
+  const branch = $("#branchInput").value.trim() || CONFIG.branch;
+  localStorage.setItem(LS_BRANCH, branch);
+  $("#srcInfo").textContent = "Loading leads from "+branch+" ...";
+  try{
+    const {data,url} = await fetchLeads(branch);
+    const res = mergeLeads(data);
+    const short = url.startsWith("..") ? "repo (Pages)" : "raw.githubusercontent.com";
+    $("#srcInfo").innerHTML = `Loaded <b>${res.total}</b> from ${short} on <b>${esc(branch)}</b>. `+
+      `Added ${res.added} new, ${res.seen} already tracked. `+
+      `Working set: <b>${Object.keys(master).length}</b> leads.`;
+    render();
+  }catch(e){
+    $("#srcInfo").innerHTML = `Could not auto-load (${esc(e.message)}). `+
+      `You can use <b>Load JSON file</b> to import output/latest_new_leads.json manually.`;
+    render();
+  }
+}
+
+/* ------------------------------------------------------------ export */
+function exportJSON(){
+  const arr = Object.values(master).map(l=>{ const o={}; for(const k of SCHEMA_KEYS) o[k]=l[k]; return o; });
+  const blob = new Blob([JSON.stringify(arr,null,2)], {type:"application/json"});
+  const a = el("a"); a.href = URL.createObjectURL(blob);
+  a.download = "ignitec_bd_working_set_"+today().replace(/-/g,"")+".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setDirty(false);
+}
+
+/* ------------------------------------------------------------ edit */
+function edit(id, field, value){
+  const l = master[id]; if(!l) return;
+  l[field]=value; l.lastTouched=today();
+  saveMaster(); setDirty(true);
+}
+function editGate(id, idx, value){
+  const l = master[id]; if(!l) return;
+  if(!Array.isArray(l.gates)||l.gates.length!==6) l.gates=[null,null,null,null,null,null];
+  l.gates[idx] = (l.gates[idx]===value) ? null : value;   // click same value to clear
+  l.lastTouched=today();
+  saveMaster(); setDirty(true);
+  // re-render just this card's score + badge
+  const card = document.querySelector('.lead[data-id="'+CSS.escape(id)+'"]');
+  if(card){ renderScoreArea(card, l); }
+  renderTiles();
+}
+
+/* ------------------------------------------------------------ render */
+function optionList(sel, values, current){
+  sel.innerHTML="";
+  for(const v of values){ const o=el("option"); o.value=v; o.textContent = v===""?"(none)":v;
+    if(v===current) o.selected=true; sel.appendChild(o); }
+}
+
+function renderScoreArea(card, l){
+  const s = scored(l);
+  const badge = card.querySelector(".badge");
+  badge.className = "badge "+bandClass(s.cls);
+  badge.textContent = s.avg==null ? "Unscored" : s.band+"  ("+s.avg.toFixed(2)+")";
+  const flags = card.querySelector(".flagbox");
+  flags.innerHTML="";
+  if(s.zero) flags.appendChild(el("div","flag","Gate at 0: no-bid as prime."));
+  if(s.rfi) flags.appendChild(el("div","flag rfi","RFI override: Tier "+String(l.tier).replace(/[^0-9]/g,"")+" respond regardless of score."));
+  const av = card.querySelector(".avgtxt");
+  if(av) av.innerHTML = s.avg==null ? "Not yet scored" : "Six-gate average <b>"+s.avg.toFixed(2)+"</b>";
+}
+
+function leadCard(l){
+  const s = scored(l);
+  const card = el("div","lead"); card.dataset.id=l.id;
+
+  // head
+  const head = el("div","head");
+  const grow = el("div","headgrow");
+  grow.appendChild(el("div","title", l.title||l.id));
+  const metabits=[];
+  if(l.agency) metabits.push(l.agency);
+  if(l.prime) metabits.push("Prime: "+l.prime);
+  if(l.value) metabits.push(fmtVal(l.value));
+  grow.appendChild(el("div","meta", metabits.join("  ·  ")));
+  const chips = el("div","chips");
+  chips.appendChild(el("span","chip src", l.source||"?"));
+  if(l.posture) chips.appendChild(el("span","chip", l.posture));
+  if(l.status) chips.appendChild(el("span","chip", l.status));
+  if(l.owner) chips.appendChild(el("span","chip", "Owner: "+l.owner));
+  if(l.naics) chips.appendChild(el("span","chip", "NAICS "+l.naics));
+  const du = daysUntil(l.popEnd);
+  if(du!=null && du>=0 && du<=730 && l.source==="Expiring Contract") chips.appendChild(el("span","chip","PoP ends in "+du+"d"));
+  const dna = daysUntil(l.nextActionDate);
+  if(dna!=null && dna>=0 && dna<=30) chips.appendChild(el("span","chip","Due in "+dna+"d"));
+  grow.appendChild(chips);
+  const flagbox = el("div","flagbox"); grow.appendChild(flagbox);
+
+  const badge = el("span","badge "+bandClass(s.cls));
+  badge.textContent = s.avg==null ? "Unscored" : s.band+"  ("+s.avg.toFixed(2)+")";
+
+  head.appendChild(grow); head.appendChild(badge);
+  head.addEventListener("click", ()=> card.classList.toggle("open"));
+  card.appendChild(head);
+
+  // panel
+  const panel = el("div","panel");
+
+  // gates
+  const gwrap = el("div","gates");
+  gwrap.appendChild(el("h2",null,"Six-gate go / no-go"));
+  GATES.forEach(([name],i)=>{
+    const row = el("div","gate");
+    const gn = el("div","gn"); gn.appendChild(document.createTextNode((i+1)+". "+name));
+    row.appendChild(gn);
+    const seg = el("div","seg");
+    [0,1,2,3].forEach(v=>{
+      const b = el("button",null,String(v));
+      if(l.gates && l.gates[i]===v){ b.classList.add("on"); if(v===0) b.classList.add("z"); }
+      b.addEventListener("click",()=>editGate(l.id,i,v));
+      seg.appendChild(b);
+    });
+    row.appendChild(seg);
+    gwrap.appendChild(row);
+  });
+  const scoreline = el("div","scoreline");
+  scoreline.appendChild(el("div","avg avgtxt"));
+  scoreline.firstChild.innerHTML = s.avg==null ? "Not yet scored" : "Six-gate average <b>"+s.avg.toFixed(2)+"</b>";
+  scoreline.appendChild(el("span","hint","Bands: 2.8+ pursue, 2.4-2.7 sub, 2.0-2.3 conditional, below 2.0 no-bid. Click a selected score again to clear it."));
+  gwrap.appendChild(scoreline);
+  panel.appendChild(gwrap);
+
+  // editable triage fields
+  const grid = el("div","grid"); grid.style.marginTop="14px";
+  function field(label, key, kind, opts){
+    const f = el("div","fld"); f.appendChild(el("label",null,label));
+    let inp;
+    if(kind==="select"){ inp=el("select"); optionList(inp,opts,l[key]||""); }
+    else if(kind==="textarea"){ inp=el("textarea"); inp.value=l[key]||""; }
+    else if(kind==="date"){ inp=el("input"); inp.type="date"; inp.value=(l[key]||"").slice(0,10); }
+    else { inp=el("input"); inp.type="text"; inp.value=l[key]||""; }
+    inp.addEventListener("change",()=>edit(l.id,key,inp.value));
+    f.appendChild(inp); return f;
+  }
+  grid.appendChild(field("Posture","posture","select",POSTURES));
+  grid.appendChild(field("Status","status","select",STATUSES));
+  grid.appendChild(field("Owner","owner","text"));
+  grid.appendChild(field("Tier (1 or 2 triggers RFI override)","tier","text"));
+  grid.appendChild(field("Lane","lane","text"));
+  grid.appendChild(field("Next action date","nextActionDate","date"));
+  const na = field("Next action","nextAction","text"); na.style.gridColumn="1/-1"; grid.appendChild(na);
+  const nt = field("Notes","notes","textarea"); nt.style.gridColumn="1/-1"; grid.appendChild(nt);
+  panel.appendChild(grid);
+
+  // read-only detail
+  const ro = el("div","ro"); ro.style.marginTop="14px";
+  ro.appendChild(el("h2",null,"Opportunity detail"));
+  const rows=[
+    ["Source",l.source],["Award ID",l.awardId],["Solicitation",l.solicitationNumber],
+    ["Sub-agency",l.subAgency],["Value",fmtVal(l.value)],["NAICS",l.naics],["PSC",l.psc],
+    ["PoP start",l.popStart],["PoP end",l.popEnd],["Date added",l.dateAdded],
+    ["Last touched",l.lastTouched],["Lead id",l.id]
+  ];
+  for(const [k,v] of rows){ if(v==null||v==="")continue;
+    const r=el("div","row"); r.appendChild(el("div","k",k)); r.appendChild(el("div","v",String(v))); ro.appendChild(r); }
+  // link from notes (SAM uiLink)
+  const m = String(l.notes||"").match(/https?:\/\/\S+/);
+  if(m){ const r=el("div","row"); r.appendChild(el("div","k","Notice link"));
+    const vv=el("div","v"); const a=el("a",null,"Open notice"); a.href=m[0]; a.target="_blank"; a.rel="noopener";
+    vv.appendChild(a); r.appendChild(vv); ro.appendChild(r); }
+  if(l.notes){ const r=el("div","row"); r.appendChild(el("div","k","Crawler notes"));
+    r.appendChild(el("div","v", l.notes)); ro.appendChild(r); }
+  panel.appendChild(ro);
+
+  card.appendChild(panel);
+  renderScoreArea(card, l);
+  return card;
+}
+
+function currentFilters(){
+  return {
+    q: $("#search").value.trim().toLowerCase(),
+    source: $("#fSource").value,
+    band: $("#fBand").value,
+    posture: $("#fPosture").value,
+    agency: $("#fAgency").value,
+    sort: $("#fSort").value,
+    hideNobid: $("#hideNobid").checked
+  };
+}
+function matches(l,f){
+  if(f.source && l.source!==f.source) return false;
+  if(f.posture && l.posture!==f.posture) return false;
+  if(f.agency && l.agency!==f.agency) return false;
+  const s=scored(l);
+  if(f.band && s.band!==f.band) return false;
+  if(f.hideNobid && s.cls==="nobid") return false;
+  if(f.q){ const hay=(l.title+" "+l.agency+" "+l.prime+" "+l.solicitationNumber+" "+l.awardId+" "+l.notes).toLowerCase();
+    if(!hay.includes(f.q)) return false; }
+  return true;
+}
+function sortLeads(arr,key){
+  const val = l => {
+    if(key==="score"){ const s=scored(l); return s.avg==null?-1:s.avg; }
+    if(key==="value"){ const n=Number(l.value); return isNaN(n)?-1:n; }
+    if(key==="popEnd"||key==="nextActionDate"||key==="dateAdded"){ const t=Date.parse(l[key]); return isNaN(t)?Infinity:t; }
+    return 0;
+  };
+  const desc = (key==="score"||key==="value"||key==="dateAdded");
+  return arr.sort((a,b)=>{ const x=val(a),y=val(b); return desc?(y-x):(x-y); });
+}
+
+function renderTiles(){
+  const all = Object.values(master);
+  let pursue=0,sub=0,cond=0,nobid=0,unscored=0,expSoon=0,dueSoon=0;
+  for(const l of all){ const s=scored(l);
+    if(s.cls==="pursue")pursue++; else if(s.cls==="sub")sub++; else if(s.cls==="cond")cond++;
+    else if(s.cls==="nobid")nobid++; else unscored++;
+    const du=daysUntil(l.popEnd); if(l.source==="Expiring Contract"&&du!=null&&du>=0&&du<=180)expSoon++;
+    const dn=daysUntil(l.nextActionDate); if(dn!=null&&dn>=0&&dn<=14)dueSoon++;
+  }
+  const t=[
+    ["",all.length,"Leads tracked"],
+    ["pursue",pursue,"Pursue"],["sub",sub,"Pursue as sub"],
+    ["cond",cond,"Conditional"],["nobid",nobid,"No-bid"],
+    ["",unscored,"Unscored"],["",expSoon,"Expiring < 180d"],["",dueSoon,"Action due < 14d"]
+  ];
+  const box=$("#tiles"); box.innerHTML="";
+  for(const [cls,n,l] of t){ const d=el("div","tile "+cls);
+    d.appendChild(el("div","n",String(n))); d.appendChild(el("div","l",l)); box.appendChild(d); }
+}
+
+function refreshFilterOptions(){
+  const all=Object.values(master);
+  const sources=[...new Set(all.map(l=>l.source).filter(Boolean))].sort();
+  const agencies=[...new Set(all.map(l=>l.agency).filter(Boolean))].sort();
+  const keepS=$("#fSource").value, keepA=$("#fAgency").value, keepP=$("#fPosture").value;
+  $("#fSource").innerHTML='<option value="">All sources</option>'+sources.map(s=>`<option>${esc(s)}</option>`).join("");
+  $("#fAgency").innerHTML='<option value="">All agencies</option>'+agencies.map(s=>`<option>${esc(s)}</option>`).join("");
+  $("#fPosture").innerHTML='<option value="">All postures</option>'+POSTURES.filter(Boolean).map(s=>`<option>${esc(s)}</option>`).join("");
+  $("#fSource").value=keepS; $("#fAgency").value=keepA; $("#fPosture").value=keepP;
+}
+
+function render(){
+  renderTiles();
+  refreshFilterOptions();
+  const f=currentFilters();
+  let arr=Object.values(master).filter(l=>matches(l,f));
+  arr=sortLeads(arr,f.sort);
+  const list=$("#list"); list.innerHTML="";
+  if(Object.keys(master).length===0){
+    list.appendChild(el("div","empty","No leads loaded yet. Use Reload from crawler or Load JSON file."));
+  } else if(arr.length===0){
+    list.appendChild(el("div","empty","No leads match the current filters."));
+  } else {
+    const frag=document.createDocumentFragment();
+    for(const l of arr) frag.appendChild(leadCard(l));
+    list.appendChild(frag);
+  }
+  $("#count").textContent = arr.length+" of "+Object.keys(master).length+" shown";
+}
+
+/* ------------------------------------------------------------ wire up */
+function init(){
+  loadMaster();
+  $("#branchInput").value = localStorage.getItem(LS_BRANCH) || CONFIG.branch;
+  setDirty(false);
+  $("#reloadBtn").addEventListener("click",reload);
+  $("#exportBtn").addEventListener("click",exportJSON);
+  $("#fileBtn").addEventListener("click",()=>$("#fileInput").click());
+  $("#fileInput").addEventListener("change",ev=>{
+    const file=ev.target.files[0]; if(!file)return;
+    const rd=new FileReader();
+    rd.onload=()=>{ try{ const data=JSON.parse(rd.result);
+      const res=mergeLeads(Array.isArray(data)?data:[data]);
+      $("#srcInfo").innerHTML=`Imported <b>${res.total}</b> from file. Added ${res.added}, ${res.seen} already tracked. Working set: <b>${Object.keys(master).length}</b>.`;
+      render();
+    }catch(e){ alert("Could not parse JSON: "+e.message); } };
+    rd.readAsText(file); ev.target.value="";
+  });
+  $("#resetBtn").addEventListener("click",()=>{
+    if(confirm("Clear all locally accumulated leads and every edit in this browser? This cannot be undone. Export first if you want a backup.")){
+      master={}; saveMaster(); setDirty(false); render();
+      $("#srcInfo").textContent="Local data cleared. Use Reload from crawler to pull leads again.";
+    }
+  });
+  ["#search","#fSource","#fBand","#fPosture","#fAgency","#fSort","#hideNobid"].forEach(sel=>{
+    const e=$(sel); e.addEventListener(e.tagName==="INPUT"&&e.type==="text"?"input":"change",render);
+  });
+  window.addEventListener("beforeunload",e=>{ if(dirty){ e.preventDefault(); e.returnValue=""; } });
+
+  if(Object.keys(master).length>0) render();
+  reload();  // always try to pull the latest on open
+}
+document.addEventListener("DOMContentLoaded",init);
+</script>
+</body>
+</html>
