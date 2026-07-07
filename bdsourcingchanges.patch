@@ -1,0 +1,248 @@
+From 4f5b4595826fadd02eea6b1f9240569453c80123 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 7 Jul 2026 17:43:43 +0000
+Subject: [PATCH 1/3] Add CLAUDE.md project guide for BD sourcing pipeline
+
+Documents the crawler's three feeds, the cockpit lead schema, the
+six-gate go/no-go bands, and the truth-first guardrails (UEI/CAGE only,
+no DUNS, 8(a) pending, FAR Part 31 not DCAA) that changes must respect.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_017uh9cMntZaBTp82X6EN2pY
+---
+ CLAUDE.md | 84 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 CLAUDE.md
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+new file mode 100644
+index 0000000..ede5819
+--- /dev/null
++++ b/CLAUDE.md
+@@ -0,0 +1,84 @@
++# Ignitec BD Sourcing Pipeline — Project Guide for Claude Code
++
++This repository automates Layer 1 (the crawl) of Ignitec's BD sourcing pipeline and
++feeds the BD Sourcing Cockpit (a separate React artifact used in Claude.ai). Read this
++file before making changes. The guardrails below are non-negotiable and exist to protect
++Ignitec from audit and protest risk.
++
++## What this project does
++Crawls federal opportunity data and emits cockpit-ready JSON leads from three feeds:
++1. USASpending recent awards (subcontracting targets)
++2. USASpending expiring contracts (recompete shaping targets)
++3. SAM.gov Sources Sought and Special Notices (the RFI cadence feed)
++A GitHub Action runs the crawler on a schedule and commits new leads. The cockpit imports
++the JSON, runs a six-gate go/no-go, and tracks status, posture, owner, and next action.
++
++## Repo layout
++- ignitec_bd_sourcing.py — the crawler (v0.2)
++- requirements.txt — Python dependencies (requests)
++- .github/workflows/bd-sourcing.yml — the scheduled job
++- state.json — dedupe ledger, created on first run; do not hand-edit
++- output/ — emitted JSON leads; output/latest_new_leads.json is the cockpit import file
++
++## How to run and test
++- Local: `pip install -r requirements.txt` then `SAM_API_KEY=... python ignitec_bd_sourcing.py`
++- SAM_API_KEY must come from the environment or a GitHub secret. Never hard-code or commit it.
++- After a run, output/latest_new_leads.json is the file to import into the cockpit.
++
++## Validate against live APIs first (high priority)
++The crawler was written without live API access, so verify and fix these before relying on it:
++- USASpending: confirm the endpoint, filter keys, and field names ("End Date" is the current
++  period-of-performance end) against https://api.usaspending.gov/docs/ . Contract and IDV
++  award-type groups are queried separately on purpose.
++- SAM.gov: confirm parameter names (postedFrom, postedTo, ptype, naicsCode) and notice-type
++  codes (r = Sources Sought, s = Special Notice) against
++  https://open.gsa.gov/api/get-opportunities-public-api/ . NAICS is also filtered client-side
++  as a backstop.
++- If a field is missing or renamed, fix the mapping. Do not silently drop fields.
++
++## Lead schema (crawler output MUST match this or cockpit import breaks)
++Keys: id, source, title, prime, agency, subAgency, value, awardId, solicitationNumber,
++naics, psc, popStart, popEnd, posture, tier, lane, gates (array of six nulls),
++status, owner, nextAction, nextActionDate, notes, dateAdded, lastTouched.
++- source is one of: "Recent Award", "Expiring Contract", "RFI/Sources Sought",
++  "Email/Referral", "Manual".
++- posture strings must match the cockpit exactly: "Shape", "Position", "Compete/Team",
++  "Warm - route via channel", "Cold outreach", or "".
++- Keep ids deterministic (hash of the award ID or notice id) so re-runs never duplicate.
++
++## Six-gate go/no-go bands (keep any scoring logic consistent with these)
++Gates: 1 Core Lane Alignment, 2 Past Performance Defensibility, 3 Clearance and Compliance,
++4 Competitive Position, 5 Effort vs Probability of Win, 6 Team Capacity. Each scored 0 to 3.
++- 2.8+ pursue (prime or preferred sub); 2.4 to 2.7 pursue as sub; 2.0 to 2.3 conditional;
++  below 2.0 no-bid.
++- Any single gate at 0 is an immediate no-bid for a prime bid.
++- An RFI touching Tier 1 or Tier 2 responds regardless of score (RFI override).
++
++## Non-negotiable guardrails (truth-first)
++- Never invent facts, metrics, past performance, clause citations, or contract data. Use
++  bracketed placeholders such as [INSERT METRIC] where a value is unknown.
++- Identifiers: UEI (KLHRNT5GPFH5) and CAGE (88CY6) only. Never use DUNS. DUNS 081557884 is
++  retired (2022). Do not add it to any file, output, or generated document.
++- Always label prime versus subcontractor roles explicitly. Never blur them.
++- The $51M portfolio figure is cumulative realized revenue, never annual.
++- 8(a) is pending, not certified. Never claim it as active.
++- Accounting is FAR Part 31 compliant. Do not claim DCAA-approved or DCAA-audited.
++
++## Writing and formatting standards (for any generated document or proposal text)
++- No em dashes. Use "and" not "&". Single space after periods.
++- Active voice. Quantify claims. No superlatives (best, leading, world-class, cutting-edge).
++- Customer-first framing: restate the agency mission in its own language before Ignitec's approach.
++- Arial font; red (#C0222C) H1 with a bottom rule; navy (#1F3864) H2.
++- File naming: [NoticeNumber]_[DocumentType]_IGNITEC-INC
++  (for example CB26-RFQ0012_TechnicalApproach_IGNITEC-INC).
++- Logos: use the .jpg versions on white documents.
++
++## Likely tasks
++- Validate and fix the crawler against the live USASpending and SAM APIs.
++- Add a Fetch from URL path so the cockpit reads latest_new_leads.json from the repo raw URL.
++- Build a hosted version that crawls on a schedule and pre-vets each hit with a six-gate read.
++- Extend to proposal production: generate style-guide-compliant DOCX from templates with python-docx.
++
++## Ask before doing
++- Do not commit secrets. Do not populate pricing; Anand owns all rate decisions.
++- Flag, do not silently change, anything that would alter a defensibility posture or a claim.
+-- 
+2.43.0
+
+
+From 4a59d5469b4d75e03df484e2236282f45b2e80af Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 7 Jul 2026 17:43:43 +0000
+Subject: [PATCH 2/3] Fix USASpending NAICS/PSC mapping; add missing-field
+ guards
+
+Validated against the live USASpending spending_by_award API:
+- NAICS and PSC come back as {"code","description"} objects, not strings.
+  Flatten to the bare code via code_of() so leads match the cockpit schema
+  (previously a dict was written into naics/psc, breaking import).
+- Add warn_missing() guards on the first record of each feed so a renamed
+  or dropped API field is logged loudly instead of silently dropped, per
+  the project guide. SAM params/fields confirmed against the live docs;
+  final SAM live check runs in the scheduled Action where the key lives.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_017uh9cMntZaBTp82X6EN2pY
+---
+ ignitec_bd_sourcing.py | 33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/ignitec_bd_sourcing.py b/ignitec_bd_sourcing.py
+index 382bf66..6944726 100644
+--- a/ignitec_bd_sourcing.py
++++ b/ignitec_bd_sourcing.py
+@@ -101,6 +101,29 @@ def is_warm(name):
+     return any(p in n for p in WARM_PARTNERS)
+ 
+ 
++def code_of(v):
++    """USASpending returns NAICS/PSC as {"code": ..., "description": ...} objects.
++    The cockpit schema wants the bare code string. Flatten, tolerating older
++    string-shaped responses."""
++    if isinstance(v, dict):
++        return v.get("code") or ""
++    return v or ""
++
++
++# Expected result keys per feed; a live response missing one is logged loudly
++# rather than silently dropped (see project guide: "do not silently drop fields").
++USA_EXPECTED = {"Award ID", "Recipient Name", "Awarding Agency", "Award Amount",
++                "Start Date", "End Date", "NAICS", "PSC"}
++SAM_EXPECTED = {"noticeId", "title", "fullParentPathName", "naicsCode", "responseDeadLine"}
++
++
++def warn_missing(sample, expected, feed):
++    missing = [k for k in expected if k not in sample]
++    if missing:
++        print(f"  ! {feed}: response missing expected field(s): {sorted(missing)}. "
++              f"Got keys: {sorted(sample.keys())}")
++
++
+ # ------------------------------------------------------- USASpending ---------
+ def usa_query(award_type_codes, start_date, end_date):
+     rows, page = [], 1
+@@ -135,6 +158,8 @@ def recent_awards():
+     start = end - dt.timedelta(days=RECENT_AWARDS_LOOKBACK_DAYS)
+     raw = (usa_query(CONTRACT_TYPES, start.isoformat(), end.isoformat())
+            + usa_query(IDV_TYPES, start.isoformat(), end.isoformat()))
++    if raw:
++        warn_missing(raw[0], USA_EXPECTED, "Recent Award")
+     out = []
+     for a in raw:
+         amt = a.get("Award Amount") or 0
+@@ -145,7 +170,7 @@ def recent_awards():
+             "Recent Award", a.get("Award ID"),
+             title=f"{name} award at {a.get('Awarding Agency') or 'agency'}",
+             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
+-            value=amt, awardId=a.get("Award ID"), naics=a.get("NAICS"), psc=a.get("PSC"),
++            value=amt, awardId=a.get("Award ID"), naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
+             popStart=a.get("Start Date"), popEnd=a.get("End Date"),
+             posture="Warm - route via channel" if is_warm(name) else "Cold outreach",
+             notes=(a.get("Description") or "")[:400],
+@@ -160,6 +185,8 @@ def expiring_contracts():
+     scan_start = today - dt.timedelta(days=365 * EXPIRING_LOOKBACK_YEARS)
+     raw = (usa_query(CONTRACT_TYPES, scan_start.isoformat(), today.isoformat())
+            + usa_query(IDV_TYPES, scan_start.isoformat(), today.isoformat()))
++    if raw:
++        warn_missing(raw[0], USA_EXPECTED, "Expiring Contract")
+     out = []
+     for a in raw:
+         end_raw = a.get("End Date")
+@@ -179,7 +206,7 @@ def expiring_contracts():
+             title=f"Recompete: {name} at {a.get('Awarding Agency') or 'agency'} (ends {str(end_raw)[:10]})",
+             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
+             value=a.get("Award Amount") or 0, awardId=a.get("Award ID"),
+-            naics=a.get("NAICS"), psc=a.get("PSC"),
++            naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
+             popStart=a.get("Start Date"), popEnd=str(end_raw)[:10], posture=posture,
+             nextAction="Confirm shaping window and request current contract via FOIA",
+             notes=(a.get("Description") or "")[:400],
+@@ -215,6 +242,8 @@ def sam_opportunities():
+             if offset >= total or not batch:
+                 break
+             time.sleep(0.5)
++    if raw:
++        warn_missing(raw[0], SAM_EXPECTED, "RFI/Sources Sought")
+     out = []
+     for o in raw:
+         naics = o.get("naicsCode") or ""
+-- 
+2.43.0
+
+
+From 7144088bbc9ede87f57bff64e0da8899de9a15f9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 7 Jul 2026 17:43:43 +0000
+Subject: [PATCH 3/3] Add .gitignore for Python bytecode and local envs
+
+Keeps __pycache__ and virtualenv artifacts out of the repo.
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_017uh9cMntZaBTp82X6EN2pY
+---
+ .gitignore | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..7861a9c
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,11 @@
++# Python bytecode
++__pycache__/
++*.py[cod]
++
++# Local virtual environments
++.venv/
++venv/
++env/
++
++# OS / editor cruft
++.DS_Store
+-- 
+2.43.0
+
