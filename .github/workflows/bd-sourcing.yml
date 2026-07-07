@@ -1,0 +1,44 @@
+name: Ignitec BD Sourcing
+
+# Runs the sourcing crawler on a schedule and commits new leads back to the repo.
+# You can also trigger it by hand from the Actions tab (Run workflow).
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"   # Mondays 12:00 UTC (about 7:00 AM ET). Edit to change cadence.
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run sourcing crawl
+        env:
+          SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
+        run: python ignitec_bd_sourcing.py
+
+      - name: Commit new leads
+        run: |
+          git config user.name "bd-sourcing-bot"
+          git config user.email "bd-sourcing-bot@users.noreply.github.com"
+          git add output state.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "BD sourcing run $(date -u +%Y-%m-%d)"
+            git push
+          fi
