@@ -302,9 +302,13 @@ def main():
     with open(os.path.join(OUTPUT_DIR, "latest_new_leads.json"), "w") as f:
         json.dump(new_leads, f, indent=2)
 
-    # Cumulative history: merge new leads into output/all_leads.json (dedup by id),
-    # keeping earlier entries so standing views (expiring watch, the pre-vet report,
-    # the dashboard) retain history instead of seeing only this run's new leads.
+    # Cumulative standing set: merge EVERY lead pulled this run into
+    # output/all_leads.json (dedup by id), not just the newly-unseen ones. The
+    # dedupe ledger keeps latest_new_leads.json to "new only" for the import
+    # cadence, but the report, dashboard, and expiring watch need the full
+    # current picture (all in-window awards, expiring contracts, and RFIs),
+    # which would otherwise be filtered out as already-seen. Earlier entries are
+    # kept so history accumulates.
     all_path = os.path.join(OUTPUT_DIR, "all_leads.json")
     try:
         with open(all_path) as f:
@@ -312,7 +316,7 @@ def main():
     except (FileNotFoundError, json.JSONDecodeError):
         master = {}
     added = 0
-    for obj in new_leads:
+    for obj, _dedupe_key in collected:
         if obj["id"] not in master:
             master[obj["id"]] = obj
             added += 1

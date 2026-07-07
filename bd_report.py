@@ -201,7 +201,9 @@ def bucket(leads):
         elif s == "RFI/Sources Sought":
             rfis.append(l)
         elif s == "Expiring Contract":
-            expiring.append(l)
+            d = days_until(l.get("popEnd"))
+            if d is not None and d >= 0:   # "upcoming" only; already-ended drop off the watch
+                expiring.append(l)
     awards.sort(key=lambda l: (priority(l)[0], to_num(l.get("value"))), reverse=True)
     rfis.sort(key=lambda l: (days_until(l.get("nextActionDate")) if days_until(l.get("nextActionDate")) is not None else 10**6,
                              -priority(l)[0]))
