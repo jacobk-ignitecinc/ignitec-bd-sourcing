@@ -1,6 +1,6 @@
 # Ignitec BD Sourcing Report  (2026-07-07)
 
-Source: `output/all_leads.json`  |  Recent Awards: 0  |  RFIs: 261  |  Expiring Contracts: 0
+Source: `output/all_leads.json`  |  Recent Awards: 0  |  RFIs: 267  |  Expiring Contracts: 0
 
 > Priority is a transparent triage aid for ordering the queue, not the six-gate go/no-go. Gate 1 (Core Lane Alignment) is auto-suggested from NAICS and keywords and must be confirmed. Gates 2-6 require human judgment and are not auto-scored.
 
@@ -43,7 +43,7 @@ _No recent awards in the current set._
 | Medium (25) | 2026-06-30 | Notice of Intent to Sole Source for Portfolio… | UNITED STATES INTERNATIONAL D… | 541611 | 3 | In-lane NAICS 541611; Response deadline not s… |
 | Low (10) | 2026-06-30 | N5523626Q0098 - YORKIE PRO CELL PHONE DETECTOR | DEPT OF DEFENSE.DEPT OF THE N… | - | 0 | Target agency; Response deadline not set |
 
-_Showing top 30 of 261. See output/all_leads.json for the full set._
+_Showing top 30 of 267. See output/all_leads.json for the full set._
 
 
 ## 3. Upcoming contract end dates to monitor
