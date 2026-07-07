@@ -166,7 +166,8 @@ const CONFIG = {
   // Points at the branch that currently holds the crawler output. After you
   // merge to main, change this in the Branch box to "main" (it is remembered).
   branch: "claude/contract-expiration-tracking-r1qpia",
-  path:  "output/latest_new_leads.json"
+  // Prefer the cumulative history; fall back to the latest run's new leads.
+  paths: ["output/all_leads.json", "output/latest_new_leads.json"]
 };
 const LS_MASTER = "ignitec-bd-master-v1";   // accumulated leads (id -> lead)
 const LS_BRANCH = "ignitec-bd-branch";
@@ -200,8 +201,8 @@ function fmtVal(v){ const n=Number(v); if(!v||isNaN(n))return ""; if(n>=1e9)retu
 function daysUntil(d){ if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null;
   return Math.round((t-Date.now())/86400000); }
 
-function rawURL(branch){
-  return `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${encodeURIComponent(branch)}/${CONFIG.path}`;
+function rawURL(branch, path){
+  return `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${encodeURIComponent(branch)}/${path}`;
 }
 
 /* ------------------------------------------------------------ scoring */
@@ -251,7 +252,8 @@ function mergeLeads(arr){
 
 /* ------------------------------------------------------------ data load */
 async function fetchLeads(branch){
-  const candidates = ["../output/latest_new_leads.json", rawURL(branch)];
+  const candidates = [];
+  for(const p of CONFIG.paths){ candidates.push("../"+p); candidates.push(rawURL(branch,p)); }
   let lastErr;
   for(const url of candidates){
     try{

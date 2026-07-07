@@ -31,6 +31,11 @@ jobs:
           SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
         run: python ignitec_bd_sourcing.py
 
+      - name: Generate pre-vet report
+        # Buckets and ranks the cumulative leads and writes output/report_latest.*
+        # The Markdown is also appended to the run summary via GITHUB_STEP_SUMMARY.
+        run: python bd_report.py
+
       - name: Commit new leads
         run: |
           git config user.name "bd-sourcing-bot"

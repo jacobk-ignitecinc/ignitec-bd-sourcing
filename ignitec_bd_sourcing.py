@@ -301,8 +301,27 @@ def main():
         json.dump(new_leads, f, indent=2)
     with open(os.path.join(OUTPUT_DIR, "latest_new_leads.json"), "w") as f:
         json.dump(new_leads, f, indent=2)
+
+    # Cumulative history: merge new leads into output/all_leads.json (dedup by id),
+    # keeping earlier entries so standing views (expiring watch, the pre-vet report,
+    # the dashboard) retain history instead of seeing only this run's new leads.
+    all_path = os.path.join(OUTPUT_DIR, "all_leads.json")
+    try:
+        with open(all_path) as f:
+            master = {l["id"]: l for l in json.load(f) if isinstance(l, dict) and l.get("id")}
+    except (FileNotFoundError, json.JSONDecodeError):
+        master = {}
+    added = 0
+    for obj in new_leads:
+        if obj["id"] not in master:
+            master[obj["id"]] = obj
+            added += 1
+    with open(all_path, "w") as f:
+        json.dump(sorted(master.values(), key=lambda l: l.get("dateAdded", ""), reverse=True), f, indent=2)
+
     save_state(seen)
     print(f"Done. {len(new_leads)} new leads (of {len(collected)} pulled). "
+          f"Cumulative all_leads.json now holds {len(master)} leads (+{added}). "
           f"Import output/latest_new_leads.json into the cockpit.")
 
 
