@@ -157,6 +157,8 @@ def priority(lead):
             bump = 30 if d <= 7 else 20 if d <= 14 else 10 if d <= 30 else 0
             score += bump
             why.append(f"Response due in {d}d")
+        elif d is not None:
+            why.append("Response deadline passed")
         else:
             why.append("Response deadline not set")
 
@@ -199,7 +201,9 @@ def bucket(leads):
         if s == "Recent Award":
             awards.append(l)
         elif s == "RFI/Sources Sought":
-            rfis.append(l)
+            d = days_until(l.get("nextActionDate"))
+            if d is None or d >= 0:   # still open or undated; drop clearly past-due
+                rfis.append(l)
         elif s == "Expiring Contract":
             d = days_until(l.get("popEnd"))
             if d is not None and d >= 0:   # "upcoming" only; already-ended drop off the watch
