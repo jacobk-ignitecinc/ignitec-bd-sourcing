@@ -50,12 +50,54 @@ TODAY = dt.date.today()
 STAMP = TODAY.isoformat().replace("-", "")
 SECTION_CAP = 30   # rows shown per bucket; overflow is reported, never silently dropped
 
-# Distinctive substrings of the target agencies (agency strings vary by feed).
-TARGET_KEYS = ["defense", "air force", "army", "navy", "health and human services",
-               "justice", "general services"]
+# Load the Ignitec profile (lanes, agency tiers, warm partners). Falls back to
+# built-in heuristics if config/ignitec.json is missing.
+PROFILE = {}
+try:
+    with open("config/ignitec.json") as _f:
+        PROFILE = (json.load(_f) or {}).get("profile", {})
+except (FileNotFoundError, json.JSONDecodeError, OSError):
+    PROFILE = {}
+
+LANES = PROFILE.get("lanes", [])
+AGENCY_TIERS = PROFILE.get("agency_tiers", {})
+if PROFILE.get("warm_partners"):
+    WARM_PARTNERS = PROFILE["warm_partners"]
+
+    def is_warm(name):  # noqa: F811 - override with profile list
+        n = (name or "").lower()
+        return any(p in n for p in WARM_PARTNERS)
+
+# Fallback keyword list if the profile has no lanes.
 LANE_KEYWORDS = ["software", "systems", "information technology", " it ", "cyber", "data",
                  "engineering", "analytics", "cloud", "management consulting",
                  "administrative", "program management", "technical support", "modernization"]
+
+
+def agency_tier(agency):
+    """Return 1, 2, or None from the profile's agency_tiers (case-insensitive substring)."""
+    a = (agency or "").lower()
+    if any(k in a for k in AGENCY_TIERS.get("tier1", [])):
+        return 1
+    if any(k in a for k in AGENCY_TIERS.get("tier2", [])):
+        return 2
+    return None
+
+
+def lane_match(lead):
+    """Best (lowest-number) capability-lane tier this lead maps to, via the profile's
+    lane keywords and NAICS. Returns (tier, lane_id, lane_title) or (None, None, None)."""
+    hay = ((lead.get("title") or "") + " " + (lead.get("notes") or "")).lower()
+    naics = str(lead.get("naics") or "")
+    best = None
+    for lane in LANES:
+        kw_hit = any(k in hay for k in lane.get("keywords", []))
+        naics_hit = naics and naics in lane.get("naics", [])
+        if kw_hit or naics_hit:
+            t = lane.get("tier", 3)
+            if best is None or t < best[0]:
+                best = (t, lane.get("id"), lane.get("title"))
+    return best or (None, None, None)
 
 
 # --------------------------------------------------------------- helpers -----
@@ -102,25 +144,29 @@ def fmt_value(v):
     return f"${n:.0f}"
 
 
+_FALLBACK_AGENCY_KEYS = ["defense", "air force", "army", "navy",
+                         "health and human services", "justice", "general services"]
+
+
 def agency_fit(agency):
+    if AGENCY_TIERS:
+        return agency_tier(agency) is not None
     a = (agency or "").lower()
-    return any(k in a for k in TARGET_KEYS)
-
-
-def lane_kw(title):
-    t = " " + (title or "").lower() + " "
-    return any(k in t for k in LANE_KEYWORDS)
+    return any(k in a for k in _FALLBACK_AGENCY_KEYS)
 
 
 def gate1_suggestion(lead):
-    """Advisory Core Lane Alignment (Gate 1) suggestion from data only."""
+    """Advisory Core Lane Alignment (Gate 1) suggestion, from the Ignitec profile lanes."""
+    tier, lid, _ = lane_match(lead)
     naics = str(lead.get("naics") or "")
+    if tier == 1:
+        return 3, f"Tier 1 lane {lid}"
+    if tier == 2:
+        return 2, f"Tier 2 lane {lid}"
     if naics in NAICS_SET:
-        return 3, "NAICS in core lane"
-    if not naics and agency_fit(lead.get("agency")) and lane_kw(lead.get("title")):
-        return 2, "No NAICS; agency and keywords align"
-    if lane_kw(lead.get("title")):
-        return 1, "Keyword match only"
+        return 2, f"In-lane NAICS {naics}"
+    if tier == 3:
+        return 1, f"Tier 3 lane {lid}"
     return 0, "Out of core lane"
 
 
@@ -129,12 +175,37 @@ def priority(lead):
     src = lead.get("source")
     score, why = 0, []
     naics = str(lead.get("naics") or "")
-    if naics in NAICS_SET:
-        score += 25
+    tier, lid, _ = lane_match(lead)
+    if tier == 1:
+        score += 30
+        why.append(f"Tier 1 lane {lid}")
+    elif tier == 2:
+        score += 18
+        why.append(f"Tier 2 lane {lid}")
+    elif tier == 3:
+        score += 6
+        why.append(f"Tier 3 lane {lid}")
+    elif naics in NAICS_SET:
+        score += 15
         why.append(f"In-lane NAICS {naics}")
-    if agency_fit(lead.get("agency")):
-        score += 10
-        why.append("Target agency")
+
+    in_lane = tier is not None or naics in NAICS_SET
+    # Gate 1 is non-negotiable: with no core-lane fit, agency/urgency/value must not
+    # inflate the score. Out-of-lane leads stay Low and sink in the ranking.
+    if not in_lane:
+        why.append("Out of core lane (Gate 1 = 0)")
+        atier = agency_tier(lead.get("agency"))
+        if atier:
+            why.append(f"Tier {atier} agency (but out of lane)")
+        return score, "Low", why
+
+    atier = agency_tier(lead.get("agency"))
+    if atier == 1:
+        score += 15
+        why.append("Tier 1 agency")
+    elif atier == 2:
+        score += 8
+        why.append("Tier 2 agency")
     val = to_num(lead.get("value"))
 
     if src == "Recent Award":
@@ -152,6 +223,8 @@ def priority(lead):
             why.append("Award >= $1M")
 
     elif src == "RFI/Sources Sought":
+        if tier in (1, 2):
+            why.append(f"RFI override: Tier {tier} lane responds regardless of score")
         d = days_until(lead.get("nextActionDate"))
         if d is not None and d >= 0:
             bump = 30 if d <= 7 else 20 if d <= 14 else 10 if d <= 30 else 0
@@ -183,7 +256,9 @@ def priority(lead):
             score += 8
             why.append("Recompete >= $10M")
 
-    tag = "High" if score >= 45 else "Medium" if score >= 25 else "Low"
+    # Bands calibrated to the profile-weighted range (lane up to 30, agency up to 15,
+    # warm/value/urgency up to ~30). High is reserved for strong multi-signal fits.
+    tag = "High" if score >= 60 else "Medium" if score >= 35 else "Low"
     return score, tag, why
 
 

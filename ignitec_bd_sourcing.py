@@ -34,6 +34,8 @@ import datetime as dt
 import requests
 
 # ============================================================ CONFIG =========
+# Defaults below are overridden by config/ignitec.json ("crawl" block) when that
+# file is present, so targeting can be tuned without editing code.
 NAICS_CODES = ["541512", "541511", "541513", "541611", "541618", "561320"]
 
 TARGET_AGENCIES = [
@@ -59,6 +61,33 @@ SAM_LOOKBACK_DAYS = 14
 SAM_PTYPES = ["r", "s"]   # r = Sources Sought, s = Special Notice (RFIs appear under both)
 
 WARM_PARTNERS = ["deloitte", "accenture", "amyx", "icf", "optum"]
+
+CONFIG_FILE = "config/ignitec.json"
+
+
+def _apply_config():
+    """Override the defaults above from config/ignitec.json if present."""
+    global NAICS_CODES, TARGET_AGENCIES, WARM_PARTNERS
+    global RECENT_AWARDS_LOOKBACK_DAYS, MIN_AWARD_VALUE
+    global EXPIRING_MIN_DAYS, EXPIRING_MAX_DAYS, SAM_LOOKBACK_DAYS
+    try:
+        with open(CONFIG_FILE) as f:
+            crawl = (json.load(f) or {}).get("crawl", {})
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return
+    NAICS_CODES = crawl.get("naics_codes") or NAICS_CODES
+    TARGET_AGENCIES = crawl.get("target_agencies") or TARGET_AGENCIES
+    WARM_PARTNERS = crawl.get("warm_partners") or WARM_PARTNERS
+    RECENT_AWARDS_LOOKBACK_DAYS = crawl.get("recent_awards_lookback_days", RECENT_AWARDS_LOOKBACK_DAYS)
+    MIN_AWARD_VALUE = crawl.get("min_award_value", MIN_AWARD_VALUE)
+    EXPIRING_MIN_DAYS = crawl.get("expiring_min_days", EXPIRING_MIN_DAYS)
+    EXPIRING_MAX_DAYS = crawl.get("expiring_max_days", EXPIRING_MAX_DAYS)
+    SAM_LOOKBACK_DAYS = crawl.get("sam_lookback_days", SAM_LOOKBACK_DAYS)
+    print(f"  Config loaded: {len(NAICS_CODES)} NAICS, {len(TARGET_AGENCIES)} agencies, "
+          f"{len(WARM_PARTNERS)} warm partners.")
+
+
+_apply_config()
 
 OUTPUT_DIR = "output"
 STATE_FILE = "state.json"
