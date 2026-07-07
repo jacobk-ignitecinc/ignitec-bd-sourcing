@@ -101,6 +101,29 @@ def is_warm(name):
     return any(p in n for p in WARM_PARTNERS)
 
 
+def code_of(v):
+    """USASpending returns NAICS/PSC as {"code": ..., "description": ...} objects.
+    The cockpit schema wants the bare code string. Flatten, tolerating older
+    string-shaped responses."""
+    if isinstance(v, dict):
+        return v.get("code") or ""
+    return v or ""
+
+
+# Expected result keys per feed; a live response missing one is logged loudly
+# rather than silently dropped (see project guide: "do not silently drop fields").
+USA_EXPECTED = {"Award ID", "Recipient Name", "Awarding Agency", "Award Amount",
+                "Start Date", "End Date", "NAICS", "PSC"}
+SAM_EXPECTED = {"noticeId", "title", "fullParentPathName", "naicsCode", "responseDeadLine"}
+
+
+def warn_missing(sample, expected, feed):
+    missing = [k for k in expected if k not in sample]
+    if missing:
+        print(f"  ! {feed}: response missing expected field(s): {sorted(missing)}. "
+              f"Got keys: {sorted(sample.keys())}")
+
+
 # ------------------------------------------------------- USASpending ---------
 def usa_query(award_type_codes, start_date, end_date):
     rows, page = [], 1
@@ -135,6 +158,8 @@ def recent_awards():
     start = end - dt.timedelta(days=RECENT_AWARDS_LOOKBACK_DAYS)
     raw = (usa_query(CONTRACT_TYPES, start.isoformat(), end.isoformat())
            + usa_query(IDV_TYPES, start.isoformat(), end.isoformat()))
+    if raw:
+        warn_missing(raw[0], USA_EXPECTED, "Recent Award")
     out = []
     for a in raw:
         amt = a.get("Award Amount") or 0
@@ -145,7 +170,7 @@ def recent_awards():
             "Recent Award", a.get("Award ID"),
             title=f"{name} award at {a.get('Awarding Agency') or 'agency'}",
             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
-            value=amt, awardId=a.get("Award ID"), naics=a.get("NAICS"), psc=a.get("PSC"),
+            value=amt, awardId=a.get("Award ID"), naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=a.get("End Date"),
             posture="Warm - route via channel" if is_warm(name) else "Cold outreach",
             notes=(a.get("Description") or "")[:400],
@@ -160,6 +185,8 @@ def expiring_contracts():
     scan_start = today - dt.timedelta(days=365 * EXPIRING_LOOKBACK_YEARS)
     raw = (usa_query(CONTRACT_TYPES, scan_start.isoformat(), today.isoformat())
            + usa_query(IDV_TYPES, scan_start.isoformat(), today.isoformat()))
+    if raw:
+        warn_missing(raw[0], USA_EXPECTED, "Expiring Contract")
     out = []
     for a in raw:
         end_raw = a.get("End Date")
@@ -179,7 +206,7 @@ def expiring_contracts():
             title=f"Recompete: {name} at {a.get('Awarding Agency') or 'agency'} (ends {str(end_raw)[:10]})",
             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
             value=a.get("Award Amount") or 0, awardId=a.get("Award ID"),
-            naics=a.get("NAICS"), psc=a.get("PSC"),
+            naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=str(end_raw)[:10], posture=posture,
             nextAction="Confirm shaping window and request current contract via FOIA",
             notes=(a.get("Description") or "")[:400],
@@ -215,6 +242,8 @@ def sam_opportunities():
             if offset >= total or not batch:
                 break
             time.sleep(0.5)
+    if raw:
+        warn_missing(raw[0], SAM_EXPECTED, "RFI/Sources Sought")
     out = []
     for o in raw:
         naics = o.get("naicsCode") or ""
