@@ -70,6 +70,7 @@ def _apply_config():
     global NAICS_CODES, TARGET_AGENCIES, WARM_PARTNERS
     global RECENT_AWARDS_LOOKBACK_DAYS, MIN_AWARD_VALUE
     global EXPIRING_MIN_DAYS, EXPIRING_MAX_DAYS, SAM_LOOKBACK_DAYS
+    global RUN_EXPIRING_PASS, RUN_SAM_PASS
     try:
         with open(CONFIG_FILE) as f:
             crawl = (json.load(f) or {}).get("crawl", {})
@@ -83,6 +84,8 @@ def _apply_config():
     EXPIRING_MIN_DAYS = crawl.get("expiring_min_days", EXPIRING_MIN_DAYS)
     EXPIRING_MAX_DAYS = crawl.get("expiring_max_days", EXPIRING_MAX_DAYS)
     SAM_LOOKBACK_DAYS = crawl.get("sam_lookback_days", SAM_LOOKBACK_DAYS)
+    RUN_EXPIRING_PASS = crawl.get("run_expiring_pass", RUN_EXPIRING_PASS)
+    RUN_SAM_PASS = crawl.get("run_sam_pass", RUN_SAM_PASS)
     print(f"  Config loaded: {len(NAICS_CODES)} NAICS, {len(TARGET_AGENCIES)} agencies, "
           f"{len(WARM_PARTNERS)} warm partners.")
 

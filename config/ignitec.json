@@ -56,6 +56,10 @@
 
   "crawl": {
     "_note": "Seeded from the current crawler values so behavior is unchanged when this file is first read. recommended_naics_additions are NOT yet applied to naics_codes; move them up once confirmed (adding NAICS only widens the crawl, it never drops existing leads).",
+    "run_recent_awards": true,
+    "run_expiring_pass": true,
+    "run_sam_pass": false,
+    "_feeds_note": "RFI/Sources Sought (SAM) paused per direction 2026-07. Set run_sam_pass true to resume. Recent awards and expiring contracts are the active plays.",
     "naics_codes": ["541512", "541511", "541513", "541611", "541618", "561320"],
     "recommended_naics_additions": {
       "codes": ["541330", "518210", "541519"],
