@@ -79,7 +79,11 @@
   .pursueBtn{align-self:center;border:1px solid var(--warm);background:#fff;color:var(--warm);
     border-radius:20px;padding:5px 11px;font-size:12px;white-space:nowrap}
   .pursueBtn.on{background:var(--warm);color:#fff}
+  .rejectBtn{align-self:center;border:1px solid var(--muted);background:#fff;color:var(--muted);
+    border-radius:20px;padding:5px 11px;font-size:12px;white-space:nowrap}
+  .rejectBtn.on{background:var(--muted);color:#fff}
   .chip.pipe{background:var(--warmbg);color:var(--warm);font-weight:bold}
+  .chip.rej{background:var(--greybg);color:var(--grey);font-weight:bold}
   /* pipeline toolbar */
   .ptool{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);
     border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px}
@@ -161,6 +165,12 @@
       <option value="value">Value (high to low)</option>
       <option value="popEnd">Expiring soonest</option>
       <option value="dateAdded">Date added</option>
+    </select>
+    <select id="fDecision" title="Show by decision status">
+      <option value="undecided">Undecided only</option>
+      <option value="all">All (incl. pipeline &amp; rejected)</option>
+      <option value="pursuing">In pipeline</option>
+      <option value="rejected">Rejected</option>
     </select>
     <label class="hint"><input type="checkbox" id="fShowUnaligned"> Show out-of-lane</label>
   </div>
@@ -298,20 +308,35 @@ async function loadPipelineRemote(branch){
     const j=await r.json(); if(j && typeof j==="object"){ PIPELINE=mergePipeline(PIPELINE,j); savePipelineLocal(); return true; } }catch(e){} }
   return false;
 }
-function isPursued(id){return !!PIPELINE[id];}
+/* Three decision states per lead: "undecided" (not in PIPELINE),
+   "pursuing" (in PIPELINE), or "rejected" (in PIPELINE with rejected:true). */
+function pipeState(id){ const p=PIPELINE[id]; if(!p)return "undecided"; return p.rejected?"rejected":"pursuing"; }
+function isPursued(id){ return pipeState(id)==="pursuing"; }
+function isRejected(id){ return pipeState(id)==="rejected"; }
 function touchPipe(id){ if(PIPELINE[id]) PIPELINE[id].lastTouched=nowISO(); savePipelineLocal(); }
+function unsetDecision(id){ delete PIPELINE[id]; savePipelineLocal(); markPipeDirty(); render(); renderPipeline(); }
+function setPursued(id){
+  if(!master[id])return;
+  PIPELINE[id]={ stage:"Pursue", owner:"", nextAction:"", nextActionDate:"", notes:"",
+    pursuedDate:today(), stageSince:today(),
+    activities:[{type:"Decided to pursue", date:today(), note:""}], lastTouched:nowISO() };
+  savePipelineLocal(); markPipeDirty(); render(); renderPipeline();
+}
+function setRejected(id,reason){
+  if(!master[id])return;
+  PIPELINE[id]={ rejected:true, rejectedDate:today(), reason:reason||"", lastTouched:nowISO() };
+  savePipelineLocal(); markPipeDirty(); render(); renderPipeline();
+}
 function togglePursue(id){
-  const l=master[id]; if(!l)return;
-  if(PIPELINE[id]){
-    if(!confirm("Remove this opportunity from the pipeline? Its activity log will be discarded on next save.")) return;
-    delete PIPELINE[id];
-  } else {
-    PIPELINE[id]={ stage:"Pursue", owner:"", nextAction:"", nextActionDate:"", notes:"",
-      pursuedDate:today(), stageSince:today(),
-      activities:[{type:"Decided to pursue", date:today(), note:""}], lastTouched:nowISO() };
-  }
-  savePipelineLocal(); markPipeDirty();
-  render(); renderPipeline();
+  if(isPursued(id)){ if(!confirm("Remove this opportunity from the pipeline? Its activity log will be discarded on next save.")) return; unsetDecision(id); }
+  else { setPursued(id); }   // from undecided or rejected
+}
+function toggleReject(id){
+  if(isRejected(id)){ unsetDecision(id); return; }   // un-reject -> undecided
+  if(isPursued(id) && !confirm("This opportunity is in the pipeline. Reject it and remove it from the pipeline (activity log discarded on next save)?")) return;
+  const reason=prompt("Optional: why is this not a fit? (kept for the record)","");
+  if(reason===null) return;   // cancelled
+  setRejected(id, reason.trim());
 }
 function pipeEdit(id,field,value){ const p=PIPELINE[id]; if(!p)return; p[field]=value; touchPipe(id); markPipeDirty(); }
 function setStage(id,stage,logNote){
@@ -326,7 +351,7 @@ function addActivity(id,type,date,note){
   touchPipe(id); markPipeDirty();
 }
 function markPipeDirty(){ const el=$("#gStatus"); if(el){el.textContent="Unsaved pipeline changes in this browser. Save to GitHub to share."; el.className="gstatus";} updatePipeCount(); }
-function updatePipeCount(){ const n=Object.keys(PIPELINE).length; const c=$("#pipeCount"); if(c)c.textContent=n; }
+function updatePipeCount(){ const n=Object.values(PIPELINE).filter(p=>!p.rejected).length; const c=$("#pipeCount"); if(c)c.textContent=n; }
 
 /* ------------------------------------------------------------ github save */
 function ghToken(){return localStorage.getItem(LS_TOKEN)||"";}
@@ -514,13 +539,17 @@ function leadCard(l){
     grow.appendChild(cd);
   }
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
-  const pursued=isPursued(l.id);
-  if(pursued) chips.appendChild(el("span","chip pipe","In pipeline: "+PIPELINE[l.id].stage));
-  const pbtn=el("button","pursueBtn"+(pursued?" on":""), pursued?"✓ Pursuing":"+ Pursue");
-  pbtn.title=pursued?"In the pipeline. Click to remove.":"Add to the pursuit pipeline";
+  const st=pipeState(l.id);
+  if(st==="pursuing") chips.appendChild(el("span","chip pipe","In pipeline: "+PIPELINE[l.id].stage));
+  else if(st==="rejected") chips.appendChild(el("span","chip rej","Rejected"+(PIPELINE[l.id].reason?": "+PIPELINE[l.id].reason:"")));
+  const pbtn=el("button","pursueBtn"+(st==="pursuing"?" on":""), st==="pursuing"?"✓ Pursuing":"+ Pursue");
+  pbtn.title=st==="pursuing"?"In the pipeline. Click to remove.":"Add to the pursuit pipeline";
   pbtn.addEventListener("click",e=>{e.stopPropagation(); togglePursue(l.id);});
+  const rbtn=el("button","rejectBtn"+(st==="rejected"?" on":""), st==="rejected"?"✓ Rejected":"✕ Reject");
+  rbtn.title=st==="rejected"?"Rejected. Click to restore to undecided.":"Hide from sourcing as not a fit";
+  rbtn.addEventListener("click",e=>{e.stopPropagation(); toggleReject(l.id);});
   const rightcol=el("div"); rightcol.style.cssText="display:flex;flex-direction:column;gap:6px;align-items:flex-end";
-  rightcol.appendChild(badge); rightcol.appendChild(pbtn);
+  rightcol.appendChild(badge); rightcol.appendChild(pbtn); rightcol.appendChild(rbtn);
   head.appendChild(grow); head.appendChild(rightcol);
   head.addEventListener("click",()=>card.classList.toggle("open"));
   card.appendChild(head);
@@ -580,12 +609,17 @@ function leadCard(l){
 function currentFilters(){return{
   q:$("#search").value.trim().toLowerCase(), source:$("#fSource").value, route:$("#fRoute").value,
   lane:$("#fLane").value, agency:$("#fAgency").value, sort:$("#fSort").value,
+  decision:$("#fDecision").value,
   showUnaligned:$("#fShowUnaligned").checked, setAside:$("#fSetAside").value,
   valMin:parseFloat($("#fValMin").value), valMax:parseFloat($("#fValMax").value),
   expiry:$("#fExpiry").value, heldVeh:$("#fHeldVeh").checked, exclude:$("#fExclude").value.trim().toLowerCase()
 };}
 function matches(l,f){
   if(l.source!=="Recent Award" && l.source!=="Expiring Contract") return false;   // RFI feed paused
+  const st=pipeState(l.id);
+  if(f.decision==="undecided" && st!=="undecided") return false;   // default: hide pursued + rejected
+  if(f.decision==="pursuing" && st!=="pursuing") return false;
+  if(f.decision==="rejected" && st!=="rejected") return false;
   if(!f.showUnaligned && !aligned(l)) return false;
   if(f.source && l.source!==f.source) return false;
   if(f.route && route(l)!==f.route) return false;
@@ -629,7 +663,11 @@ function renderTiles(){
   const shaping=al.filter(isShaping).length;
   const held=al.filter(l=>l.vehicleHeld).length;
   const outlane=all.length-al.length;
-  const t=[["",al.length,"Aligned leads"],["",awards,"Recent awards"],["",exp,"Expiring"],
+  const undecided=al.filter(l=>pipeState(l.id)==="undecided").length;
+  const inpipe=al.filter(l=>pipeState(l.id)==="pursuing").length;
+  const rejected=al.filter(l=>pipeState(l.id)==="rejected").length;
+  const t=[["",undecided,"Undecided (to review)"],["warm",inpipe,"In pipeline"],["",rejected,"Rejected"],
+    ["",awards,"Recent awards"],["",exp,"Expiring"],
     ["warm",warm,"Warm (route via channel)"],["cold",cold,"Cold outreach"],
     ["shape",shaping,"Shaping window"],["",held,"Held-vehicle"],["",outlane,"Out-of-lane (hidden)"]];
   const box=$("#tiles"); box.innerHTML="";
@@ -662,7 +700,7 @@ function daysSince(d){ if(!d)return null; const t=Date.parse(d); if(isNaN(t))ret
 function lastActivity(p){ const a=(p.activities||[]); return a.length?a[a.length-1]:null; }
 
 function renderPipeTiles(){
-  const ids=Object.keys(PIPELINE);
+  const ids=Object.keys(PIPELINE).filter(id=>!PIPELINE[id].rejected);
   const active=ids.filter(id=>!TERMINAL.has(PIPELINE[id].stage));
   const val=active.reduce((s,id)=>s+(Number((master[id]||{}).value)||0),0);
   const overdue=active.filter(id=>{const d=PIPELINE[id].nextActionDate; return d && daysUntil(d)<0;}).length;
@@ -710,7 +748,7 @@ function renderPipeline(){
   renderPipeTiles();
   const fOwner=of?of.value:"", fStage=sf?sf.value:"";
   const board=$("#board"); if(!board)return; board.innerHTML="";
-  const ids=Object.keys(PIPELINE).filter(id=>(!fOwner||PIPELINE[id].owner===fOwner));
+  const ids=Object.keys(PIPELINE).filter(id=>!PIPELINE[id].rejected && (!fOwner||PIPELINE[id].owner===fOwner));
   if(ids.length===0){ board.appendChild(el("div","empty","No opportunities in the pipeline yet. On the Sourcing tab, click + Pursue on the ones you want to go after.")); board.style.display="block"; return; }
   board.style.display="flex";
   const cols=fStage?[fStage]:STAGES;
@@ -830,8 +868,8 @@ function init(){
   $("#clearFilters").addEventListener("click",()=>{
     ["#search","#fExclude","#fValMin","#fValMax"].forEach(s=>$(s).value="");
     ["#fSource","#fRoute","#fLane","#fAgency","#fSetAside","#fExpiry"].forEach(s=>$(s).value="");
-    $("#fSort").value="default"; $("#fShowUnaligned").checked=false; $("#fHeldVeh").checked=false; render();});
-  ["#search","#fSource","#fRoute","#fLane","#fAgency","#fSort","#fShowUnaligned",
+    $("#fSort").value="default"; $("#fDecision").value="undecided"; $("#fShowUnaligned").checked=false; $("#fHeldVeh").checked=false; render();});
+  ["#search","#fSource","#fRoute","#fLane","#fAgency","#fSort","#fDecision","#fShowUnaligned",
    "#fSetAside","#fValMin","#fValMax","#fExpiry","#fHeldVeh","#fExclude"].forEach(sel=>{
     const e=$(sel); const ev=(e.tagName==="INPUT"&&(e.type==="text"||e.type==="number"))?"input":"change";
     e.addEventListener(ev,render);});

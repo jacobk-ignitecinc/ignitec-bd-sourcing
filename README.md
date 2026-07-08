@@ -12,7 +12,11 @@ For crawler internals, guardrails, and the lead schema, see `CLAUDE.md`.
 
 - **Sourcing** — every capability-aligned recent award and expiring contract,
   with AI summaries, HigherGov contacts, vehicle, and a link to the opportunity.
-  Filter and review, then click **+ Pursue** on the ones worth going after.
+  Filter and review, then click **+ Pursue** on the ones worth going after or
+  **✕ Reject** on the ones that are not a fit. By default the list shows only
+  **undecided** opportunities (pursued and rejected ones are hidden); the
+  Decision filter can show All, In pipeline, or Rejected. Decisions are shared
+  through the same pipeline file.
 - **Pipeline** — a Kanban board of only the pursued opportunities, with stages
   (Pursue → Researching → First contact → In discussion → Teaming/RFI →
   Submitted → Won/Lost/Parked), owners, next actions, and a timestamped
