@@ -128,7 +128,7 @@ def lead(source, key, **fields):
         "title": "", "prime": "", "agency": "", "subAgency": "",
         "value": "", "awardId": "", "solicitationNumber": "", "naics": "", "psc": "",
         "popStart": "", "popEnd": "", "posture": "", "tier": "", "lane": "",
-        "setAside": "", "vehicle": "", "vehicleHeld": False, "incumbent": "", "routing": "",
+        "setAside": "", "vehicle": "", "vehicleHeld": False, "incumbent": "", "routing": "", "url": "",
         "gates": [None, None, None, None, None, None],
         "status": "Tracking", "owner": "", "nextAction": "", "nextActionDate": "",
         "notes": "", "dateAdded": TODAY, "lastTouched": TODAY,
@@ -163,6 +163,13 @@ def parse_vehicle(generated_internal_id):
         if cand and cand not in ("-NONE-", "NONE"):
             piid = cand
     return piid, (piid in HELD_VEHICLE_PIIDS)
+
+
+def usa_award_url(generated_internal_id):
+    """The public USASpending award page for a lead, from its generated_internal_id.
+    e.g. https://www.usaspending.gov/award/CONT_AWD_.../ . Empty if the id is missing."""
+    gid = str(generated_internal_id or "").strip()
+    return f"https://www.usaspending.gov/award/{gid}/" if gid else ""
 
 
 def code_of(v):
@@ -238,7 +245,7 @@ def recent_awards():
             title=f"{name} award at {a.get('Awarding Agency') or 'agency'}",
             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
             value=amt, awardId=a.get("Award ID"), naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
-            popStart=a.get("Start Date"), popEnd=a.get("End Date"),
+            popStart=a.get("Start Date"), popEnd=a.get("End Date"), url=usa_award_url(a.get("generated_internal_id")),
             setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
             posture=routing_for(name), routing=routing_for(name),
             nextAction="Cold outreach to prime for subcontracting/staffing"
@@ -283,6 +290,7 @@ def expiring_contracts():
             value=a.get("Award Amount") or 0, awardId=a.get("Award ID"),
             naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=str(end_raw)[:10], posture=posture,
+            url=usa_award_url(a.get("generated_internal_id")),
             setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
             incumbent=name, routing=routing_for(name),
             nextAction=("Reach CO/COR now to shape the recompete" if shaping

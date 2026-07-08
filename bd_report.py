@@ -273,6 +273,12 @@ def vehicle_disp(lead):
     return v + (" (HELD)" if lead.get("vehicleHeld") else "")
 
 
+def opp_url(lead):
+    """Best public link to the opportunity: USASpending award page, else the
+    HigherGov record from enrichment."""
+    return lead.get("url") or enrich_of(lead).get("hgPath") or ""
+
+
 # --------------------------------------------------------------- bucketing ---
 def bucket(leads):
     """Prefilter to capability-aligned leads, then split into the two plays.
@@ -311,6 +317,13 @@ def md_trunc(s, n=70):
     return s if len(s) <= n else s[:n - 1] + "…"
 
 
+def md_link(text, url, n=70):
+    """Markdown link with a truncated label; plain text if no url."""
+    label = md_trunc(text, n)
+    u = md_cell(url)
+    return f"[{label}]({u})" if u else label
+
+
 def render_markdown(awards, expiring, dropped, source_name):
     L = []
     L.append(f"# Ignitec BD Sourcing Report  ({TODAY.isoformat()})")
@@ -338,7 +351,7 @@ def render_markdown(awards, expiring, dropped, source_name):
         L.append("|---|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
             blurb = summary_text(l) or l.get("nextAction") or ""
-            L.append(f"| {routing_tag(l)} | {md_trunc(l.get('prime'), 30)} "
+            L.append(f"| {routing_tag(l)} | {md_link(l.get('prime'), opp_url(l), 30)} "
                      f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
                      f"| {lane_label(l)} | {md_trunc(setaside_short(l), 22)} | {md_cell(vehicle_disp(l))} "
                      f"| {md_trunc(contact_text(l), 46)} | {md_trunc(blurb, 80)} |")
@@ -358,7 +371,7 @@ def render_markdown(awards, expiring, dropped, source_name):
             shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
             blurb = summary_text(l) or l.get("nextAction") or ""
             L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
-                     f"| {md_trunc(incumbent_text(l), 24)} | {md_trunc(contact_text(l), 44)} "
+                     f"| {md_link(incumbent_text(l), opp_url(l), 24)} | {md_trunc(contact_text(l), 44)} "
                      f"| {md_trunc(l.get('agency'), 20)} "
                      f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {routing_tag(l)} "
                      f"| {md_trunc(blurb, 70)} |")
@@ -394,10 +407,14 @@ def render_html(awards, expiring, dropped, source_name):
         r = routing_tag(l)
         return f"<span class='tag {r.lower()}'>{r}</span>"
 
+    def name_link(l, text):
+        u = opp_url(l)
+        return f"<a href='{h(u)}' target='_blank' rel='noopener'>{h(text)}</a>" if u else h(text)
+
     def rows_awards(items):
         out = []
         for l in items[:SECTION_CAP]:
-            out.append(f"<tr><td>{route_span(l)}</td><td>{h(l.get('prime'))}</td>"
+            out.append(f"<tr><td>{route_span(l)}</td><td>{name_link(l, l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
                        f"<td>{h(vehicle_disp(l))}</td><td>{contact_html(l)}</td>"
@@ -410,7 +427,7 @@ def render_html(awards, expiring, dropped, source_name):
             d = days_until(l.get("popEnd"))
             shaping = "<span class='tag shape'>Shaping</span>" if (d is not None and 270 <= d <= 540) else ""
             out.append(f"<tr><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
-                       f"<td>{shaping}</td><td>{h(incumbent_text(l))}</td>"
+                       f"<td>{shaping}</td><td>{name_link(l, incumbent_text(l))}</td>"
                        f"<td>{contact_html(l)}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{route_span(l)}</td>"

@@ -148,7 +148,7 @@ const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Pos
 const STATUSES = ["Tracking","Reviewing","Contacted","In discussion","Pursuing","Submitted","Won","Lost","Parked"];
 /* source-derived fields the crawler owns; everything else is user triage and preserved on reload */
 const SOURCE_FIELDS = ["source","title","prime","agency","subAgency","value","awardId","solicitationNumber",
-  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent"];
+  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent","url"];
 const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","notes","routing"];
 
 let master = {}, dirty = false;
@@ -268,7 +268,12 @@ function leadCard(l){
   const head=el("div","head"); const grow=el("div","headgrow");
   const isAward=l.source==="Recent Award";
   const target=isAward?(l.prime||"prime"):(l.incumbent||l.prime||"incumbent");
-  grow.appendChild(el("div","title", l.title||l.id));
+  const oppUrl=l.url||((ENRICHMENT[l.id]||{}).hgPath)||"";
+  const titleWrap=el("div","title");
+  if(oppUrl){ const a=el("a",null,l.title||l.id); a.href=oppUrl; a.target="_blank"; a.rel="noopener";
+    a.title="Open the opportunity"; a.addEventListener("click",e=>e.stopPropagation()); titleWrap.appendChild(a); }
+  else titleWrap.appendChild(document.createTextNode(l.title||l.id));
+  grow.appendChild(titleWrap);
   const bits=[]; if(l.agency)bits.push(l.agency); bits.push((isAward?"Prime: ":"Incumbent: ")+target);
   if(l.value)bits.push(fmtVal(l.value));
   grow.appendChild(el("div","meta", bits.join("  ·  ")));
@@ -338,6 +343,8 @@ function leadCard(l){
     ["Date added",l.dateAdded],["Lead id",l.id]];
   for(const [k,v] of rows){ if(v==null||v===""||v==="-")continue;
     const row=el("div","row"); row.appendChild(el("div","k",k)); row.appendChild(el("div","v",String(v))); ro.appendChild(row); }
+  if(l.url){ const row=el("div","row"); row.appendChild(el("div","k","Opportunity"));
+    const v=el("div","v"); const a=el("a",null,"open in USASpending"); a.href=l.url; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
   if(enr && (enr.contacts||[]).length){
     (enr.contacts||[]).forEach(c=>{
       const row=el("div","row"); row.appendChild(el("div","k",c.role||"Contact"));

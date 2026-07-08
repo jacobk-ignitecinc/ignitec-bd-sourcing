@@ -40,6 +40,11 @@ The crawler was written without live API access, so verify and fix these before 
 Keys: id, source, title, prime, agency, subAgency, value, awardId, solicitationNumber,
 naics, psc, popStart, popEnd, posture, tier, lane, gates (array of six nulls),
 status, owner, nextAction, nextActionDate, notes, dateAdded, lastTouched.
+Also emitted (added after v0.2, all optional and preserved on cockpit reload):
+setAside, vehicle (the parent IDV PIID), vehicleHeld, incumbent, routing, url
+(public USASpending award page). AI summaries and HigherGov contacts/incumbent/
+vehicle live in SEPARATE files (output/summaries.json, output/enrichment.json),
+keyed by lead id, so the lead schema stays pure.
 - source is one of: "Recent Award", "Expiring Contract", "RFI/Sources Sought",
   "Email/Referral", "Manual".
 - posture strings must match the cockpit exactly: "Shape", "Position", "Compete/Team",
