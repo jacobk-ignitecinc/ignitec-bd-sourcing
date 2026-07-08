@@ -393,11 +393,17 @@ def main():
             master = {l["id"]: l for l in json.load(f) if isinstance(l, dict) and l.get("id")}
     except (FileNotFoundError, json.JSONDecodeError):
         master = {}
+    # all_leads.json holds only crawler output (triage lives in the dashboard), so it
+    # is safe to refresh existing records with the latest crawl data. This backfills
+    # newly added fields onto previously-seen leads. First-seen dateAdded is preserved.
     added = 0
     for obj, _dedupe_key in collected:
-        if obj["id"] not in master:
-            master[obj["id"]] = obj
+        prev = master.get(obj["id"])
+        if prev is None:
             added += 1
+        else:
+            obj["dateAdded"] = prev.get("dateAdded") or obj.get("dateAdded")
+        master[obj["id"]] = obj
     with open(all_path, "w") as f:
         json.dump(sorted(master.values(), key=lambda l: l.get("dateAdded", ""), reverse=True), f, indent=2)
 

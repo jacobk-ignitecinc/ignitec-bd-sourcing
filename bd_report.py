@@ -100,6 +100,32 @@ def lane_match(lead):
     return best or (None, None, None)
 
 
+# PSC classes that indicate IT / professional-services work (support our lanes).
+IN_LANE_PSC_PREFIXES = ("D", "R", "H")
+
+
+def psc_in_lane(psc):
+    return bool(psc) and str(psc)[:1].upper() in IN_LANE_PSC_PREFIXES
+
+
+def aligned(lead):
+    """Capability prefilter: is this lead in an Ignitec lane at all? True if it maps
+    to a profile lane (keyword/NAICS), sits in a core NAICS, or carries an in-lane PSC."""
+    tier, _, _ = lane_match(lead)
+    return tier is not None or str(lead.get("naics") or "") in NAICS_SET or psc_in_lane(lead.get("psc"))
+
+
+def lane_label(lead):
+    tier, lid, title = lane_match(lead)
+    if lid:
+        return f"{lid} (T{tier})"
+    if str(lead.get("naics") or "") in NAICS_SET:
+        return f"NAICS {lead.get('naics')}"
+    if psc_in_lane(lead.get("psc")):
+        return f"PSC {lead.get('psc')}"
+    return "-"
+
+
 # --------------------------------------------------------------- helpers -----
 def load_leads():
     for name in ("all_leads.json", "latest_new_leads.json"):
@@ -170,124 +196,50 @@ def gate1_suggestion(lead):
     return 0, "Out of core lane"
 
 
-def priority(lead):
-    """Transparent triage score. Returns (score, tag, reasons)."""
-    src = lead.get("source")
-    score, why = 0, []
-    naics = str(lead.get("naics") or "")
-    tier, lid, _ = lane_match(lead)
-    if tier == 1:
-        score += 30
-        why.append(f"Tier 1 lane {lid}")
-    elif tier == 2:
-        score += 18
-        why.append(f"Tier 2 lane {lid}")
-    elif tier == 3:
-        score += 6
-        why.append(f"Tier 3 lane {lid}")
-    elif naics in NAICS_SET:
-        score += 15
-        why.append(f"In-lane NAICS {naics}")
-
-    in_lane = tier is not None or naics in NAICS_SET
-    # Gate 1 is non-negotiable: with no core-lane fit, agency/urgency/value must not
-    # inflate the score. Out-of-lane leads stay Low and sink in the ranking.
-    if not in_lane:
-        why.append("Out of core lane (Gate 1 = 0)")
-        atier = agency_tier(lead.get("agency"))
-        if atier:
-            why.append(f"Tier {atier} agency (but out of lane)")
-        return score, "Low", why
-
-    atier = agency_tier(lead.get("agency"))
-    if atier == 1:
-        score += 15
-        why.append("Tier 1 agency")
-    elif atier == 2:
-        score += 8
-        why.append("Tier 2 agency")
-    val = to_num(lead.get("value"))
-
-    if src == "Recent Award":
-        if is_warm(lead.get("prime")):
-            score += 30
-            why.append(f"Warm partner: {lead.get('prime')}")
-        if val >= 50e6:
-            score += 20
-            why.append("Award >= $50M")
-        elif val >= 10e6:
-            score += 12
-            why.append("Award >= $10M")
-        elif val >= 1e6:
-            score += 5
-            why.append("Award >= $1M")
-
-    elif src == "RFI/Sources Sought":
-        if tier in (1, 2):
-            why.append(f"RFI override: Tier {tier} lane responds regardless of score")
-        d = days_until(lead.get("nextActionDate"))
-        if d is not None and d >= 0:
-            bump = 30 if d <= 7 else 20 if d <= 14 else 10 if d <= 30 else 0
-            score += bump
-            why.append(f"Response due in {d}d")
-        elif d is not None:
-            why.append("Response deadline passed")
-        else:
-            why.append("Response deadline not set")
-
-    elif src == "Expiring Contract":
-        d = days_until(lead.get("popEnd"))
-        if d is not None:
-            if d < 0:
-                why.append("Already ended")
-            elif d < 120:
-                score += 15
-                why.append(f"Ends in {d}d (engage now)")
-            elif d <= 365:
-                score += 20
-                why.append(f"Ends in {d}d (shaping window)")
-            elif d <= 730:
-                score += 10
-                why.append(f"Ends in {d}d (early monitor)")
-        if val >= 50e6:
-            score += 15
-            why.append("Recompete >= $50M")
-        elif val >= 10e6:
-            score += 8
-            why.append("Recompete >= $10M")
-
-    # Bands calibrated to the profile-weighted range (lane up to 30, agency up to 15,
-    # warm/value/urgency up to ~30). High is reserved for strong multi-signal fits.
-    tag = "High" if score >= 60 else "Medium" if score >= 35 else "Low"
-    return score, tag, why
+def routing_tag(lead):
+    return "Warm" if is_warm(lead.get("prime") or lead.get("incumbent")) else "Cold"
 
 
-def notice_link(lead):
-    import re
-    m = re.search(r"https?://\S+", str(lead.get("notes") or ""))
-    return m.group(0) if m else ""
+def setaside_short(lead):
+    s = (lead.get("setAside") or "").strip()
+    if not s or s.upper() in ("NO SET ASIDE USED.", "NONE"):
+        return "-"
+    return s.title().replace("Set-Aside", "SA").replace("Set Aside", "SA")
+
+
+def vehicle_disp(lead):
+    v = lead.get("vehicle") or ""
+    if not v:
+        return "-"
+    return v + (" (HELD)" if lead.get("vehicleHeld") else "")
 
 
 # --------------------------------------------------------------- bucketing ---
 def bucket(leads):
-    awards, rfis, expiring = [], [], []
+    """Prefilter to capability-aligned leads, then split into the two plays.
+    Returns (awards, expiring, dropped) where dropped is the out-of-lane count."""
+    awards, expiring, dropped = [], [], 0
     for l in leads:
+        if not aligned(l):
+            dropped += 1
+            continue
         s = l.get("source")
         if s == "Recent Award":
             awards.append(l)
-        elif s == "RFI/Sources Sought":
-            d = days_until(l.get("nextActionDate"))
-            if d is None or d >= 0:   # still open or undated; drop clearly past-due
-                rfis.append(l)
         elif s == "Expiring Contract":
             d = days_until(l.get("popEnd"))
-            if d is not None and d >= 0:   # "upcoming" only; already-ended drop off the watch
+            if d is not None and d >= 0:   # upcoming only
                 expiring.append(l)
-    awards.sort(key=lambda l: (priority(l)[0], to_num(l.get("value"))), reverse=True)
-    rfis.sort(key=lambda l: (days_until(l.get("nextActionDate")) if days_until(l.get("nextActionDate")) is not None else 10**6,
-                             -priority(l)[0]))
-    expiring.sort(key=lambda l: (days_until(l.get("popEnd")) if days_until(l.get("popEnd")) is not None else 10**6))
-    return awards, rfis, expiring
+    # Awards: warm partners first (route via channel), then by value.
+    awards.sort(key=lambda l: (is_warm(l.get("prime")), to_num(l.get("value"))), reverse=True)
+    # Expiring: shaping-window (9-18 mo) first, then soonest end date.
+    def exp_key(l):
+        d = days_until(l.get("popEnd"))
+        d = d if d is not None else 10**6
+        shaping = 270 <= d <= 540
+        return (0 if shaping else 1, d)
+    expiring.sort(key=exp_key)
+    return awards, expiring, dropped
 
 
 # --------------------------------------------------------------- markdown ----
@@ -300,76 +252,57 @@ def md_trunc(s, n=70):
     return s if len(s) <= n else s[:n - 1] + "…"
 
 
-def render_markdown(awards, rfis, expiring, source_name):
+def render_markdown(awards, expiring, dropped, source_name):
     L = []
     L.append(f"# Ignitec BD Sourcing Report  ({TODAY.isoformat()})")
     L.append("")
-    L.append(f"Source: `output/{source_name}`  |  Recent Awards: {len(awards)}  |  "
-             f"RFIs: {len(rfis)}  |  Expiring Contracts: {len(expiring)}")
+    L.append(f"Source: `output/{source_name}`  |  Recent Awards (aligned): {len(awards)}  |  "
+             f"Expiring Contracts (aligned): {len(expiring)}  |  Out-of-lane filtered out: {dropped}")
     L.append("")
-    L.append("> Priority is a transparent triage aid for ordering the queue, not the six-gate "
-             "go/no-go. Gate 1 (Core Lane Alignment) is auto-suggested from NAICS and keywords "
-             "and must be confirmed. Gates 2-6 require human judgment and are not auto-scored.")
+    L.append("> Capability prefilter: only opportunities that map to an Ignitec lane (keyword, NAICS, "
+             "or PSC) are shown. Warm = winning prime / incumbent is an existing Ignitec channel "
+             "(route via relationship, do not cold-call). Contacts (CO/COR, prime POC) populate once "
+             "HigherGov enrichment is connected; today the target is the prime (awards) or incumbent (expiring).")
     L.append("")
 
     def overflow(items):
         return f"\n_Showing top {SECTION_CAP} of {len(items)}. See output/{source_name} for the full set._\n" if len(items) > SECTION_CAP else ""
 
-    # 1. Recent Awards
-    L.append("## 1. Recent Awards to pursue (subcontracting and outreach)")
+    # 1. Recent Awards -> subcontracting / staffing outreach
+    L.append("## 1. Recent Awards: subcontracting and staffing outreach")
     L.append("")
     if not awards:
-        L.append("_No recent awards in the current set._")
+        L.append("_No aligned recent awards in the current set._")
     else:
-        L.append("| Priority | Award | Agency | Value | Prime | Lane NAICS | Gate 1 (confirm) | Why |")
+        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Next action |")
         L.append("|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
-            sc, tag, why = priority(l)
-            g1, _ = gate1_suggestion(l)
-            L.append(f"| {tag} ({sc}) | {md_trunc(l.get('awardId') or l.get('title'), 40)} "
-                     f"| {md_trunc(l.get('agency'), 34)} | {fmt_value(l.get('value'))} "
-                     f"| {md_trunc(l.get('prime'), 30)} | {md_cell(l.get('naics'))} | {g1} "
-                     f"| {md_trunc('; '.join(why), 60)} |")
+            L.append(f"| {routing_tag(l)} | {md_trunc(l.get('prime'), 30)} "
+                     f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
+                     f"| {lane_label(l)} | {md_trunc(setaside_short(l), 22)} | {md_cell(vehicle_disp(l))} "
+                     f"| {md_trunc(l.get('nextAction'), 40)} |")
         L.append(overflow(awards))
     L.append("")
 
-    # 2. RFIs
-    L.append("## 2. RFIs and Sources Sought to develop responses for")
-    L.append("")
-    if not rfis:
-        L.append("_No open RFIs in the current set._")
-    else:
-        L.append("| Priority | Response due | Title | Agency | NAICS | Gate 1 | Why |")
-        L.append("|---|---|---|---|---|---|---|")
-        for l in rfis[:SECTION_CAP]:
-            sc, tag, why = priority(l)
-            g1, _ = gate1_suggestion(l)
-            due = l.get("nextActionDate") or "not set"
-            L.append(f"| {tag} ({sc}) | {md_cell(due)} | {md_trunc(l.get('title'), 46)} "
-                     f"| {md_trunc(l.get('agency'), 30)} | {md_cell(l.get('naics')) or '-'} | {g1} "
-                     f"| {md_trunc('; '.join(why), 46)} |")
-        L.append(overflow(rfis))
-    L.append("")
-
-    # 3. Expiring
-    L.append("## 3. Upcoming contract end dates to monitor")
+    # 2. Expiring -> recompete shaping / incumbent outreach
+    L.append("## 2. Expiring Contracts: recompete shaping and incumbent outreach")
     L.append("")
     if not expiring:
-        L.append("_No expiring contracts in the current set._")
+        L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| End date | Days out | Posture | Title | Agency | Value | Why |")
-        L.append("|---|---|---|---|---|---|---|")
+        L.append("| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Set-aside | Vehicle | Route |")
+        L.append("|---|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
-            sc, tag, why = priority(l)
             d = days_until(l.get("popEnd"))
-            L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} "
-                     f"| {md_cell(l.get('posture')) or '-'} | {md_trunc(l.get('title'), 40)} "
-                     f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
-                     f"| {md_trunc('; '.join(why), 40)} |")
+            shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
+            L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
+                     f"| {md_trunc(l.get('incumbent') or l.get('prime'), 28)} | {md_trunc(l.get('agency'), 24)} "
+                     f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {md_trunc(setaside_short(l), 20)} "
+                     f"| {md_cell(vehicle_disp(l))} | {routing_tag(l)} |")
         L.append(overflow(expiring))
     L.append("")
-    L.append(f"_Generated {TODAY.isoformat()} by bd_report.py. Work these in the BD Sourcing "
-             f"Cockpit: score the six gates and set owner, posture, and next action._")
+    L.append(f"_Generated {TODAY.isoformat()} by bd_report.py. Work these in the BD Sourcing Cockpit: "
+             f"set owner, next action, and log outreach._")
     return "\n".join(L)
 
 
@@ -378,49 +311,41 @@ def h(s):
     return html.escape(str(s if s is not None else ""))
 
 
-def render_html(awards, rfis, expiring, source_name):
+def render_html(awards, expiring, dropped, source_name):
+    def route_span(l):
+        r = routing_tag(l)
+        return f"<span class='tag {r.lower()}'>{r}</span>"
+
     def rows_awards(items):
         out = []
         for l in items[:SECTION_CAP]:
-            sc, tag, why = priority(l)
-            g1, _ = gate1_suggestion(l)
-            out.append(f"<tr><td><span class='tag {tag.lower()}'>{tag}</span> {sc}</td>"
-                       f"<td>{h(l.get('awardId') or l.get('title'))}</td><td>{h(l.get('agency'))}</td>"
-                       f"<td class='num'>{h(fmt_value(l.get('value')))}</td><td>{h(l.get('prime'))}</td>"
-                       f"<td>{h(l.get('naics'))}</td><td class='num'>{g1}</td><td class='why'>{h('; '.join(why))}</td></tr>")
-        return "".join(out)
-
-    def rows_rfis(items):
-        out = []
-        for l in items[:SECTION_CAP]:
-            sc, tag, why = priority(l)
-            g1, _ = gate1_suggestion(l)
-            link = notice_link(l)
-            title = h(l.get('title'))
-            if link:
-                title = f"<a href='{h(link)}' target='_blank' rel='noopener'>{title}</a>"
-            out.append(f"<tr><td><span class='tag {tag.lower()}'>{tag}</span> {sc}</td>"
-                       f"<td>{h(l.get('nextActionDate') or 'not set')}</td><td>{title}</td>"
-                       f"<td>{h(l.get('agency'))}</td><td>{h(l.get('naics') or '-')}</td>"
-                       f"<td class='num'>{g1}</td><td class='why'>{h('; '.join(why))}</td></tr>")
+            out.append(f"<tr><td>{route_span(l)}</td><td>{h(l.get('prime'))}</td>"
+                       f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
+                       f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
+                       f"<td>{h(vehicle_disp(l))}</td><td class='why'>{h(l.get('nextAction'))}</td></tr>")
         return "".join(out)
 
     def rows_exp(items):
         out = []
         for l in items[:SECTION_CAP]:
-            sc, tag, why = priority(l)
             d = days_until(l.get("popEnd"))
+            shaping = "<span class='tag shape'>Shaping</span>" if (d is not None and 270 <= d <= 540) else ""
             out.append(f"<tr><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
-                       f"<td>{h(l.get('posture') or '-')}</td><td>{h(l.get('title'))}</td>"
+                       f"<td>{shaping}</td><td>{h(l.get('incumbent') or l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
-                       f"<td class='why'>{h('; '.join(why))}</td></tr>")
+                       f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
+                       f"<td>{h(vehicle_disp(l))}</td><td>{route_span(l)}</td></tr>")
         return "".join(out)
 
     def overflow(items):
         return (f"<p class='ovf'>Showing top {SECTION_CAP} of {len(items)}. "
                 f"Full set in output/{source_name}.</p>") if len(items) > SECTION_CAP else ""
 
-    empty = "<p class='empty'>None in the current set.</p>"
+    empty = "<p class='empty'>None aligned in the current set.</p>"
+    aw_head = ("<table><tr><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
+               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Next action</th></tr>")
+    ex_head = ("<table><tr><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
+               "<th>Agency</th><th>Value</th><th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Route</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -439,29 +364,27 @@ def render_html(awards, rfis, expiring, source_name):
  td.num{{text-align:right;white-space:nowrap}} td.why{{color:#5b6472;font-size:12px}}
  tr:hover td{{background:#fafbfc}}
  .tag{{font-weight:bold;padding:1px 7px;border-radius:12px;font-size:11px}}
- .tag.high{{background:#e6f4ec;color:#1b7a43}} .tag.medium{{background:#fbf1dc;color:#946200}}
- .tag.low{{background:#eceef2;color:#5b6472}}
+ .tag.warm{{background:#e6f4ec;color:#1b7a43}} .tag.cold{{background:#eef1fb;color:#1F3864}}
+ .tag.shape{{background:#fbf1dc;color:#946200}}
  .ovf,.empty{{color:#5b6472;font-size:12px}} a{{color:#1F3864}}
  .foot{{color:#5b6472;font-size:12px;margin-top:24px}}
 </style></head><body><div class="wrap">
 <h1>Ignitec BD Sourcing Report</h1>
 <div class="meta">{h(TODAY.isoformat())} &nbsp;|&nbsp; source output/{h(source_name)} &nbsp;|&nbsp;
- Recent Awards {len(awards)} &nbsp;|&nbsp; RFIs {len(rfis)} &nbsp;|&nbsp; Expiring {len(expiring)}</div>
-<div class="note">Priority is a transparent triage aid for ordering the queue, not the six-gate
- go/no-go. Gate 1 (Core Lane Alignment) is auto-suggested from NAICS and keywords and must be
- confirmed. Gates 2 through 6 require human judgment and are not auto-scored.</div>
+ Recent Awards {len(awards)} &nbsp;|&nbsp; Expiring {len(expiring)} &nbsp;|&nbsp; Out-of-lane filtered {dropped}</div>
+<div class="note">Capability prefilter: only opportunities that map to an Ignitec lane (keyword, NAICS,
+ or PSC) are shown. <b>Warm</b> = the winning prime or incumbent is an existing Ignitec channel
+ (route via the relationship, do not cold-call). Contacts (CO/COR, prime POC) populate once HigherGov
+ enrichment is connected; today the outreach target is the prime (awards) or the incumbent (expiring).</div>
 
-<h2>1. Recent Awards to pursue (subcontracting and outreach)</h2>
-{("<table><tr><th>Priority</th><th>Award</th><th>Agency</th><th>Value</th><th>Prime</th><th>NAICS</th><th>Gate 1</th><th>Why</th></tr>" + rows_awards(awards) + "</table>" + overflow(awards)) if awards else empty}
+<h2>1. Recent Awards: subcontracting and staffing outreach</h2>
+{(aw_head + rows_awards(awards) + "</table>" + overflow(awards)) if awards else empty}
 
-<h2>2. RFIs and Sources Sought to develop responses for</h2>
-{("<table><tr><th>Priority</th><th>Response due</th><th>Title</th><th>Agency</th><th>NAICS</th><th>Gate 1</th><th>Why</th></tr>" + rows_rfis(rfis) + "</table>" + overflow(rfis)) if rfis else empty}
+<h2>2. Expiring Contracts: recompete shaping and incumbent outreach</h2>
+{(ex_head + rows_exp(expiring) + "</table>" + overflow(expiring)) if expiring else empty}
 
-<h2>3. Upcoming contract end dates to monitor</h2>
-{("<table><tr><th>End date</th><th>Days out</th><th>Posture</th><th>Title</th><th>Agency</th><th>Value</th><th>Why</th></tr>" + rows_exp(expiring) + "</table>" + overflow(expiring)) if expiring else empty}
-
-<p class="foot">Generated by bd_report.py. Work these in the BD Sourcing Cockpit: score the six
- gates and set owner, posture, and next action.</p>
+<p class="foot">Generated by bd_report.py. Work these in the BD Sourcing Cockpit: set owner,
+ next action, and log outreach.</p>
 </div></body></html>"""
 
 
@@ -471,10 +394,10 @@ def main():
     if not leads:
         print("No leads found in output/. Run the crawler first.")
         source_name = "all_leads.json"
-    awards, rfis, expiring = bucket(leads)
+    awards, expiring, dropped = bucket(leads)
 
-    md = render_markdown(awards, rfis, expiring, source_name)
-    html_doc = render_html(awards, rfis, expiring, source_name)
+    md = render_markdown(awards, expiring, dropped, source_name)
+    html_doc = render_html(awards, expiring, dropped, source_name)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(os.path.join(OUTPUT_DIR, "report_latest.md"), "w") as f:
@@ -498,8 +421,8 @@ def main():
         except OSError as e:
             print(f"  ! could not write step summary: {e}")
 
-    print(f"Report written. Recent Awards: {len(awards)}, RFIs: {len(rfis)}, "
-          f"Expiring: {len(expiring)}. See output/report_latest.md and .html")
+    print(f"Report written. Aligned recent awards: {len(awards)}, expiring: {len(expiring)}, "
+          f"out-of-lane filtered: {dropped}. See output/report_latest.md and .html")
 
 
 if __name__ == "__main__":
