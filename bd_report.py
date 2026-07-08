@@ -136,6 +136,43 @@ def summary_text(lead):
     return out
 
 
+ENRICHMENT = {}
+
+
+def load_enrichment():
+    try:
+        with open(os.path.join(OUTPUT_DIR, "enrichment.json")) as fh:
+            return json.load(fh) or {}
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return {}
+
+
+def enrich_of(lead):
+    return ENRICHMENT.get(lead.get("id")) or {}
+
+
+def contact_text(lead):
+    """Top contracting-office contact from HigherGov, as 'Name <email>'."""
+    contacts = enrich_of(lead).get("contacts") or []
+    if not contacts:
+        return ""
+    c = contacts[0]
+    label = c.get("name") or c.get("email") or ""
+    if c.get("email") and c.get("name"):
+        label = f"{c['name']} <{c['email']}>"
+    return label
+
+
+def incumbent_text(lead):
+    """Prefer the HigherGov incumbent (clean name + parent) over the raw field."""
+    inc = enrich_of(lead).get("incumbent") or {}
+    name = inc.get("name") or lead.get("incumbent") or lead.get("prime") or ""
+    parent = inc.get("parent")
+    if parent and parent.lower() != (name or "").lower():
+        name = f"{name} ({parent})"
+    return name
+
+
 def lane_label(lead):
     tier, lid, title = lane_match(lead)
     if lid:
@@ -229,7 +266,7 @@ def setaside_short(lead):
 
 
 def vehicle_disp(lead):
-    v = lead.get("vehicle") or ""
+    v = lead.get("vehicle") or enrich_of(lead).get("vehicle") or ""
     if not v:
         return "-"
     return v + (" (HELD)" if lead.get("vehicleHeld") else "")
@@ -282,8 +319,9 @@ def render_markdown(awards, expiring, dropped, source_name):
     L.append("")
     L.append("> Capability prefilter: only opportunities that map to an Ignitec lane (keyword, NAICS, "
              "or PSC) are shown. Warm = winning prime / incumbent is an existing Ignitec channel "
-             "(route via relationship, do not cold-call). Contacts (CO/COR, prime POC) populate once "
-             "HigherGov enrichment is connected; today the target is the prime (awards) or incumbent (expiring).")
+             "(route via relationship, do not cold-call). Contact is the contracting-office point of "
+             "contact from HigherGov (blank until enrichment resolves the record); the outreach target "
+             "is the prime (awards) or incumbent (expiring).")
     L.append("")
 
     def overflow(items):
@@ -295,14 +333,14 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not awards:
         L.append("_No aligned recent awards in the current set._")
     else:
-        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Summary |")
-        L.append("|---|---|---|---|---|---|---|---|")
+        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Contact | Summary |")
+        L.append("|---|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
             blurb = summary_text(l) or l.get("nextAction") or ""
             L.append(f"| {routing_tag(l)} | {md_trunc(l.get('prime'), 30)} "
                      f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
                      f"| {lane_label(l)} | {md_trunc(setaside_short(l), 22)} | {md_cell(vehicle_disp(l))} "
-                     f"| {md_trunc(blurb, 90)} |")
+                     f"| {md_trunc(contact_text(l), 46)} | {md_trunc(blurb, 80)} |")
         L.append(overflow(awards))
     L.append("")
 
@@ -312,16 +350,17 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not expiring:
         L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Route | Summary |")
-        L.append("|---|---|---|---|---|---|---|---|---|")
+        L.append("| End date | Days | Shaping | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
+        L.append("|---|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
             shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
             blurb = summary_text(l) or l.get("nextAction") or ""
             L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
-                     f"| {md_trunc(l.get('incumbent') or l.get('prime'), 28)} | {md_trunc(l.get('agency'), 24)} "
+                     f"| {md_trunc(incumbent_text(l), 24)} | {md_trunc(contact_text(l), 44)} "
+                     f"| {md_trunc(l.get('agency'), 20)} "
                      f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {routing_tag(l)} "
-                     f"| {md_trunc(blurb, 90)} |")
+                     f"| {md_trunc(blurb, 70)} |")
         L.append(overflow(expiring))
     L.append("")
     L.append(f"_Generated {TODAY.isoformat()} by bd_report.py. Work these in the BD Sourcing Cockpit: "
@@ -332,6 +371,21 @@ def render_markdown(awards, expiring, dropped, source_name):
 # --------------------------------------------------------------- html --------
 def h(s):
     return html.escape(str(s if s is not None else ""))
+
+
+def contact_html(lead):
+    """First HigherGov contact as a name + mailto link, with phone if present."""
+    contacts = enrich_of(lead).get("contacts") or []
+    if not contacts:
+        return "<span class='muted'>-</span>"
+    c = contacts[0]
+    name = h(c.get("name") or c.get("email") or "contact")
+    email = c.get("email") or ""
+    phone = c.get("phone") or ""
+    inner = f"<a href='mailto:{h(email)}'>{name}</a>" if email else name
+    if phone:
+        inner += f"<br><span class='muted'>{h(phone)}</span>"
+    return inner
 
 
 def render_html(awards, expiring, dropped, source_name):
@@ -345,7 +399,7 @@ def render_html(awards, expiring, dropped, source_name):
             out.append(f"<tr><td>{route_span(l)}</td><td>{h(l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
-                       f"<td>{h(vehicle_disp(l))}</td>"
+                       f"<td>{h(vehicle_disp(l))}</td><td>{contact_html(l)}</td>"
                        f"<td class='why'>{h(summary_text(l) or l.get('nextAction') or '')}</td></tr>")
         return "".join(out)
 
@@ -355,7 +409,8 @@ def render_html(awards, expiring, dropped, source_name):
             d = days_until(l.get("popEnd"))
             shaping = "<span class='tag shape'>Shaping</span>" if (d is not None and 270 <= d <= 540) else ""
             out.append(f"<tr><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
-                       f"<td>{shaping}</td><td>{h(l.get('incumbent') or l.get('prime'))}</td>"
+                       f"<td>{shaping}</td><td>{h(incumbent_text(l))}</td>"
+                       f"<td>{contact_html(l)}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{route_span(l)}</td>"
                        f"<td class='why'>{h(summary_text(l) or l.get('nextAction') or '')}</td></tr>")
@@ -367,9 +422,9 @@ def render_html(awards, expiring, dropped, source_name):
 
     empty = "<p class='empty'>None aligned in the current set.</p>"
     aw_head = ("<table><tr><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
-               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Summary</th></tr>")
+               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Contact</th><th>Summary</th></tr>")
     ex_head = ("<table><tr><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
-               "<th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
+               "<th>CO / contact</th><th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -386,6 +441,7 @@ def render_html(awards, expiring, dropped, source_name):
  th,td{{text-align:left;padding:7px 9px;border-bottom:1px solid #eef1f5;vertical-align:top}}
  th{{background:#1F3864;color:#fff;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}}
  td.num{{text-align:right;white-space:nowrap}} td.why{{color:#5b6472;font-size:12px}}
+ .muted{{color:#8a94a3;font-size:11.5px}} td a{{color:#1F3864}}
  tr:hover td{{background:#fafbfc}}
  .tag{{font-weight:bold;padding:1px 7px;border-radius:12px;font-size:11px}}
  .tag.warm{{background:#e6f4ec;color:#1b7a43}} .tag.cold{{background:#eef1fb;color:#1F3864}}
@@ -414,12 +470,13 @@ def render_html(awards, expiring, dropped, source_name):
 
 # --------------------------------------------------------------- run ---------
 def main():
-    global SUMMARIES
+    global SUMMARIES, ENRICHMENT
     leads, source_name = load_leads()
     if not leads:
         print("No leads found in output/. Run the crawler first.")
         source_name = "all_leads.json"
     SUMMARIES = load_summaries()
+    ENRICHMENT = load_enrichment()
     awards, expiring, dropped = bucket(leads)
 
     md = render_markdown(awards, expiring, dropped, source_name)

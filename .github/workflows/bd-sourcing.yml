@@ -31,6 +31,14 @@ jobs:
           SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
         run: python ignitec_bd_sourcing.py
 
+      - name: Enrich with HigherGov (contacts, incumbent, vehicle)
+        # Looks up each aligned award/expiring lead by Award ID and backfills
+        # contracting-office contacts, incumbent identity, and vehicle into
+        # output/enrichment.json. Incremental; skips if no key.
+        env:
+          HIGHERGOV_API_KEY: ${{ secrets.HIGHERGOV_API_KEY }}
+        run: python bd_enrich.py
+
       - name: Generate AI summaries
         # Summarizes each aligned award/expiring lead via the Anthropic Batch API
         # (Haiku, profile-cached). Writes output/summaries.json. Skips if no key.

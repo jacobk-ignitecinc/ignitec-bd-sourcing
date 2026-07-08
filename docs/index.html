@@ -53,6 +53,9 @@
   .chip.held{background:var(--amberbg);color:var(--amber);font-weight:bold}
   .summary{margin-top:7px;font-size:12.5px;color:#2a2f36;background:#f6f8fb;border-left:3px solid var(--navy);
            border-radius:0 6px 6px 0;padding:6px 9px} .summary .angle{color:var(--muted)}
+  .contacts{margin-top:6px;font-size:12px;color:#2a2f36;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+  .contacts .clabel{font-weight:bold;color:var(--navy)} .contacts .contact{white-space:nowrap}
+  .contacts a,.ro .v a{color:var(--navy);text-decoration:none;border-bottom:1px dotted var(--navy)}
   .badge{font-size:11.5px;font-weight:bold;padding:4px 9px;border-radius:20px;white-space:nowrap;align-self:center}
   .b-warm{background:var(--warmbg);color:var(--warm)} .b-cold{background:var(--coldbg);color:var(--cold)}
   .panel{border-top:1px solid var(--line);padding:14px;display:none;background:#fcfdff}
@@ -136,7 +139,8 @@ const CONFIG = {
   branch: "claude/contract-expiration-tracking-r1qpia",
   paths: ["output/all_leads.json", "output/latest_new_leads.json"],
   configPath: "config/ignitec.json",
-  summariesPath: "output/summaries.json"
+  summariesPath: "output/summaries.json",
+  enrichmentPath: "output/enrichment.json"
 };
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
@@ -148,7 +152,7 @@ const SOURCE_FIELDS = ["source","title","prime","agency","subAgency","value","aw
 const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","notes","routing"];
 
 let master = {}, dirty = false;
-let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {};
+let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {}, ENRICHMENT = {};
 
 const $ = s => document.querySelector(s);
 const el = (t,c,txt)=>{const e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e;};
@@ -210,6 +214,12 @@ async function loadSummaries(branch){
     const j=await r.json(); if(j && typeof j==="object"){ SUMMARIES=j; return true; } }catch(e){} }
   return false;
 }
+async function loadEnrichment(branch){
+  const cands=["../"+CONFIG.enrichmentPath, rawURL(branch,CONFIG.enrichmentPath)];
+  for(const u of cands){ try{ const r=await fetch(u,{cache:"no-store"}); if(!r.ok)continue;
+    const j=await r.json(); if(j && typeof j==="object"){ ENRICHMENT=j; return true; } }catch(e){} }
+  return false;
+}
 async function fetchLeads(branch){
   const cands=[]; for(const p of CONFIG.paths){ cands.push("../"+p); cands.push(rawURL(branch,p)); }
   let lastErr;
@@ -224,6 +234,7 @@ async function reload(){
   $("#srcInfo").textContent="Loading leads from "+branch+" ...";
   await loadConfig(branch);
   await loadSummaries(branch);
+  await loadEnrichment(branch);
   try{
     const {data,url}=await fetchLeads(branch);
     const res=mergeLeads(data);
@@ -277,6 +288,20 @@ function leadCard(l){
     if(sum.outreach_angle){ const a=el("span","angle"); a.textContent="  Angle: "+sum.outreach_angle; sd.appendChild(a); }
     grow.appendChild(sd);
   }
+  const enr=ENRICHMENT[l.id];
+  if(enr && (enr.contacts||[]).length){
+    const cd=el("div","contacts");
+    cd.appendChild(el("span","clabel","Contacts:"));
+    (enr.contacts||[]).slice(0,3).forEach((c,i)=>{
+      const span=el("span","contact");
+      const nm=c.name||c.email||"contact";
+      if(c.email){ const a=el("a",null,nm); a.href="mailto:"+c.email; a.addEventListener("click",e=>e.stopPropagation()); span.appendChild(a); }
+      else span.appendChild(document.createTextNode(nm));
+      if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone));
+      cd.appendChild(span);
+    });
+    grow.appendChild(cd);
+  }
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
   head.appendChild(grow); head.appendChild(badge);
   head.addEventListener("click",()=>card.classList.toggle("open"));
@@ -301,14 +326,31 @@ function leadCard(l){
   panel.appendChild(grid);
 
   const ro=el("div","ro"); ro.appendChild(el("h2",null,"Opportunity detail"));
-  const rows=[["Source",l.source],["Award ID",l.awardId],[isAward?"Prime":"Incumbent",target],
+  const inc=(enr&&enr.incumbent)||null;
+  const incDisp=inc?(inc.name+(inc.parent&&inc.parent.toLowerCase()!==(inc.name||"").toLowerCase()?" ("+inc.parent+")":"")
+                     +(inc.uei?" · UEI "+inc.uei:"")+(inc.cage?" · CAGE "+inc.cage:"")):target;
+  const vehDisp=(l.vehicle||(enr&&enr.vehicle)||"");
+  const rows=[["Source",l.source],["Award ID",l.awardId],[isAward?"Prime":"Incumbent",incDisp],
     ["Agency",l.agency],["Sub-agency",l.subAgency],["Value",fmtVal(l.value)],["NAICS",l.naics],["PSC",l.psc],
-    ["Set-aside",l.setAside],["Vehicle",l.vehicle+(l.vehicleHeld?" (HELD by Ignitec)":"")],
+    ["Set-aside",l.setAside],["Vehicle",vehDisp+(l.vehicleHeld?" (HELD by Ignitec)":"")],
     ["PoP start",l.popStart],["PoP end",l.popEnd],["Lane match",laneLabel(l)],
-    ["Contact (CO/COR, POC)","pending HigherGov enrichment"],
     ["Date added",l.dateAdded],["Lead id",l.id]];
   for(const [k,v] of rows){ if(v==null||v===""||v==="-")continue;
     const row=el("div","row"); row.appendChild(el("div","k",k)); row.appendChild(el("div","v",String(v))); ro.appendChild(row); }
+  if(enr && (enr.contacts||[]).length){
+    (enr.contacts||[]).forEach(c=>{
+      const row=el("div","row"); row.appendChild(el("div","k",c.role||"Contact"));
+      const v=el("div","v"); const nm=c.name||c.email||"contact";
+      if(c.email){ const a=el("a",null,nm); a.href="mailto:"+c.email; v.appendChild(a);} else v.appendChild(document.createTextNode(nm));
+      const extra=[c.title,c.email&&c.name?c.email:null,c.phone].filter(Boolean).join(" · ");
+      if(extra)v.appendChild(document.createTextNode(" — "+extra));
+      row.appendChild(v); ro.appendChild(row);
+    });
+  }
+  if(enr && enr.hgPath){ const row=el("div","row"); row.appendChild(el("div","k","HigherGov record"));
+    const v=el("div","v"); const a=el("a",null,"open in HigherGov"); a.href=enr.hgPath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
+  if(!enr){ const row=el("div","row"); row.appendChild(el("div","k","Contacts"));
+    row.appendChild(el("div","v","pending HigherGov enrichment")); ro.appendChild(row); }
   if(l.notes){const row=el("div","row"); row.appendChild(el("div","k","Crawler notes")); row.appendChild(el("div","v",l.notes)); ro.appendChild(row);}
   panel.appendChild(ro);
   card.appendChild(panel);
