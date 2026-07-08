@@ -195,6 +195,7 @@
       <select id="pStageFilter"><option value="">All stages</option></select>
       <select id="pOwnerFilter"><option value="">All owners</option></select>
       <button class="ghost" id="pConnectBtn" title="Store a GitHub token in this browser to save the shared pipeline">Connect GitHub</button>
+      <button class="ghost" id="pHelpBtn" title="How to create the token" style="padding:7px 10px">?</button>
       <button id="pSaveBtn" title="Commit the pipeline to output/pipeline.json">Save to GitHub</button>
     </div>
     <div class="board" id="board"></div>
@@ -338,6 +339,38 @@ function connectGitHub(){
   setGStatus(t.trim()?"GitHub connected. You can Save to GitHub.":"GitHub disconnected.", t.trim()?"ok":"");
 }
 function setGStatus(msg,cls){const el=$("#gStatus"); if(el){el.textContent=msg; el.className="gstatus "+(cls||"");}}
+function showTokenHelp(){
+  const root=$("#modalRoot"); root.innerHTML="";
+  const overlay=el("div","modal"); overlay.addEventListener("click",e=>{if(e.target===overlay)closeModal();});
+  const sheet=el("div","sheet");
+  const mhead=el("div","mhead");
+  const hg=el("div"); hg.appendChild(el("div",null,"Create a GitHub token to save the shared pipeline"));
+  hg.querySelector("div").style.cssText="font-weight:bold;font-size:15px;color:var(--navy)";
+  hg.appendChild(el("div","hint","One-time setup, per person. The token lets this page write output/pipeline.json. It is stored only in your browser, never committed."));
+  const x=el("button","x","×"); x.addEventListener("click",closeModal);
+  mhead.appendChild(hg); mhead.appendChild(x); sheet.appendChild(mhead);
+  const body=el("div","mbody"); body.style.fontSize="13px"; body.style.lineHeight="1.6";
+  const steps=[
+    ["Open the fine-grained token page","GitHub → your photo (top right) → Settings → Developer settings → Personal access tokens → Fine-grained tokens. Or go straight to github.com/settings/personal-access-tokens/new."],
+    ["Name and expiration","Token name: “Ignitec BD pipeline”. Set an expiration (90 days is fine; you will regenerate when it lapses)."],
+    ["Resource owner","Choose "+CONFIG.owner+" (the account that owns the repo). If it is an organization and you do not see the repo in the next step, an org admin must approve the token request or enable fine-grained tokens."],
+    ["Repository access","Select “Only select repositories” and choose "+CONFIG.owner+"/"+CONFIG.repo+"."],
+    ["Permissions","Under Repository permissions, set Contents to “Read and write”. (Metadata read-only is added automatically. Nothing else is needed.)"],
+    ["Generate and copy","Click Generate token and copy it (it starts with github_pat_ and is shown only once)."],
+    ["Paste it here","Click “Connect GitHub” on this page and paste the token. Then use “Save to GitHub” whenever you want to publish pipeline changes for the team."],
+  ];
+  const ol=el("ol"); ol.style.cssText="margin:4px 0 0;padding-left:20px";
+  steps.forEach(([t,d])=>{ const li=el("li"); li.style.marginBottom="9px";
+    const b=el("b",null,t); b.style.color="var(--navy)"; li.appendChild(b); li.appendChild(el("div",null,d)); ol.appendChild(li); });
+  body.appendChild(ol);
+  const note=el("div","hint"); note.style.marginTop="12px";
+  note.textContent="Viewers who only want to read the board do not need a token. Only people who will save changes need one. Each teammate creates their own.";
+  body.appendChild(note);
+  const openBtn=el("a","btn","Open GitHub token page"); openBtn.href="https://github.com/settings/personal-access-tokens/new";
+  openBtn.target="_blank"; openBtn.rel="noopener"; openBtn.style.marginTop="14px"; openBtn.style.display="inline-block";
+  body.appendChild(openBtn);
+  sheet.appendChild(body); overlay.appendChild(sheet); root.appendChild(overlay);
+}
 function b64encode(str){return btoa(unescape(encodeURIComponent(str)));}
 function b64decode(str){try{return decodeURIComponent(escape(atob(str)));}catch(e){return atob(str);}}
 async function saveToGitHub(){
@@ -806,6 +839,7 @@ function init(){
   $("#tabSourcing").addEventListener("click",()=>showTab("sourcing"));
   $("#tabPipeline").addEventListener("click",()=>showTab("pipeline"));
   $("#pConnectBtn").addEventListener("click",connectGitHub);
+  $("#pHelpBtn").addEventListener("click",showTokenHelp);
   $("#pSaveBtn").addEventListener("click",saveToGitHub);
   $("#pStageFilter").addEventListener("change",renderPipeline);
   $("#pOwnerFilter").addEventListener("change",renderPipeline);
