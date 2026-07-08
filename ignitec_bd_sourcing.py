@@ -62,6 +62,11 @@ SAM_PTYPES = ["r", "s"]   # r = Sources Sought, s = Special Notice (RFIs appear 
 
 WARM_PARTNERS = ["deloitte", "accenture", "amyx", "icf", "optum"]
 
+# Vehicles Ignitec holds (a match is a strong sub angle) and recipient names to
+# exclude (self-awards). Overridden from config.
+HELD_VEHICLE_PIIDS = ["47QTCA24D0060", "N0017825D7445"]
+EXCLUDE_RECIPIENT_NAMES = ["ignitec"]
+
 CONFIG_FILE = "config/ignitec.json"
 
 
@@ -71,6 +76,7 @@ def _apply_config():
     global RECENT_AWARDS_LOOKBACK_DAYS, MIN_AWARD_VALUE
     global EXPIRING_MIN_DAYS, EXPIRING_MAX_DAYS, SAM_LOOKBACK_DAYS
     global RUN_EXPIRING_PASS, RUN_SAM_PASS
+    global HELD_VEHICLE_PIIDS, EXCLUDE_RECIPIENT_NAMES
     try:
         with open(CONFIG_FILE) as f:
             crawl = (json.load(f) or {}).get("crawl", {})
@@ -86,6 +92,8 @@ def _apply_config():
     SAM_LOOKBACK_DAYS = crawl.get("sam_lookback_days", SAM_LOOKBACK_DAYS)
     RUN_EXPIRING_PASS = crawl.get("run_expiring_pass", RUN_EXPIRING_PASS)
     RUN_SAM_PASS = crawl.get("run_sam_pass", RUN_SAM_PASS)
+    HELD_VEHICLE_PIIDS = crawl.get("held_vehicle_piids") or HELD_VEHICLE_PIIDS
+    EXCLUDE_RECIPIENT_NAMES = crawl.get("exclude_recipient_names") or EXCLUDE_RECIPIENT_NAMES
     print(f"  Config loaded: {len(NAICS_CODES)} NAICS, {len(TARGET_AGENCIES)} agencies, "
           f"{len(WARM_PARTNERS)} warm partners.")
 
@@ -102,7 +110,7 @@ CONTRACT_TYPES = ["A", "B", "C", "D"]
 IDV_TYPES = ["IDV_A", "IDV_B", "IDV_B_A", "IDV_B_B", "IDV_B_C", "IDV_C", "IDV_D", "IDV_E"]
 USA_FIELDS = ["Award ID", "Recipient Name", "Awarding Agency", "Awarding Sub Agency",
               "Award Amount", "Start Date", "End Date", "Description",
-              "Contract Award Type", "NAICS", "PSC"]
+              "Contract Award Type", "NAICS", "PSC", "Type of Set Aside"]
 NAICS_SET = set(NAICS_CODES)
 TODAY = dt.date.today().isoformat()
 SRC_PREFIX = {"Recent Award": "RA", "Expiring Contract": "EX", "RFI/Sources Sought": "RFI"}
@@ -120,6 +128,7 @@ def lead(source, key, **fields):
         "title": "", "prime": "", "agency": "", "subAgency": "",
         "value": "", "awardId": "", "solicitationNumber": "", "naics": "", "psc": "",
         "popStart": "", "popEnd": "", "posture": "", "tier": "", "lane": "",
+        "setAside": "", "vehicle": "", "vehicleHeld": False, "incumbent": "", "routing": "",
         "gates": [None, None, None, None, None, None],
         "status": "Tracking", "owner": "", "nextAction": "", "nextActionDate": "",
         "notes": "", "dateAdded": TODAY, "lastTouched": TODAY,
@@ -131,6 +140,29 @@ def lead(source, key, **fields):
 def is_warm(name):
     n = (name or "").lower()
     return any(p in n for p in WARM_PARTNERS)
+
+
+def routing_for(name):
+    """Warm partners get routed through the existing channel; everyone else is cold."""
+    return "Warm - route via channel" if is_warm(name) else "Cold outreach"
+
+
+def is_self(name):
+    n = (name or "").lower()
+    return any(x in n for x in EXCLUDE_RECIPIENT_NAMES)
+
+
+def parse_vehicle(generated_internal_id):
+    """The parent IDV (vehicle) PIID is embedded in USASpending's generated_internal_id,
+    e.g. CONT_AWD_<piid>_<subtier>_<parentPIID>_<parentSubtier>. Returns (piid, held)."""
+    gid = str(generated_internal_id or "")
+    parts = gid.split("_")
+    piid = ""
+    if gid.startswith("CONT_AWD_") and len(parts) >= 5:
+        cand = parts[4]
+        if cand and cand not in ("-NONE-", "NONE"):
+            piid = cand
+    return piid, (piid in HELD_VEHICLE_PIIDS)
 
 
 def code_of(v):
@@ -198,13 +230,19 @@ def recent_awards():
         if amt < MIN_AWARD_VALUE:
             continue
         name = a.get("Recipient Name")
+        if is_self(name):
+            continue   # exclude Ignitec's own awards
+        vehicle, held = parse_vehicle(a.get("generated_internal_id"))
         out.append(lead(
             "Recent Award", a.get("Award ID"),
             title=f"{name} award at {a.get('Awarding Agency') or 'agency'}",
             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
             value=amt, awardId=a.get("Award ID"), naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=a.get("End Date"),
-            posture="Warm - route via channel" if is_warm(name) else "Cold outreach",
+            setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
+            posture=routing_for(name), routing=routing_for(name),
+            nextAction="Cold outreach to prime for subcontracting/staffing"
+                       if not is_warm(name) else "Route to existing channel; offer to sub",
             notes=(a.get("Description") or "")[:400],
         ))
     return out
@@ -232,7 +270,12 @@ def expiring_contracts():
             continue
         days = (end - today).days
         posture = "Shape" if days >= 540 else "Position" if days >= 180 else "Compete/Team"
-        name = a.get("Recipient Name")
+        name = a.get("Recipient Name")   # the incumbent on the expiring contract
+        if is_self(name):
+            continue
+        vehicle, held = parse_vehicle(a.get("generated_internal_id"))
+        # 9-18 months out is the recompete-shaping sweet spot for CO/COR outreach.
+        shaping = 270 <= days <= 540
         out.append(lead(
             "Expiring Contract", a.get("Award ID"),
             title=f"Recompete: {name} at {a.get('Awarding Agency') or 'agency'} (ends {str(end_raw)[:10]})",
@@ -240,8 +283,11 @@ def expiring_contracts():
             value=a.get("Award Amount") or 0, awardId=a.get("Award ID"),
             naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=str(end_raw)[:10], posture=posture,
-            nextAction="Confirm shaping window and request current contract via FOIA",
-            notes=(a.get("Description") or "")[:400],
+            setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
+            incumbent=name, routing=routing_for(name),
+            nextAction=("Reach CO/COR now to shape the recompete" if shaping
+                        else "Track; engage incumbent about subcontracting"),
+            notes=(("SHAPING WINDOW. " if shaping else "") + (a.get("Description") or ""))[:400],
         ))
     return out
 

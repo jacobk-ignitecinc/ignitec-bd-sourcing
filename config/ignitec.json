@@ -80,7 +80,13 @@
     "min_award_value": 1000000,
     "expiring_min_days": 60,
     "expiring_max_days": 730,
-    "sam_lookback_days": 14
+    "sam_lookback_days": 14,
+    "held_vehicle_piids": ["47QTCA24D0060", "N0017825D7445"],
+    "exclude_recipient_names": ["ignitec"],
+    "prime_set_asides": ["", "NO SET ASIDE USED.", "SMALL BUSINESS SET ASIDE - TOTAL",
+                          "SMALL BUSINESS SET ASIDE - PARTIAL", "SMALL DISADVANTAGED BUSINESS SET-ASIDE"],
+    "cannot_prime_set_asides": ["SERVICE-DISABLED VETERAN-OWNED SMALL BUSINESS SET-ASIDE",
+                                 "WOMEN-OWNED SMALL BUSINESS", "8(A)", "HUBZONE", "VETERAN-OWNED"]
   },
 
   "profile": {
