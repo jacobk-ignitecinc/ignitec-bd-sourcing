@@ -81,6 +81,7 @@
     "expiring_min_days": 60,
     "expiring_max_days": 730,
     "sam_lookback_days": 14,
+    "max_summaries_per_run": 1500,
     "held_vehicle_piids": ["47QTCA24D0060", "N0017825D7445"],
     "exclude_recipient_names": ["ignitec"],
     "prime_set_asides": ["", "NO SET ASIDE USED.", "SMALL BUSINESS SET ASIDE - TOTAL",

@@ -115,6 +115,27 @@ def aligned(lead):
     return tier is not None or str(lead.get("naics") or "") in NAICS_SET or psc_in_lane(lead.get("psc"))
 
 
+SUMMARIES = {}
+
+
+def load_summaries():
+    try:
+        with open(os.path.join(OUTPUT_DIR, "summaries.json")) as fh:
+            return json.load(fh) or {}
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return {}
+
+
+def summary_text(lead):
+    s = SUMMARIES.get(lead.get("id"))
+    if not s:
+        return ""
+    out = s.get("summary", "")
+    if s.get("outreach_angle"):
+        out += "  Angle: " + s["outreach_angle"]
+    return out
+
+
 def lane_label(lead):
     tier, lid, title = lane_match(lead)
     if lid:
@@ -274,13 +295,14 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not awards:
         L.append("_No aligned recent awards in the current set._")
     else:
-        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Next action |")
+        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Summary |")
         L.append("|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
+            blurb = summary_text(l) or l.get("nextAction") or ""
             L.append(f"| {routing_tag(l)} | {md_trunc(l.get('prime'), 30)} "
                      f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
                      f"| {lane_label(l)} | {md_trunc(setaside_short(l), 22)} | {md_cell(vehicle_disp(l))} "
-                     f"| {md_trunc(l.get('nextAction'), 40)} |")
+                     f"| {md_trunc(blurb, 90)} |")
         L.append(overflow(awards))
     L.append("")
 
@@ -290,15 +312,16 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not expiring:
         L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Set-aside | Vehicle | Route |")
-        L.append("|---|---|---|---|---|---|---|---|---|---|")
+        L.append("| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Route | Summary |")
+        L.append("|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
             shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
+            blurb = summary_text(l) or l.get("nextAction") or ""
             L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
                      f"| {md_trunc(l.get('incumbent') or l.get('prime'), 28)} | {md_trunc(l.get('agency'), 24)} "
-                     f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {md_trunc(setaside_short(l), 20)} "
-                     f"| {md_cell(vehicle_disp(l))} | {routing_tag(l)} |")
+                     f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {routing_tag(l)} "
+                     f"| {md_trunc(blurb, 90)} |")
         L.append(overflow(expiring))
     L.append("")
     L.append(f"_Generated {TODAY.isoformat()} by bd_report.py. Work these in the BD Sourcing Cockpit: "
@@ -322,7 +345,8 @@ def render_html(awards, expiring, dropped, source_name):
             out.append(f"<tr><td>{route_span(l)}</td><td>{h(l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
-                       f"<td>{h(vehicle_disp(l))}</td><td class='why'>{h(l.get('nextAction'))}</td></tr>")
+                       f"<td>{h(vehicle_disp(l))}</td>"
+                       f"<td class='why'>{h(summary_text(l) or l.get('nextAction') or '')}</td></tr>")
         return "".join(out)
 
     def rows_exp(items):
@@ -333,8 +357,8 @@ def render_html(awards, expiring, dropped, source_name):
             out.append(f"<tr><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
                        f"<td>{shaping}</td><td>{h(l.get('incumbent') or l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
-                       f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
-                       f"<td>{h(vehicle_disp(l))}</td><td>{route_span(l)}</td></tr>")
+                       f"<td>{h(lane_label(l))}</td><td>{route_span(l)}</td>"
+                       f"<td class='why'>{h(summary_text(l) or l.get('nextAction') or '')}</td></tr>")
         return "".join(out)
 
     def overflow(items):
@@ -343,9 +367,9 @@ def render_html(awards, expiring, dropped, source_name):
 
     empty = "<p class='empty'>None aligned in the current set.</p>"
     aw_head = ("<table><tr><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
-               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Next action</th></tr>")
+               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Summary</th></tr>")
     ex_head = ("<table><tr><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
-               "<th>Agency</th><th>Value</th><th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Route</th></tr>")
+               "<th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -390,10 +414,12 @@ def render_html(awards, expiring, dropped, source_name):
 
 # --------------------------------------------------------------- run ---------
 def main():
+    global SUMMARIES
     leads, source_name = load_leads()
     if not leads:
         print("No leads found in output/. Run the crawler first.")
         source_name = "all_leads.json"
+    SUMMARIES = load_summaries()
     awards, expiring, dropped = bucket(leads)
 
     md = render_markdown(awards, expiring, dropped, source_name)

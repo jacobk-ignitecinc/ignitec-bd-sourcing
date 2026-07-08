@@ -6,7 +6,7 @@ Source: `output/all_leads.json`  |  Recent Awards (aligned): 605  |  Expiring Co
 
 ## 1. Recent Awards: subcontracting and staffing outreach
 
-| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Next action |
+| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Summary |
 |---|---|---|---|---|---|---|---|
 | Warm | ACCENTURE FEDERAL SERVICES LLC | Department of Health and Hu… | $796.2M | 1A (T1) | - | - |  |
 | Warm | DELOITTE CONSULTING LLP | General Services Administra… | $396.4M | 1A (T1) | - | - |  |
@@ -44,38 +44,38 @@ _Showing top 30 of 605. See output/all_leads.json for the full set._
 
 ## 2. Expiring Contracts: recompete shaping and incumbent outreach
 
-| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Set-aside | Vehicle | Route |
-|---|---|---|---|---|---|---|---|---|---|
-| 2027-04-04 | 270 | Yes | INDEX ANALYTICS LLC | Department of Health an… | $13.1M | 1A (T1) | - | - | Cold |
-| 2027-04-05 | 271 | Yes | SABEL SYSTEMS TECHNOLOGY SO… | General Services Admini… | $13.0M | 1A (T1) | - | - | Cold |
-| 2027-04-06 | 272 | Yes | ACCENTURE FEDERAL SERVICES … | Department of Defense | $116.7M | 1A (T1) | - | - | Warm |
-| 2027-04-08 | 274 | Yes | ASRC FEDERAL CYBER, LLC | Department of Defense | $21.3M | 1D (T1) | - | - | Cold |
-| 2027-04-09 | 275 | Yes | COVALENT SOLUTIONS LLC | Department of Health an… | $19.3M | 1A (T1) | - | - | Cold |
-| 2027-04-13 | 279 | Yes | PERATON INC. | Department of Defense | $299.1M | 1A (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | RELI GROUP INC | Department of Health an… | $34.0M | 1A (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | TRILOGY INNOVATIONS INC. | Department of Justice | $32.7M | 1A (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | ANDWORX, LLC | Department of Defense | $18.5M | 1D (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | COMPUTER WORLD SERVICES, CO… | Department of Health an… | $16.5M | 1A (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | EAGLE SECURITY GROUP INC | Department of Justice | $15.1M | 1D (T1) | - | - | Cold |
-| 2027-04-14 | 280 | Yes | RIVERSIDE ENGINEERING LLC | Department of Defense | $11.9M | 1A (T1) | - | - | Cold |
-| 2027-04-15 | 281 | Yes | BELLESE TECHNOLOGIES, LLC | Department of Health an… | $17.0M | 1A (T1) | - | - | Cold |
-| 2027-04-15 | 281 | Yes | ANAVATION, LLC | Department of Justice | $11.0M | 1A (T1) | - | - | Cold |
-| 2027-04-16 | 282 | Yes | SYNEREN TECHNOLOGIES CORPOR… | Department of Defense | $18.3M | 1A (T1) | - | - | Cold |
-| 2027-04-18 | 284 | Yes | JARIA LLC | Department of Defense | $81.1M | 1D (T1) | - | - | Cold |
-| 2027-04-18 | 284 | Yes | OBSIDIAN GLOBAL, LLC | Department of Defense | $15.0M | 1A (T1) | - | - | Cold |
-| 2027-04-19 | 285 | Yes | TUNNELL CONSULTING INC | Department of Health an… | $24.3M | 1D (T1) | - | - | Cold |
-| 2027-04-21 | 287 | Yes | FUSION TECHNOLOGY LLC | Department of Justice | $73.6M | 1A (T1) | - | - | Cold |
-| 2027-04-21 | 287 | Yes | SERCO INC | General Services Admini… | $13.8M | 1D (T1) | - | - | Cold |
-| 2027-04-22 | 288 | Yes | BOOZ ALLEN HAMILTON INC | General Services Admini… | $545.5M | 1A (T1) | - | - | Cold |
-| 2027-04-22 | 288 | Yes | GOLDMAN EDWARDS - TANTUS TE… | Department of Health an… | $18.5M | 1A (T1) | - | - | Cold |
-| 2027-04-23 | 289 | Yes | BY LIGHT PROFESSIONAL IT SE… | Department of Defense | $13.6M | 1A (T1) | - | - | Cold |
-| 2027-04-23 | 289 | Yes | SERCO INC | General Services Admini… | $13.3M | 1D (T1) | - | - | Cold |
-| 2027-04-24 | 290 | Yes | MANTECH ADVANCED SYSTEMS IN… | General Services Admini… | $149.7M | 1A (T1) | - | - | Cold |
-| 2027-04-24 | 290 | Yes | DELOITTE CONSULTING LLP | Department of Defense | $43.7M | 1D (T1) | - | - | Warm |
-| 2027-04-25 | 291 | Yes | PERATON ENTERPRISE SOLUTION… | General Services Admini… | $428.4M | 1A (T1) | - | - | Cold |
-| 2027-04-25 | 291 | Yes | CORBALT, LLC | Department of Health an… | $29.4M | 1A (T1) | - | - | Cold |
-| 2027-04-25 | 291 | Yes | TEYA ENTERPRISES LLC | Department of Defense | $15.0M | 1A (T1) | - | - | Cold |
-| 2027-04-28 | 294 | Yes | DLH, LLC | Department of Health an… | $16.8M | 1A (T1) | - | - | Cold |
+| End date | Days | Shaping | Incumbent (target) | Agency | Value | Lane | Route | Summary |
+|---|---|---|---|---|---|---|---|---|
+| 2027-04-04 | 270 | Yes | INDEX ANALYTICS LLC | Department of Health an… | $13.1M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-05 | 271 | Yes | SABEL SYSTEMS TECHNOLOGY SO… | General Services Admini… | $13.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-06 | 272 | Yes | ACCENTURE FEDERAL SERVICES … | Department of Defense | $116.7M | 1A (T1) | Warm | Confirm shaping window and request current contract via FOIA |
+| 2027-04-08 | 274 | Yes | ASRC FEDERAL CYBER, LLC | Department of Defense | $21.3M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-09 | 275 | Yes | COVALENT SOLUTIONS LLC | Department of Health an… | $19.3M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-13 | 279 | Yes | PERATON INC. | Department of Defense | $299.1M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | RELI GROUP INC | Department of Health an… | $34.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | TRILOGY INNOVATIONS INC. | Department of Justice | $32.7M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | ANDWORX, LLC | Department of Defense | $18.5M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | COMPUTER WORLD SERVICES, CO… | Department of Health an… | $16.5M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | EAGLE SECURITY GROUP INC | Department of Justice | $15.1M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-14 | 280 | Yes | RIVERSIDE ENGINEERING LLC | Department of Defense | $11.9M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-15 | 281 | Yes | BELLESE TECHNOLOGIES, LLC | Department of Health an… | $17.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-15 | 281 | Yes | ANAVATION, LLC | Department of Justice | $11.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-16 | 282 | Yes | SYNEREN TECHNOLOGIES CORPOR… | Department of Defense | $18.3M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-18 | 284 | Yes | JARIA LLC | Department of Defense | $81.1M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-18 | 284 | Yes | OBSIDIAN GLOBAL, LLC | Department of Defense | $15.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-19 | 285 | Yes | TUNNELL CONSULTING INC | Department of Health an… | $24.3M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-21 | 287 | Yes | FUSION TECHNOLOGY LLC | Department of Justice | $73.6M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-21 | 287 | Yes | SERCO INC | General Services Admini… | $13.8M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-22 | 288 | Yes | BOOZ ALLEN HAMILTON INC | General Services Admini… | $545.5M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-22 | 288 | Yes | GOLDMAN EDWARDS - TANTUS TE… | Department of Health an… | $18.5M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-23 | 289 | Yes | BY LIGHT PROFESSIONAL IT SE… | Department of Defense | $13.6M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-23 | 289 | Yes | SERCO INC | General Services Admini… | $13.3M | 1D (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-24 | 290 | Yes | MANTECH ADVANCED SYSTEMS IN… | General Services Admini… | $149.7M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-24 | 290 | Yes | DELOITTE CONSULTING LLP | Department of Defense | $43.7M | 1D (T1) | Warm | Confirm shaping window and request current contract via FOIA |
+| 2027-04-25 | 291 | Yes | PERATON ENTERPRISE SOLUTION… | General Services Admini… | $428.4M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-25 | 291 | Yes | CORBALT, LLC | Department of Health an… | $29.4M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-25 | 291 | Yes | TEYA ENTERPRISES LLC | Department of Defense | $15.0M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
+| 2027-04-28 | 294 | Yes | DLH, LLC | Department of Health an… | $16.8M | 1A (T1) | Cold | Confirm shaping window and request current contract via FOIA |
 
 _Showing top 30 of 848. See output/all_leads.json for the full set._
 

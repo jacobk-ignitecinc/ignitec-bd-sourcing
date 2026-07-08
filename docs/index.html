@@ -51,6 +51,8 @@
   .chip{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--greybg);color:var(--grey);white-space:nowrap}
   .chip.src{background:#eef1fb;color:var(--navy)} .chip.lane{background:#e8f0ea;color:var(--warm)}
   .chip.held{background:var(--amberbg);color:var(--amber);font-weight:bold}
+  .summary{margin-top:7px;font-size:12.5px;color:#2a2f36;background:#f6f8fb;border-left:3px solid var(--navy);
+           border-radius:0 6px 6px 0;padding:6px 9px} .summary .angle{color:var(--muted)}
   .badge{font-size:11.5px;font-weight:bold;padding:4px 9px;border-radius:20px;white-space:nowrap;align-self:center}
   .b-warm{background:var(--warmbg);color:var(--warm)} .b-cold{background:var(--coldbg);color:var(--cold)}
   .panel{border-top:1px solid var(--line);padding:14px;display:none;background:#fcfdff}
@@ -133,7 +135,8 @@ const CONFIG = {
   owner: "jacobk-ignitecinc", repo: "ignitec-bd-sourcing",
   branch: "claude/contract-expiration-tracking-r1qpia",
   paths: ["output/all_leads.json", "output/latest_new_leads.json"],
-  configPath: "config/ignitec.json"
+  configPath: "config/ignitec.json",
+  summariesPath: "output/summaries.json"
 };
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
@@ -145,7 +148,7 @@ const SOURCE_FIELDS = ["source","title","prime","agency","subAgency","value","aw
 const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","notes","routing"];
 
 let master = {}, dirty = false;
-let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set();
+let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {};
 
 const $ = s => document.querySelector(s);
 const el = (t,c,txt)=>{const e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e;};
@@ -201,6 +204,12 @@ async function loadConfig(branch){
     CORE_NAICS=new Set(c.naics_codes||[]); return true; }catch(e){} }
   return false;
 }
+async function loadSummaries(branch){
+  const cands=["../"+CONFIG.summariesPath, rawURL(branch,CONFIG.summariesPath)];
+  for(const u of cands){ try{ const r=await fetch(u,{cache:"no-store"}); if(!r.ok)continue;
+    const j=await r.json(); if(j && typeof j==="object"){ SUMMARIES=j; return true; } }catch(e){} }
+  return false;
+}
 async function fetchLeads(branch){
   const cands=[]; for(const p of CONFIG.paths){ cands.push("../"+p); cands.push(rawURL(branch,p)); }
   let lastErr;
@@ -214,6 +223,7 @@ async function reload(){
   localStorage.setItem(LS_BRANCH,branch);
   $("#srcInfo").textContent="Loading leads from "+branch+" ...";
   await loadConfig(branch);
+  await loadSummaries(branch);
   try{
     const {data,url}=await fetchLeads(branch);
     const res=mergeLeads(data);
@@ -261,6 +271,12 @@ function leadCard(l){
   const du=daysUntil(l.popEnd);
   if(!isAward && du!=null && du>=0)chips.appendChild(el("span","chip",(isShaping(l)?"Shaping window · ":"")+"ends in "+du+"d"));
   grow.appendChild(chips);
+  const sum=SUMMARIES[l.id];
+  if(sum && sum.summary){
+    const sd=el("div","summary"); sd.appendChild(document.createTextNode(sum.summary));
+    if(sum.outreach_angle){ const a=el("span","angle"); a.textContent="  Angle: "+sum.outreach_angle; sd.appendChild(a); }
+    grow.appendChild(sd);
+  }
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
   head.appendChild(grow); head.appendChild(badge);
   head.addEventListener("click",()=>card.classList.toggle("open"));
