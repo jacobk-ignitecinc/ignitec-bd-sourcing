@@ -37,11 +37,20 @@ try:
 except (FileNotFoundError, json.JSONDecodeError, OSError):
     _cfg = {}
 PROFILE = _cfg.get("profile", {})
+CERTS = (_cfg.get("certifications", {}) or {})
+EXPERIENCE = PROFILE.get("experience", {})
 MAX_PER_RUN = int((_cfg.get("crawl", {}) or {}).get("max_summaries_per_run", 1000))
 
 LANE_LINES = "\n".join(
     f"- {l.get('id')} (Tier {l.get('tier')}): {l.get('title')}" for l in PROFILE.get("lanes", [])
 )
+
+# Grounding facts for the fit assessment, straight from the profile (no invention).
+_held = ", ".join(CERTS.get("held", [])) or "small business"
+_pending = ", ".join(CERTS.get("pending", [])) or "none"
+_dontclaim = ", ".join(CERTS.get("do_not_claim", []))
+_proven_ag = ", ".join(EXPERIENCE.get("proven_agencies", []))
+_primes = ", ".join(EXPERIENCE.get("prime_relationships", []))
 
 SYSTEM = f"""You summarize U.S. federal contracting opportunities for Ignitec Inc, a small
 disadvantaged business (SDB, minority-owned) that provides IT staffing and services.
@@ -52,17 +61,32 @@ sub to the incumbent.
 Ignitec capability lanes:
 {LANE_LINES}
 
+Ignitec profile facts (use ONLY these for fit; do not add credentials it does not have):
+- Certifications held: {_held}.
+- Pending (NOT yet certified, never claim as active): {_pending}.
+- Must never be claimed: {_dontclaim}.
+- Agencies with real past performance (prime or subcontractor): {_proven_ag}.
+- Primes Ignitec has actually subcontracted to: {_primes}.
+
 For each opportunity you are given, return:
 - summary: 2 to 3 plain sentences on what the work is and who it is for. Restate the
   agency mission in its own terms first.
 - outreach_angle: one sentence on the specific angle Ignitec should use (which lane,
   sub vs. prime, warm channel vs. cold), grounded only in the data provided.
+- fit: 1 to 2 sentences on why this fits Ignitec, tied to a specific lane and to any
+  real past performance (a proven agency above, or a prime Ignitec already subs to).
+  If the fit is weak, say so plainly.
+- concerns: one short sentence naming the main risk or gap, or "" if none is evident.
+  Examples: a set-aside Ignitec cannot prime (SDVOSB, WOSB, HUBZone, 8(a) as prime
+  since 8(a) is only pending), a clearance or domain outside the lanes, or a very large
+  ceiling where only a subcontract role is realistic.
 - lanes: the Ignitec lane id(s) this maps to (e.g. "1A"), or [] if none clearly apply.
 
-Rules: Use ONLY the information provided. Never invent facts, metrics, dollar values,
-past performance, clause citations, contacts, set-asides, or clearances. If the
-description is thin, say what is unknown rather than guessing. No superlatives. No em
-dashes. Use "and" not "&". Keep it factual and short."""
+Rules: Use ONLY the information provided and the profile facts above. Never invent facts,
+metrics, dollar values, past performance, clause citations, contacts, set-asides, or
+clearances. Never claim 8(a), SDVOSB, WOSB, HUBZone, or DCAA status. If the description
+is thin, say what is unknown rather than guessing. No superlatives. No em dashes. Use
+"and" not "&". Keep it factual and short."""
 
 
 def load_leads():
@@ -86,6 +110,24 @@ def load_summaries():
         return {}
 
 
+# Reuse the deterministic scorer's signals to ground the AI's fit rationale, so the
+# two agree. Optional: if bd_report cannot be imported, we simply omit the signals.
+try:
+    from bd_report import score_lead as _score_lead
+except Exception:  # pragma: no cover
+    _score_lead = None
+
+
+def _priority_signals(l):
+    if not _score_lead:
+        return None
+    try:
+        s, t, why = _score_lead(l)
+    except Exception:
+        return None
+    return f"Tier {t} (score {s}/100): " + (", ".join(why) if why else "no strong signals")
+
+
 def lead_prompt(l):
     fields = [
         ("Play", "Recent award (subcontracting target)" if l.get("source") == "Recent Award"
@@ -101,6 +143,7 @@ def lead_prompt(l):
         ("Set-aside", l.get("setAside")),
         ("Vehicle", l.get("vehicle")),
         ("Period end", l.get("popEnd")),
+        ("Our scorer's read", _priority_signals(l)),
         ("Description", (l.get("notes") or "")[:1200]),
     ]
     return "\n".join(f"{k}: {v}" for k, v in fields if v not in (None, "", []))
@@ -111,9 +154,11 @@ SCHEMA = {
     "properties": {
         "summary": {"type": "string"},
         "outreach_angle": {"type": "string"},
+        "fit": {"type": "string"},
+        "concerns": {"type": "string"},
         "lanes": {"type": "array", "items": {"type": "string"}},
     },
-    "required": ["summary", "outreach_angle", "lanes"],
+    "required": ["summary", "outreach_angle", "fit", "concerns", "lanes"],
     "additionalProperties": False,
 }
 
@@ -126,13 +171,16 @@ def build_requests(leads, done):
     for l in leads:
         if l.get("source") not in ("Recent Award", "Expiring Contract"):
             continue
-        if l.get("id") in done:
+        prev = done.get(l.get("id"))
+        # Skip only if already summarized WITH the fit/concerns fields; records from
+        # before those fields existed are re-summarized once to backfill them.
+        if prev is not None and "fit" in prev:
             continue
         reqs.append(Request(
             custom_id=l["id"],
             params=MessageCreateParamsNonStreaming(
                 model=MODEL,
-                max_tokens=400,
+                max_tokens=550,
                 system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
                 output_config={"format": {"type": "json_schema", "schema": SCHEMA}},
                 messages=[{"role": "user", "content": lead_prompt(l)}],
@@ -185,6 +233,8 @@ def main():
         summaries[result.custom_id] = {
             "summary": data.get("summary", ""),
             "outreach_angle": data.get("outreach_angle", ""),
+            "fit": data.get("fit", ""),
+            "concerns": data.get("concerns", ""),
             "lanes": data.get("lanes", []),
             "model": MODEL,
             "dateSummarized": TODAY,

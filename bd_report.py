@@ -200,6 +200,10 @@ def summary_text(lead):
     out = s.get("summary", "")
     if s.get("outreach_angle"):
         out += "  Angle: " + s["outreach_angle"]
+    if s.get("fit"):
+        out += "  Fit: " + s["fit"]
+    if s.get("concerns"):
+        out += "  Risk: " + s["concerns"]
     return out
 
 
