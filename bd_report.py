@@ -61,6 +61,10 @@ except (FileNotFoundError, json.JSONDecodeError, OSError):
 
 LANES = PROFILE.get("lanes", [])
 AGENCY_TIERS = PROFILE.get("agency_tiers", {})
+EXPERIENCE = PROFILE.get("experience", {})
+SCORING = PROFILE.get("scoring", {})
+TIER_A_MIN = SCORING.get("tier_a_min", 70)
+TIER_B_MIN = SCORING.get("tier_b_min", 60)
 if PROFILE.get("warm_partners"):
     WARM_PARTNERS = PROFILE["warm_partners"]
 
@@ -106,6 +110,69 @@ IN_LANE_PSC_PREFIXES = ("D", "R", "H")
 
 def psc_in_lane(psc):
     return bool(psc) and str(psc)[:1].upper() in IN_LANE_PSC_PREFIXES
+
+
+def _any_incl(hay, items):
+    h = (hay or "").lower()
+    return any(x and str(x).lower() in h for x in (items or []))
+
+
+def score_lead(lead):
+    """Transparent priority score 0-100 -> Tier A/B/C. Mirrors scoreLead() in the
+    dashboard. Signals: capability lane fit, experience affinity (proven agencies/
+    NAICS/PSC from Ignitec's award history), relationship/route (primes we sub to,
+    warm partners), and opportunity fit (value, shaping window, primeable set-aside).
+    Returns (score, tier, reasons)."""
+    s = 0
+    why = []
+    tier, lid, _ = lane_match(lead)
+    if tier == 1:
+        s += 22; why.append(f"Tier 1 lane {lid}")
+    elif tier == 2:
+        s += 15; why.append(f"Tier 2 lane {lid}")
+    elif str(lead.get("naics") or "") in NAICS_SET:
+        s += 10; why.append(f"core NAICS {lead.get('naics')}")
+    elif tier == 3:
+        s += 8; why.append(f"Tier 3 lane {lid}")
+    elif psc_in_lane(lead.get("psc")):
+        s += 5; why.append("PSC in lane")
+
+    agency = (lead.get("agency") or "") + " " + (lead.get("subAgency") or "")
+    if _any_incl(agency, EXPERIENCE.get("proven_agencies")):
+        s += 18; why.append("proven agency")
+    elif agency_tier(agency) == 1:
+        s += 8; why.append("Tier 1 agency")
+    elif agency_tier(agency) == 2:
+        s += 4; why.append("Tier 2 agency")
+    if str(lead.get("naics") or "") in (EXPERIENCE.get("proven_naics") or []):
+        s += 8; why.append("proven NAICS")
+    psc2 = str(lead.get("psc") or "")[:2].upper()
+    if psc2 and any(str(x).upper().startswith(psc2) for x in (EXPERIENCE.get("proven_psc") or [])):
+        s += 4; why.append("proven PSC class")
+
+    target = lead.get("prime") or lead.get("incumbent")
+    if _any_incl(target, EXPERIENCE.get("prime_relationships")):
+        s += 25; why.append("we sub to this prime")
+    elif is_warm(target):
+        s += 14; why.append("warm partner")
+
+    v = to_num(lead.get("value"))
+    if 1e6 <= v < 5e7:
+        s += 8; why.append("value sweet spot")
+    elif 5e7 <= v < 2.5e8:
+        s += 4
+    elif v >= 2.5e8:
+        s += 2
+    d = days_until(lead.get("popEnd"))
+    if lead.get("source") == "Expiring Contract" and d is not None and 270 <= d <= 540:
+        s += 8; why.append("shaping window")
+    sa = (lead.get("setAside") or "").upper()
+    if sa and ("SMALL" in sa or "DISADVANTAGED" in sa or "8(A)" in sa):
+        s += 6; why.append("primeable set-aside")
+
+    s = min(100, s)
+    t = "A" if s >= TIER_A_MIN else ("B" if s >= TIER_B_MIN else "C")
+    return s, t, why
 
 
 def aligned(lead):
@@ -295,16 +362,16 @@ def bucket(leads):
             d = days_until(l.get("popEnd"))
             if d is not None and d >= 0:   # upcoming only
                 expiring.append(l)
-    # Awards: warm partners first (route via channel), then by value.
-    awards.sort(key=lambda l: (is_warm(l.get("prime")), to_num(l.get("value"))), reverse=True)
-    # Expiring: shaping-window (9-18 mo) first, then soonest end date.
-    def exp_key(l):
-        d = days_until(l.get("popEnd"))
-        d = d if d is not None else 10**6
-        shaping = 270 <= d <= 540
-        return (0 if shaping else 1, d)
-    expiring.sort(key=exp_key)
+    # Both plays: rank by the priority score (Tier A first), value breaks ties.
+    awards.sort(key=lambda l: (score_lead(l)[0], to_num(l.get("value"))), reverse=True)
+    expiring.sort(key=lambda l: (score_lead(l)[0], to_num(l.get("value"))), reverse=True)
     return awards, expiring, dropped
+
+
+def pri_cell(lead):
+    """Compact priority label for a report row, e.g. 'A 82'."""
+    s, t, _ = score_lead(lead)
+    return f"{t} {s}"
 
 
 # --------------------------------------------------------------- markdown ----
@@ -328,14 +395,21 @@ def render_markdown(awards, expiring, dropped, source_name):
     L = []
     L.append(f"# Ignitec BD Sourcing Report  ({TODAY.isoformat()})")
     L.append("")
+    tiers = {"A": 0, "B": 0, "C": 0}
+    for l in awards + expiring:
+        tiers[score_lead(l)[1]] += 1
     L.append(f"Source: `output/{source_name}`  |  Recent Awards (aligned): {len(awards)}  |  "
              f"Expiring Contracts (aligned): {len(expiring)}  |  Out-of-lane filtered out: {dropped}")
     L.append("")
-    L.append("> Capability prefilter: only opportunities that map to an Ignitec lane (keyword, NAICS, "
-             "or PSC) are shown. Warm = winning prime / incumbent is an existing Ignitec channel "
-             "(route via relationship, do not cold-call). Contact is the contracting-office point of "
-             "contact from HigherGov (blank until enrichment resolves the record); the outreach target "
-             "is the prime (awards) or incumbent (expiring).")
+    L.append(f"**Priority: Tier A {tiers['A']} (review first)  |  Tier B {tiers['B']} (worth a look)  |  "
+             f"Tier C {tiers['C']} (long tail).** Rows below are ranked by priority score (0-100).")
+    L.append("")
+    L.append("> Priority score blends capability-lane fit, experience affinity (agencies, NAICS, and "
+             "primes Ignitec has actually won or subcontracted under), relationship/route, and "
+             "opportunity fit (value, shaping window, set-aside). Capability prefilter: only "
+             "opportunities that map to an Ignitec lane are shown. Warm = winning prime / incumbent is "
+             "an existing Ignitec channel. Contact is the contracting-office POC from HigherGov; the "
+             "outreach target is the prime (awards) or incumbent (expiring).")
     L.append("")
 
     def overflow(items):
@@ -347,11 +421,11 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not awards:
         L.append("_No aligned recent awards in the current set._")
     else:
-        L.append("| Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Contact | Summary |")
-        L.append("|---|---|---|---|---|---|---|---|---|")
+        L.append("| Pri | Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Contact | Summary |")
+        L.append("|---|---|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
             blurb = summary_text(l) or l.get("nextAction") or ""
-            L.append(f"| {routing_tag(l)} | {md_link(l.get('prime'), opp_url(l), 30)} "
+            L.append(f"| {pri_cell(l)} | {routing_tag(l)} | {md_link(l.get('prime'), opp_url(l), 30)} "
                      f"| {md_trunc(l.get('agency'), 28)} | {fmt_value(l.get('value'))} "
                      f"| {lane_label(l)} | {md_trunc(setaside_short(l), 22)} | {md_cell(vehicle_disp(l))} "
                      f"| {md_trunc(contact_text(l), 46)} | {md_trunc(blurb, 80)} |")
@@ -364,13 +438,13 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not expiring:
         L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| End date | Days | Shaping | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
-        L.append("|---|---|---|---|---|---|---|---|---|---|")
+        L.append("| Pri | End date | Days | Shaping | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
+        L.append("|---|---|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
             shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
             blurb = summary_text(l) or l.get("nextAction") or ""
-            L.append(f"| {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
+            L.append(f"| {pri_cell(l)} | {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
                      f"| {md_link(incumbent_text(l), opp_url(l), 24)} | {md_trunc(contact_text(l), 44)} "
                      f"| {md_trunc(l.get('agency'), 20)} "
                      f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {routing_tag(l)} "
@@ -411,10 +485,14 @@ def render_html(awards, expiring, dropped, source_name):
         u = opp_url(l)
         return f"<a href='{h(u)}' target='_blank' rel='noopener'>{h(text)}</a>" if u else h(text)
 
+    def pri_span(l):
+        s, t, why = score_lead(l)
+        return f"<span class='pri p{t}' title='{h(', '.join(why))}'>{t} {s}</span>"
+
     def rows_awards(items):
         out = []
         for l in items[:SECTION_CAP]:
-            out.append(f"<tr><td>{route_span(l)}</td><td>{name_link(l, l.get('prime'))}</td>"
+            out.append(f"<tr><td>{pri_span(l)}</td><td>{route_span(l)}</td><td>{name_link(l, l.get('prime'))}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{h(setaside_short(l))}</td>"
                        f"<td>{h(vehicle_disp(l))}</td><td>{contact_html(l)}</td>"
@@ -426,7 +504,7 @@ def render_html(awards, expiring, dropped, source_name):
         for l in items[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
             shaping = "<span class='tag shape'>Shaping</span>" if (d is not None and 270 <= d <= 540) else ""
-            out.append(f"<tr><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
+            out.append(f"<tr><td>{pri_span(l)}</td><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
                        f"<td>{shaping}</td><td>{name_link(l, incumbent_text(l))}</td>"
                        f"<td>{contact_html(l)}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
@@ -439,9 +517,9 @@ def render_html(awards, expiring, dropped, source_name):
                 f"Full set in output/{source_name}.</p>") if len(items) > SECTION_CAP else ""
 
     empty = "<p class='empty'>None aligned in the current set.</p>"
-    aw_head = ("<table><tr><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
+    aw_head = ("<table><tr><th>Pri</th><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
                "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Contact</th><th>Summary</th></tr>")
-    ex_head = ("<table><tr><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
+    ex_head = ("<table><tr><th>Pri</th><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
                "<th>CO / contact</th><th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -460,6 +538,8 @@ def render_html(awards, expiring, dropped, source_name):
  th{{background:#1F3864;color:#fff;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px}}
  td.num{{text-align:right;white-space:nowrap}} td.why{{color:#5b6472;font-size:12px}}
  .muted{{color:#8a94a3;font-size:11.5px}} td a{{color:#1F3864}}
+ .pri{{font-weight:bold;padding:2px 7px;border-radius:20px;white-space:nowrap;font-size:11.5px;cursor:help}}
+ .pri.pA{{background:#e6f4ec;color:#1b7a43}} .pri.pB{{background:#fbf1dc;color:#946200}} .pri.pC{{background:#eceef2;color:#5b6472}}
  tr:hover td{{background:#fafbfc}}
  .tag{{font-weight:bold;padding:1px 7px;border-radius:12px;font-size:11px}}
  .tag.warm{{background:#e6f4ec;color:#1b7a43}} .tag.cold{{background:#eef1fb;color:#1F3864}}

@@ -99,6 +99,21 @@
       "note": "2.8+ pursue (prime/preferred sub); 2.4-2.7 pursue as sub; 2.0-2.3 conditional/RFI only; below 2.0 no-bid. Any single gate at 0 is an immediate no-bid. RFI/Sources Sought touching a Tier 1 or Tier 2 lane responds regardless of score."
     },
 
+    "experience": {
+      "_note": "Data-grounded past performance for priority scoring. Prime awards and reported subawards pulled from Ignitec UEI KLHRNT5GPFH5 on USASpending (2026-07), reconciled with the authoritative profile docs. proven_agencies/naics/psc raise an opportunity's experience-affinity score; prime_relationships are primes Ignitec has actually subcontracted to (strongest signal for the subcontracting play). Substring, case-insensitive matching.",
+      "proven_agencies": ["commerce", "social security", "ssa", "treasury", "defense", "justice",
+                           "general services", "gsa", "education", "energy", "health", "dha"],
+      "proven_naics": ["541330", "541511", "541512"],
+      "proven_psc": ["R499", "DB02", "DA01"],
+      "prime_relationships": ["accenture", "deloitte", "optum"]
+    },
+
+    "scoring": {
+      "_note": "Priority score 0-100 -> tiers. Data lists live in 'experience'; these are the tier cutoffs. Tier A = review first, B = worth a look, C = long tail (hidden by default in the cockpit). Tune the cutoffs to widen or tighten the review queue.",
+      "tier_a_min": 70,
+      "tier_b_min": 60
+    },
+
     "lanes": [
       {"id": "1A", "tier": 1, "title": "Federal IT Staff Augmentation and Workforce Solutions",
        "keywords": ["staff augmentation", "staffing", "workforce", "labor hour", "t&m", "time and materials", "it professional", "placement", "help desk staffing", "surge", "lcat"],

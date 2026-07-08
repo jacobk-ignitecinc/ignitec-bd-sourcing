@@ -84,6 +84,10 @@
   .rejectBtn.on{background:var(--muted);color:#fff}
   .chip.pipe{background:var(--warmbg);color:var(--warm);font-weight:bold}
   .chip.rej{background:var(--greybg);color:var(--grey);font-weight:bold}
+  .chip.tier{font-weight:bold;cursor:help}
+  .chip.tier.tA{background:#e6f4ec;color:#1b7a43} .chip.tier.tB{background:#fbf1dc;color:#946200}
+  .chip.tier.tC{background:#eceef2;color:#5b6472}
+  .tile.tA .n{color:var(--warm)} .tile.tB .n{color:var(--amber)}
   /* pipeline toolbar */
   .ptool{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);
     border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px}
@@ -160,8 +164,15 @@
     <select id="fRoute"><option value="">Any route</option><option>Warm</option><option>Cold</option></select>
     <select id="fLane"><option value="">All lanes</option></select>
     <select id="fAgency"><option value="">All agencies</option></select>
+    <select id="fTier" title="Priority tier from the fit score">
+      <option value="AB">Tier A + B (priority)</option>
+      <option value="A">Tier A only</option>
+      <option value="">All tiers (incl. C)</option>
+      <option value="C">Tier C only</option>
+    </select>
     <select id="fSort">
-      <option value="default">Sort: play default</option>
+      <option value="score">Sort: priority score</option>
+      <option value="default">Play default</option>
       <option value="value">Value (high to low)</option>
       <option value="popEnd">Expiring soonest</option>
       <option value="dateAdded">Date added</option>
@@ -243,6 +254,7 @@ const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","note
 
 let master = {}, dirty = false;
 let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {}, ENRICHMENT = {};
+let EXP = {}, TIER_A_MIN = 60, TIER_B_MIN = 40;   // experience profile + priority tier cutoffs
 let PIPELINE = {};   // leadId -> pursuit record {stage, owner, nextAction, nextActionDate, notes, pursuedDate, stageSince, activities[], lastTouched}
 
 const $ = s => document.querySelector(s);
@@ -272,6 +284,44 @@ function aligned(l){ return !!laneMatch(l) || CORE_NAICS.has(String(l.naics||"")
 function laneLabel(l){const m=laneMatch(l); if(m)return m.id+" (T"+m.tier+")";
   if(CORE_NAICS.has(String(l.naics||"")))return "NAICS "+l.naics; if(pscInLane(l.psc))return "PSC "+l.psc; return "-";}
 function isShaping(l){const d=daysUntil(l.popEnd); return l.source==="Expiring Contract" && d!=null && d>=270 && d<=540;}
+
+/* ---- priority score: transparent, data-grounded, mirrors bd_report.score_lead ---- */
+function anyIncl(hay,list){const h=(hay||"").toLowerCase(); return (list||[]).some(x=>x&&h.includes(String(x).toLowerCase()));}
+function scoreLead(l){
+  let s=0; const why=[];
+  // 1) capability lane fit (baseline is deliberately modest: every shown lead is
+  //    already in-lane, so lane alone should not lift a lead out of the long tail)
+  const m=laneMatch(l);
+  if(m&&m.tier===1){s+=22; why.push("Tier 1 lane "+m.id);}
+  else if(m&&m.tier===2){s+=15; why.push("Tier 2 lane "+m.id);}
+  else if(CORE_NAICS.has(String(l.naics||""))){s+=10; why.push("core NAICS "+l.naics);}
+  else if(m&&m.tier===3){s+=8; why.push("Tier 3 lane "+m.id);}
+  else if(pscInLane(l.psc)){s+=5; why.push("PSC "+l.psc+" in lane");}
+  // 2) experience affinity: real past performance is a strong differentiator
+  const agency=(l.agency||"")+" "+(l.subAgency||"");
+  if(anyIncl(agency,EXP.proven_agencies)){s+=18; why.push("proven agency");}
+  else if(agencyTierMatch(agency,"tier1")){s+=8; why.push("Tier 1 agency");}
+  else if(agencyTierMatch(agency,"tier2")){s+=4; why.push("Tier 2 agency");}
+  if((EXP.proven_naics||[]).includes(String(l.naics||""))){s+=8; why.push("proven NAICS");}
+  const psc2=String(l.psc||"").slice(0,2).toUpperCase();
+  if((EXP.proven_psc||[]).some(x=>String(x).toUpperCase().startsWith(psc2)&&psc2)){s+=4; why.push("proven PSC class");}
+  // 3) relationship / route: the warmest path is the biggest lever
+  const target=l.prime||l.incumbent;
+  if(anyIncl(target,EXP.prime_relationships)){s+=25; why.push("we sub to this prime");}
+  else if(isWarm(target)){s+=14; why.push("warm partner");}
+  // 4) opportunity fit
+  const v=Number(l.value)||0;
+  if(v>=1e6&&v<5e7){s+=8; why.push("value sweet spot");}
+  else if(v>=5e7&&v<2.5e8){s+=4;}
+  else if(v>=2.5e8){s+=2;}
+  if(isShaping(l)){s+=8; why.push("shaping window");}
+  const sa=(l.setAside||"").toUpperCase();
+  if(sa&&(sa.includes("SMALL")||sa.includes("DISADVANTAGED")||sa.includes("8(A)"))){s+=6; why.push("primeable set-aside");}
+  s=Math.min(100,s);
+  const tier = s>=TIER_A_MIN?"A":(s>=TIER_B_MIN?"B":"C");
+  return {score:s, tier, why};
+}
+function agencyTierMatch(agency,tierKey){const a=(agency||"").toLowerCase(); return (AGENCY_TIERS[tierKey]||[]).some(k=>k&&a.includes(k));}
 
 /* ------------------------------------------------------------ persistence */
 function saveMaster(){try{localStorage.setItem(LS_MASTER,JSON.stringify(master));}catch(e){console.warn(e);}}
@@ -433,7 +483,10 @@ async function loadConfig(branch){
     const j=await r.json(); const p=j.profile||{}; const c=j.crawl||{};
     LANES=p.lanes||[]; AGENCY_TIERS=p.agency_tiers||{};
     WARM_PARTNERS=(p.warm_partners||c.warm_partners||[]).map(x=>x.toLowerCase());
-    CORE_NAICS=new Set(c.naics_codes||[]); return true; }catch(e){} }
+    CORE_NAICS=new Set(c.naics_codes||[]);
+    EXP=p.experience||{}; const sc=p.scoring||{};
+    TIER_A_MIN=sc.tier_a_min||60; TIER_B_MIN=sc.tier_b_min||40;
+    return true; }catch(e){} }
   return false;
 }
 async function loadSummaries(branch){
@@ -508,6 +561,10 @@ function leadCard(l){
   if(l.value)bits.push(fmtVal(l.value));
   grow.appendChild(el("div","meta", bits.join("  ·  ")));
   const chips=el("div","chips");
+  const sc=scoreLead(l);
+  const tchip=el("span","chip tier t"+sc.tier, "Tier "+sc.tier+" · "+sc.score);
+  tchip.title="Priority "+sc.score+"/100: "+(sc.why.join(", ")||"no strong signals");
+  chips.appendChild(tchip);
   chips.appendChild(el("span","chip src", isAward?"Recent Award":"Expiring Contract"));
   chips.appendChild(el("span","chip lane", laneLabel(l)));
   if(l.status)chips.appendChild(el("span","chip", l.status));
@@ -609,7 +666,7 @@ function leadCard(l){
 function currentFilters(){return{
   q:$("#search").value.trim().toLowerCase(), source:$("#fSource").value, route:$("#fRoute").value,
   lane:$("#fLane").value, agency:$("#fAgency").value, sort:$("#fSort").value,
-  decision:$("#fDecision").value,
+  decision:$("#fDecision").value, tier:$("#fTier").value,
   showUnaligned:$("#fShowUnaligned").checked, setAside:$("#fSetAside").value,
   valMin:parseFloat($("#fValMin").value), valMax:parseFloat($("#fValMax").value),
   expiry:$("#fExpiry").value, heldVeh:$("#fHeldVeh").checked, exclude:$("#fExclude").value.trim().toLowerCase()
@@ -621,6 +678,9 @@ function matches(l,f){
   if(f.decision==="pursuing" && st!=="pursuing") return false;
   if(f.decision==="rejected" && st!=="rejected") return false;
   if(!f.showUnaligned && !aligned(l)) return false;
+  if(f.tier){ const t=scoreLead(l).tier;
+    if(f.tier==="AB"){ if(t==="C") return false; }
+    else if(t!==f.tier) return false; }
   if(f.source && l.source!==f.source) return false;
   if(f.route && route(l)!==f.route) return false;
   if(f.lane){ const m=laneMatch(l); if(!m||m.id!==f.lane) return false; }
@@ -642,6 +702,7 @@ function matches(l,f){
   return true;
 }
 function sortLeads(arr,key){
+  if(key==="score") return arr.sort((a,b)=>scoreLead(b).score-scoreLead(a).score);
   if(key==="value") return arr.sort((a,b)=>(Number(b.value)||0)-(Number(a.value)||0));
   if(key==="popEnd") return arr.sort((a,b)=>(daysUntil(a.popEnd)??1e9)-(daysUntil(b.popEnd)??1e9));
   if(key==="dateAdded") return arr.sort((a,b)=>String(b.dateAdded).localeCompare(String(a.dateAdded)));
@@ -663,13 +724,17 @@ function renderTiles(){
   const shaping=al.filter(isShaping).length;
   const held=al.filter(l=>l.vehicleHeld).length;
   const outlane=all.length-al.length;
-  const undecided=al.filter(l=>pipeState(l.id)==="undecided").length;
+  const undecidedLeads=al.filter(l=>pipeState(l.id)==="undecided");
+  const undecided=undecidedLeads.length;
   const inpipe=al.filter(l=>pipeState(l.id)==="pursuing").length;
   const rejected=al.filter(l=>pipeState(l.id)==="rejected").length;
-  const t=[["",undecided,"Undecided (to review)"],["warm",inpipe,"In pipeline"],["",rejected,"Rejected"],
+  const tA=undecidedLeads.filter(l=>scoreLead(l).tier==="A").length;
+  const tB=undecidedLeads.filter(l=>scoreLead(l).tier==="B").length;
+  const tC=undecidedLeads.filter(l=>scoreLead(l).tier==="C").length;
+  const t=[["tA",tA,"Tier A (review first)"],["tB",tB,"Tier B (worth a look)"],["",tC,"Tier C (long tail)"],
+    ["",undecided,"Undecided total"],["warm",inpipe,"In pipeline"],["",rejected,"Rejected"],
     ["",awards,"Recent awards"],["",exp,"Expiring"],
-    ["warm",warm,"Warm (route via channel)"],["cold",cold,"Cold outreach"],
-    ["shape",shaping,"Shaping window"],["",held,"Held-vehicle"],["",outlane,"Out-of-lane (hidden)"]];
+    ["shape",shaping,"Shaping window"],["",outlane,"Out-of-lane (hidden)"]];
   const box=$("#tiles"); box.innerHTML="";
   for(const [cls,n,l] of t){const d=el("div","tile "+cls); d.appendChild(el("div","n",String(n))); d.appendChild(el("div","l",l)); box.appendChild(d);}
 }
@@ -868,8 +933,8 @@ function init(){
   $("#clearFilters").addEventListener("click",()=>{
     ["#search","#fExclude","#fValMin","#fValMax"].forEach(s=>$(s).value="");
     ["#fSource","#fRoute","#fLane","#fAgency","#fSetAside","#fExpiry"].forEach(s=>$(s).value="");
-    $("#fSort").value="default"; $("#fDecision").value="undecided"; $("#fShowUnaligned").checked=false; $("#fHeldVeh").checked=false; render();});
-  ["#search","#fSource","#fRoute","#fLane","#fAgency","#fSort","#fDecision","#fShowUnaligned",
+    $("#fSort").value="score"; $("#fTier").value="AB"; $("#fDecision").value="undecided"; $("#fShowUnaligned").checked=false; $("#fHeldVeh").checked=false; render();});
+  ["#search","#fSource","#fRoute","#fLane","#fAgency","#fSort","#fTier","#fDecision","#fShowUnaligned",
    "#fSetAside","#fValMin","#fValMax","#fExpiry","#fHeldVeh","#fExclude"].forEach(sel=>{
     const e=$(sel); const ev=(e.tagName==="INPUT"&&(e.type==="text"||e.type==="number"))?"input":"change";
     e.addEventListener(ev,render);});

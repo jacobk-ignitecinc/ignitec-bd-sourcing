@@ -12,11 +12,17 @@ For crawler internals, guardrails, and the lead schema, see `CLAUDE.md`.
 
 - **Sourcing** — every capability-aligned recent award and expiring contract,
   with AI summaries, HigherGov contacts, vehicle, and a link to the opportunity.
-  Filter and review, then click **+ Pursue** on the ones worth going after or
-  **✕ Reject** on the ones that are not a fit. By default the list shows only
-  **undecided** opportunities (pursued and rejected ones are hidden); the
-  Decision filter can show All, In pipeline, or Rejected. Decisions are shared
-  through the same pipeline file.
+  Each is scored 0-100 and bucketed into **Tier A** (review first), **Tier B**
+  (worth a look), or **Tier C** (long tail). The score blends capability-lane
+  fit, experience affinity (agencies, NAICS, and primes Ignitec has actually
+  won or subcontracted under), relationship/route, and opportunity fit (value,
+  shaping window, set-aside); hover the tier chip to see the reasons. The list
+  defaults to **Tier A + B**, sorted by score. Click **+ Pursue** on the ones
+  worth going after or **✕ Reject** on the ones that are not a fit; by default
+  only **undecided** opportunities show (the Decision filter can show All, In
+  pipeline, or Rejected). Tiers and decisions are tunable in
+  `config/ignitec.json` (`profile.experience`, `profile.scoring`) and shared
+  through the pipeline file.
 - **Pipeline** — a Kanban board of only the pursued opportunities, with stages
   (Pursue → Researching → First contact → In discussion → Teaming/RFI →
   Submitted → Won/Lost/Parked), owners, next actions, and a timestamped
