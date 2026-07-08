@@ -278,7 +278,8 @@ function leadCard(l){
   if(l.status)chips.appendChild(el("span","chip", l.status));
   if(l.owner)chips.appendChild(el("span","chip","Owner: "+l.owner));
   if(l.setAside)chips.appendChild(el("span","chip", String(l.setAside).slice(0,28)));
-  if(l.vehicle)chips.appendChild(el("span","chip"+(l.vehicleHeld?" held":""), (l.vehicleHeld?"Vehicle HELD: ":"Vehicle: ")+l.vehicle));
+  const vehChip=((ENRICHMENT[l.id]||{}).vehicle)||l.vehicle;
+  if(vehChip)chips.appendChild(el("span","chip"+(l.vehicleHeld?" held":""), (l.vehicleHeld?"Vehicle HELD: ":"Vehicle: ")+vehChip));
   const du=daysUntil(l.popEnd);
   if(!isAward && du!=null && du>=0)chips.appendChild(el("span","chip",(isShaping(l)?"Shaping window · ":"")+"ends in "+du+"d"));
   grow.appendChild(chips);
@@ -329,7 +330,7 @@ function leadCard(l){
   const inc=(enr&&enr.incumbent)||null;
   const incDisp=inc?(inc.name+(inc.parent&&inc.parent.toLowerCase()!==(inc.name||"").toLowerCase()?" ("+inc.parent+")":"")
                      +(inc.uei?" · UEI "+inc.uei:"")+(inc.cage?" · CAGE "+inc.cage:"")):target;
-  const vehDisp=(l.vehicle||(enr&&enr.vehicle)||"");
+  const vehDisp=((enr&&enr.vehicle)||l.vehicle||"");
   const rows=[["Source",l.source],["Award ID",l.awardId],[isAward?"Prime":"Incumbent",incDisp],
     ["Agency",l.agency],["Sub-agency",l.subAgency],["Value",fmtVal(l.value)],["NAICS",l.naics],["PSC",l.psc],
     ["Set-aside",l.setAside],["Vehicle",vehDisp+(l.vehicleHeld?" (HELD by Ignitec)":"")],

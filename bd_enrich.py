@@ -17,6 +17,15 @@ Design and guardrails:
   Endpoints: /contract/ and /idv/ (filtered by award_id). Both embed awardee,
   awarding_agency, vehicle, and the created_by/last_modified_by/approved_by
   people who wrote the FPDS record (the contracting-office contacts).
+- Most leads are delivery orders that HigherGov does not resolve by the order
+  PIID alone, so the lookup escalates: contract by award_id, then idv by
+  award_id, then contract by award_id + parent, then the parent IDV (vehicle)
+  record. A parent-IDV (vehicle-level) match yields the vehicle name, sponsor
+  agency, and the vehicle's contracting office; it does NOT assert an order
+  incumbent, since the IDV holder is not necessarily this order's winner.
+  Each record carries matchLevel ("order" or "vehicle") so downstream surfaces
+  can show the difference. The run prints per-tier match counts and a sample of
+  misses for tuning.
 - Truth-first: we copy contacts verbatim from HigherGov and label them by the
   role HigherGov actually reports (the FPDS record author/approver). We do NOT
   relabel them "CO" or "COR" unless HigherGov says so, and we never invent a
@@ -164,46 +173,97 @@ def _vehicle_name(record):
     return v.get("vehicle_name") if isinstance(v, dict) else ""
 
 
-def fetch_record(session, api_key, award_id):
-    """Return (record, kind) for a government Award ID, trying contract then IDV."""
-    for kind, path in (("contract", "/contract/"), ("idv", "/idv/")):
-        try:
-            r = session.get(
-                BASE + path,
-                params={"award_id": award_id, "api_key": api_key, "page_size": "1"},
-                timeout=TIMEOUT,
-            )
-        except requests.RequestException as e:
-            print(f"    ! {kind} lookup failed for {award_id}: {e}")
-            continue
-        if r.status_code != 200:
-            # 403 with a bad key is fatal; report once and stop trying this id.
-            if r.status_code in (401, 403):
-                print(f"    ! HigherGov auth error ({r.status_code}): {r.text[:120]}")
-                return None, None
-            continue
-        results = (r.json() or {}).get("results") or []
-        if results:
-            return results[0], kind
-    return None, None
+class AuthError(Exception):
+    """Raised on a 401/403 so the whole run stops instead of hammering the API."""
 
 
-def enrich_record(record, kind):
+def _query(session, api_key, path, params):
+    """One HigherGov GET. Returns the first result dict, or None. Raises AuthError."""
+    try:
+        r = session.get(
+            BASE + path,
+            params={**params, "api_key": api_key, "page_size": "1"},
+            timeout=TIMEOUT,
+        )
+    except requests.RequestException as e:
+        print(f"    ! lookup failed for {path} {params}: {e}")
+        return None
+    if r.status_code in (401, 403):
+        raise AuthError(f"{r.status_code}: {r.text[:120]}")
+    if r.status_code != 200:
+        return None
+    results = (r.json() or {}).get("results") or []
+    return results[0] if results else None
+
+
+def fetch_record(session, api_key, award_id, parent_id, parent_cache, stats):
+    """Resolve a lead to a HigherGov record through a tiered lookup.
+
+    Most of our leads are delivery orders. HigherGov often does not resolve an
+    order by its order PIID alone, so we escalate:
+      1. contract by award_id            (exact order)
+      2. idv by award_id                 (the award itself is a vehicle)
+      3. contract by award_id + parent   (order disambiguated by its parent IDV)
+      4. idv by parent award_id          (the parent VEHICLE record; order-level
+                                          fields unknown, so vehicle/agency only)
+    Returns (record, kind, match_level) or (None, None, None) on a full miss.
+    match_level is 'order' for 1-3 and 'vehicle' for 4, which the caller uses to
+    decide which fields are safe to trust.
+    """
+    rec = _query(session, api_key, "/contract/", {"award_id": award_id})
+    if rec:
+        stats["order"] += 1
+        return rec, "contract", "order"
+    rec = _query(session, api_key, "/idv/", {"award_id": award_id})
+    if rec:
+        stats["order"] += 1
+        return rec, "idv", "order"
+    if parent_id:
+        rec = _query(session, api_key, "/contract/",
+                     {"award_id": award_id, "parent_award_id": parent_id})
+        if rec:
+            stats["order_parent"] += 1
+            return rec, "contract", "order"
+        # Parent IDV lookups are cached: many orders share one vehicle.
+        if parent_id in parent_cache:
+            rec = parent_cache[parent_id]
+        else:
+            rec = _query(session, api_key, "/idv/", {"award_id": parent_id})
+            parent_cache[parent_id] = rec
+        if rec:
+            stats["vehicle"] += 1
+            return rec, "idv", "vehicle"
+    stats["miss"] += 1
+    return None, None, None
+
+
+def enrich_record(record, kind, match_level):
     contacts = _contacts_from(record)
-    incumbent = _awardee(record)
     pop_end = (record.get("period_of_performance_current_end_date")
                or record.get("ordering_period_end_date") or "")
-    return {
+    data = {
         "contacts": contacts,
-        "incumbent": incumbent,
         "vehicle": _vehicle_name(record),
         "agency": _agency_name(record),
         "setAside": record.get("type_of_set_aside") or "",
         "popEnd": pop_end,
         "hgPath": _full_url(record.get("path")),
         "source": kind,
+        "matchLevel": match_level,
         "dateEnriched": TODAY,
     }
+    if match_level == "order":
+        # This record IS the order/award, so its awardee and contacts are the
+        # order's incumbent and contracting office.
+        data["incumbent"] = _awardee(record)
+    else:
+        # Vehicle-level match: the IDV awardee is the vehicle holder, not
+        # necessarily this order's winner, so we do NOT assert an incumbent.
+        # The contacts belong to the vehicle's contracting office; relabel them.
+        data["incumbent"] = None
+        for c in data["contacts"]:
+            c["role"] = "Vehicle " + c.get("role", "contact")
+    return data
 
 
 def main():
@@ -222,46 +282,60 @@ def main():
         return
 
     session = requests.Session()
-    by_award = {}   # award_id -> enrichment dict, cached within this run
+    by_award = {}       # (award_id, parent_id) -> enrichment dict, cached this run
+    parent_cache = {}   # parent PIID -> parent IDV record (or None), cached this run
+    stats = {"order": 0, "order_parent": 0, "vehicle": 0, "miss": 0}
+    miss_samples = []
     added = 0
     attempted = 0
-    for l in leads:
-        if l.get("source") not in ("Recent Award", "Expiring Contract"):
-            continue
-        lead_id = l.get("id")
-        if not lead_id or lead_id in enrichment:
-            continue
-        if not aligned(l):
-            continue
-        award_id = (l.get("awardId") or "").strip()
-        if not award_id:
-            continue
-        if attempted >= MAX_PER_RUN:
-            print(f"  Reached per-run cap of {MAX_PER_RUN}; remaining leads enrich next run.")
-            break
+    try:
+        for l in leads:
+            if l.get("source") not in ("Recent Award", "Expiring Contract"):
+                continue
+            lead_id = l.get("id")
+            if not lead_id or lead_id in enrichment:
+                continue
+            if not aligned(l):
+                continue
+            award_id = (l.get("awardId") or "").strip()
+            if not award_id:
+                continue
+            # The crawler stores the parent IDV (vehicle) PIID in lead["vehicle"].
+            parent_id = (l.get("vehicle") or "").strip()
+            if attempted >= MAX_PER_RUN:
+                print(f"  Reached per-run cap of {MAX_PER_RUN}; remaining leads enrich next run.")
+                break
 
-        if award_id in by_award:
-            data = by_award[award_id]
-        else:
-            attempted += 1
-            record, kind = fetch_record(session, api_key, award_id)
-            if kind is None and record is None:
-                # Distinguish auth failure (stop) from simple no-match (continue).
-                data = None
+            cache_key = (award_id, parent_id)
+            if cache_key in by_award:
+                data = by_award[cache_key]
             else:
-                data = enrich_record(record, kind) if record else None
-            by_award[award_id] = data
-            time.sleep(0.2)   # be polite to the API
+                attempted += 1
+                record, kind, level = fetch_record(
+                    session, api_key, award_id, parent_id, parent_cache, stats)
+                data = enrich_record(record, kind, level) if record else None
+                if data is None and len(miss_samples) < 20:
+                    miss_samples.append({"award_id": award_id, "parent": parent_id})
+                by_award[cache_key] = data
+                time.sleep(0.2)   # be polite to the API
 
-        if data:
-            enrichment[lead_id] = data
-            added += 1
+            if data:
+                enrichment[lead_id] = data
+                added += 1
+    except AuthError as e:
+        print(f"    ! HigherGov auth error ({e}); stopping. Check HIGHERGOV_API_KEY.")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(ENRICH_FILE, "w") as fh:
         json.dump(enrichment, fh, indent=2)
-    print(f"  HigherGov enrichment: {attempted} looked up, wrote {added} new "
+    print(f"  HigherGov enrichment: {attempted} looked up | matched "
+          f"order={stats['order']}, order+parent={stats['order_parent']}, "
+          f"vehicle={stats['vehicle']}, miss={stats['miss']} | wrote {added} new "
           f"(total {len(enrichment)}) to {ENRICH_FILE}")
+    if miss_samples:
+        print("  Miss samples (award_id / parent PIID):")
+        for m in miss_samples[:20]:
+            print(f"    - {m['award_id']}  parent={m['parent'] or '-'}")
 
 
 if __name__ == "__main__":

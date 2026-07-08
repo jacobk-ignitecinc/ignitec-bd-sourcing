@@ -266,7 +266,8 @@ def setaside_short(lead):
 
 
 def vehicle_disp(lead):
-    v = lead.get("vehicle") or enrich_of(lead).get("vehicle") or ""
+    # Prefer HigherGov's friendly vehicle name; fall back to the raw parent PIID.
+    v = enrich_of(lead).get("vehicle") or lead.get("vehicle") or ""
     if not v:
         return "-"
     return v + (" (HELD)" if lead.get("vehicleHeld") else "")
