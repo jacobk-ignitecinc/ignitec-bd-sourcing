@@ -67,6 +67,53 @@
   .ro .k{color:var(--muted);flex:0 0 120px} .ro .v{overflow-wrap:anywhere} .ro a{color:var(--navy)}
   .empty{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:40px;text-align:center;color:var(--muted)}
   .dirty{color:var(--red);font-weight:bold} .hint{font-size:11.5px;color:var(--muted)} .hidden{display:none!important}
+  /* tabs */
+  .tabs{display:flex;gap:4px;padding:0 22px;background:var(--card);border-bottom:1px solid var(--line)}
+  .tabs button{background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);
+    border-radius:0;padding:12px 16px;font-weight:bold;font-size:13.5px}
+  .tabs button.active{color:var(--red);border-bottom-color:var(--red)}
+  .tabs .pcount{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:20px;
+    background:var(--greybg);color:var(--grey);font-size:11px}
+  .tabs button.active .pcount{background:var(--warmbg);color:var(--warm)}
+  /* pursue button on sourcing cards */
+  .pursueBtn{align-self:center;border:1px solid var(--warm);background:#fff;color:var(--warm);
+    border-radius:20px;padding:5px 11px;font-size:12px;white-space:nowrap}
+  .pursueBtn.on{background:var(--warm);color:#fff}
+  .chip.pipe{background:var(--warmbg);color:var(--warm);font-weight:bold}
+  /* pipeline toolbar */
+  .ptool{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px}
+  .ptool .gstatus{font-size:12px;color:var(--muted)} .ptool .gstatus.ok{color:var(--warm)} .ptool .gstatus.err{color:var(--red)}
+  /* kanban board */
+  .board{display:flex;gap:12px;overflow-x:auto;padding-bottom:14px;align-items:flex-start}
+  .col{flex:0 0 250px;background:#eef1f5;border-radius:10px;padding:8px;min-height:120px}
+  .col.terminal{background:#e9ecf1}
+  .col h3{font-size:12px;color:var(--navy);margin:2px 4px 8px;display:flex;justify-content:space-between;align-items:baseline;text-transform:uppercase;letter-spacing:.3px}
+  .col h3 .csum{font-size:11px;color:var(--muted);font-weight:normal}
+  .pcard{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 10px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer}
+  .pcard:hover{border-color:var(--navy)}
+  .pcard .pt{font-weight:bold;font-size:12.5px;overflow-wrap:anywhere;margin-bottom:3px}
+  .pcard .pm{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+  .pcard .prow{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;align-items:center}
+  .pcard .mini{font-size:10.5px;padding:1px 7px;border-radius:20px;background:var(--greybg);color:var(--grey);white-space:nowrap}
+  .pcard .mini.warm{background:var(--warmbg);color:var(--warm)} .pcard .mini.cold{background:var(--coldbg);color:var(--cold)}
+  .pcard .mini.due{background:#fde9e9;color:var(--red)} .pcard .mini.ok{background:var(--warmbg);color:var(--warm)}
+  .pcard .nav{display:flex;justify-content:space-between;margin-top:7px;gap:6px}
+  .pcard .nav button{padding:2px 8px;font-size:11px;background:#fff;color:var(--navy);border:1px solid var(--line)}
+  .pcard .nav button:disabled{opacity:.3;cursor:default}
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(16,24,40,.45);display:flex;justify-content:center;align-items:flex-start;
+    padding:36px 16px;z-index:50;overflow-y:auto}
+  .modal .sheet{background:#fff;border-radius:12px;max-width:720px;width:100%;box-shadow:0 20px 50px rgba(16,24,40,.3)}
+  .modal .mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .modal .mhead .x{border:none;background:none;color:var(--muted);font-size:20px;padding:0 4px;cursor:pointer}
+  .modal .mbody{padding:16px 18px}
+  .tl{margin-top:6px;border-left:2px solid var(--line);padding-left:12px}
+  .tl .ev{position:relative;padding:5px 0;font-size:12.5px}
+  .tl .ev::before{content:"";position:absolute;left:-17px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--navy)}
+  .tl .ev .d{color:var(--muted);font-size:11px} .tl .ev .ty{font-weight:bold;color:var(--navy)}
+  .addact{display:grid;grid-template-columns:150px 130px 1fr auto;gap:8px;align-items:end;margin-top:10px}
+  @media(max-width:620px){.addact{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -74,6 +121,11 @@
   <h1>Ignitec BD Sourcing Cockpit</h1>
   <div class="sub">Capability-aligned federal opportunities for two plays: subcontracting to recent-award primes, and getting ahead of expiring-contract recompetes.</div>
 </header>
+
+<div class="tabs">
+  <button id="tabSourcing" class="active">Sourcing</button>
+  <button id="tabPipeline">Pipeline <span class="pcount" id="pipeCount">0</span></button>
+</div>
 
 <div class="wrap">
   <div class="bar">
@@ -90,9 +142,10 @@
     <button class="warn" id="resetBtn" title="Clear local edits and accumulated leads">Reset local data</button>
   </div>
 
+  <div id="sourcingView">
   <div class="tiles" id="tiles"></div>
 
-  <h2>Pipeline</h2>
+  <h2>Triage queue</h2>
   <div class="filters">
     <input type="text" id="search" placeholder="Search prime, incumbent, agency, title...">
     <select id="fSource">
@@ -129,7 +182,25 @@
   </div>
 
   <div id="list"></div>
+  </div><!-- /sourcingView -->
+
+  <div id="pipelineView" class="hidden">
+    <div class="tiles" id="pTiles"></div>
+    <div class="ptool">
+      <div class="grow" style="flex:1 1 auto">
+        <b style="color:var(--navy)">Shared pipeline</b>
+        <span class="hint" id="pipeSrc"> &mdash; loads from output/pipeline.json on the branch.</span>
+        <div class="gstatus" id="gStatus"></div>
+      </div>
+      <select id="pStageFilter"><option value="">All stages</option></select>
+      <select id="pOwnerFilter"><option value="">All owners</option></select>
+      <button class="ghost" id="pConnectBtn" title="Store a GitHub token in this browser to save the shared pipeline">Connect GitHub</button>
+      <button id="pSaveBtn" title="Commit the pipeline to output/pipeline.json">Save to GitHub</button>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
 </div>
+<div id="modalRoot"></div>
 
 <script>
 "use strict";
@@ -140,8 +211,16 @@ const CONFIG = {
   paths: ["output/all_leads.json", "output/latest_new_leads.json"],
   configPath: "config/ignitec.json",
   summariesPath: "output/summaries.json",
-  enrichmentPath: "output/enrichment.json"
+  enrichmentPath: "output/enrichment.json",
+  pipelinePath: "output/pipeline.json"
 };
+/* Kanban stages (order = left to right). Won/Lost/Parked are terminal. */
+const STAGES = ["Pursue","Researching","First contact","In discussion","Teaming/RFI","Submitted","Won","Lost","Parked"];
+const TERMINAL = new Set(["Won","Lost","Parked"]);
+const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting","RFI response",
+  "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
+const LS_PIPELINE = "ignitec-bd-pipeline-v1";
+const LS_TOKEN = "ignitec-bd-gh-token";
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -153,6 +232,7 @@ const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","note
 
 let master = {}, dirty = false;
 let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {}, ENRICHMENT = {};
+let PIPELINE = {};   // leadId -> pursuit record {stage, owner, nextAction, nextActionDate, notes, pursuedDate, stageSince, activities[], lastTouched}
 
 const $ = s => document.querySelector(s);
 const el = (t,c,txt)=>{const e=document.createElement(t); if(c)e.className=c; if(txt!=null)e.textContent=txt; return e;};
@@ -198,6 +278,96 @@ function mergeLeads(arr){
   saveMaster(); return {added,seen,total:arr.length};
 }
 
+/* ------------------------------------------------------------ pipeline state */
+function nowISO(){return new Date().toISOString();}
+function loadPipelineLocal(){try{PIPELINE=JSON.parse(localStorage.getItem(LS_PIPELINE)||"{}")||{};}catch(e){PIPELINE={};}}
+function savePipelineLocal(){try{localStorage.setItem(LS_PIPELINE,JSON.stringify(PIPELINE));}catch(e){console.warn(e);}}
+/* Merge two pipeline maps: for each lead id, keep the record with the newer lastTouched. */
+function mergePipeline(base, incoming){
+  const out={...base};
+  for(const id in incoming){
+    const a=out[id], b=incoming[id];
+    if(!a || String(b.lastTouched||"") > String(a.lastTouched||"")) out[id]=b;
+  }
+  return out;
+}
+async function loadPipelineRemote(branch){
+  const cands=["../"+CONFIG.pipelinePath, rawURL(branch,CONFIG.pipelinePath)];
+  for(const u of cands){ try{ const r=await fetch(u,{cache:"no-store"}); if(!r.ok)continue;
+    const j=await r.json(); if(j && typeof j==="object"){ PIPELINE=mergePipeline(PIPELINE,j); savePipelineLocal(); return true; } }catch(e){} }
+  return false;
+}
+function isPursued(id){return !!PIPELINE[id];}
+function touchPipe(id){ if(PIPELINE[id]) PIPELINE[id].lastTouched=nowISO(); savePipelineLocal(); }
+function togglePursue(id){
+  const l=master[id]; if(!l)return;
+  if(PIPELINE[id]){
+    if(!confirm("Remove this opportunity from the pipeline? Its activity log will be discarded on next save.")) return;
+    delete PIPELINE[id];
+  } else {
+    PIPELINE[id]={ stage:"Pursue", owner:"", nextAction:"", nextActionDate:"", notes:"",
+      pursuedDate:today(), stageSince:today(),
+      activities:[{type:"Decided to pursue", date:today(), note:""}], lastTouched:nowISO() };
+  }
+  savePipelineLocal(); markPipeDirty();
+  render(); renderPipeline();
+}
+function pipeEdit(id,field,value){ const p=PIPELINE[id]; if(!p)return; p[field]=value; touchPipe(id); markPipeDirty(); }
+function setStage(id,stage,logNote){
+  const p=PIPELINE[id]; if(!p||p.stage===stage)return;
+  p.stage=stage; p.stageSince=today();
+  p.activities=p.activities||[]; p.activities.push({type:"Stage change",date:today(),note:(logNote||("Moved to "+stage))});
+  touchPipe(id); markPipeDirty(); renderPipeline();
+}
+function addActivity(id,type,date,note){
+  const p=PIPELINE[id]; if(!p)return;
+  p.activities=p.activities||[]; p.activities.push({type,date:date||today(),note:note||""});
+  touchPipe(id); markPipeDirty();
+}
+function markPipeDirty(){ const el=$("#gStatus"); if(el){el.textContent="Unsaved pipeline changes in this browser. Save to GitHub to share."; el.className="gstatus";} updatePipeCount(); }
+function updatePipeCount(){ const n=Object.keys(PIPELINE).length; const c=$("#pipeCount"); if(c)c.textContent=n; }
+
+/* ------------------------------------------------------------ github save */
+function ghToken(){return localStorage.getItem(LS_TOKEN)||"";}
+function connectGitHub(){
+  const cur=ghToken();
+  const t=prompt("Paste a GitHub fine-grained personal access token with Contents: Read and write on "+
+    CONFIG.owner+"/"+CONFIG.repo+".\n\nStored only in this browser (localStorage), never committed. Leave blank to disconnect.", cur);
+  if(t===null)return;
+  if(t.trim()) localStorage.setItem(LS_TOKEN,t.trim()); else localStorage.removeItem(LS_TOKEN);
+  setGStatus(t.trim()?"GitHub connected. You can Save to GitHub.":"GitHub disconnected.", t.trim()?"ok":"");
+}
+function setGStatus(msg,cls){const el=$("#gStatus"); if(el){el.textContent=msg; el.className="gstatus "+(cls||"");}}
+function b64encode(str){return btoa(unescape(encodeURIComponent(str)));}
+function b64decode(str){try{return decodeURIComponent(escape(atob(str)));}catch(e){return atob(str);}}
+async function saveToGitHub(){
+  const token=ghToken();
+  if(!token){ connectGitHub(); if(!ghToken())return; }
+  const branch=$("#branchInput").value.trim()||CONFIG.branch;
+  const api=`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.pipelinePath}`;
+  const hdr={Authorization:"Bearer "+token, Accept:"application/vnd.github+json"};
+  setGStatus("Saving...","");
+  try{
+    // 1. Read current remote file (sha + content) to merge, avoiding clobbering teammates.
+    let sha=null, remote={};
+    const g=await fetch(`${api}?ref=${encodeURIComponent(branch)}`,{headers:hdr,cache:"no-store"});
+    if(g.status===200){ const j=await g.json(); sha=j.sha; try{remote=JSON.parse(b64decode(j.content))||{};}catch(e){remote={};} }
+    else if(g.status===401){ setGStatus("Token rejected (401). Reconnect GitHub.","err"); return; }
+    else if(g.status!==404){ setGStatus("Read failed ("+g.status+").","err"); return; }
+    // 2. Merge remote into local (newer lastTouched per opportunity wins), then persist merged locally.
+    PIPELINE=mergePipeline(remote,PIPELINE);
+    savePipelineLocal();
+    // 3. Commit.
+    const body={ message:"BD pipeline update "+today(), branch,
+      content:b64encode(JSON.stringify(PIPELINE,null,2)) };
+    if(sha)body.sha=sha;
+    const p=await fetch(api,{method:"PUT",headers:hdr,body:JSON.stringify(body)});
+    if(p.status===200||p.status===201){ setGStatus("Saved to GitHub "+today()+". Shared board updated.","ok"); renderPipeline(); }
+    else if(p.status===409){ setGStatus("Conflict; someone saved first. Click Save again to merge.","err"); }
+    else { const t=await p.text(); setGStatus("Save failed ("+p.status+"). "+t.slice(0,80),"err"); }
+  }catch(e){ setGStatus("Save error: "+e.message,"err"); }
+}
+
 /* ------------------------------------------------------------ data load */
 async function loadConfig(branch){
   const cands=["../"+CONFIG.configPath, rawURL(branch,CONFIG.configPath)];
@@ -235,6 +405,8 @@ async function reload(){
   await loadConfig(branch);
   await loadSummaries(branch);
   await loadEnrichment(branch);
+  await loadPipelineRemote(branch);
+  updatePipeCount();
   try{
     const {data,url}=await fetchLeads(branch);
     const res=mergeLeads(data);
@@ -242,10 +414,10 @@ async function reload(){
     $("#srcInfo").innerHTML=`Loaded <b>${res.total}</b> from ${short} on <b>${esc(branch)}</b>. `+
       `Added ${res.added}, ${res.seen} already tracked. Working set: <b>${Object.keys(master).length}</b>. `+
       `Lanes loaded: ${LANES.length}.`;
-    render();
+    render(); renderPipeline();
   }catch(e){
     $("#srcInfo").innerHTML=`Could not auto-load (${esc(e.message)}). Use <b>Load JSON file</b> to import output/all_leads.json.`;
-    render();
+    render(); renderPipeline();
   }
 }
 
@@ -309,7 +481,14 @@ function leadCard(l){
     grow.appendChild(cd);
   }
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
-  head.appendChild(grow); head.appendChild(badge);
+  const pursued=isPursued(l.id);
+  if(pursued) chips.appendChild(el("span","chip pipe","In pipeline: "+PIPELINE[l.id].stage));
+  const pbtn=el("button","pursueBtn"+(pursued?" on":""), pursued?"✓ Pursuing":"+ Pursue");
+  pbtn.title=pursued?"In the pipeline. Click to remove.":"Add to the pursuit pipeline";
+  pbtn.addEventListener("click",e=>{e.stopPropagation(); togglePursue(l.id);});
+  const rightcol=el("div"); rightcol.style.cssText="display:flex;flex-direction:column;gap:6px;align-items:flex-end";
+  rightcol.appendChild(badge); rightcol.appendChild(pbtn);
+  head.appendChild(grow); head.appendChild(rightcol);
   head.addEventListener("click",()=>card.classList.toggle("open"));
   card.appendChild(head);
 
@@ -444,9 +623,165 @@ function render(){
   $("#count").textContent=arr.length+" shown";
 }
 
+/* ------------------------------------------------------------ pipeline render */
+function pursuitOwners(){ return [...new Set(Object.values(PIPELINE).map(p=>p.owner).filter(Boolean))].sort(); }
+function daysSince(d){ if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null; return Math.round((Date.now()-t)/86400000); }
+function lastActivity(p){ const a=(p.activities||[]); return a.length?a[a.length-1]:null; }
+
+function renderPipeTiles(){
+  const ids=Object.keys(PIPELINE);
+  const active=ids.filter(id=>!TERMINAL.has(PIPELINE[id].stage));
+  const val=active.reduce((s,id)=>s+(Number((master[id]||{}).value)||0),0);
+  const overdue=active.filter(id=>{const d=PIPELINE[id].nextActionDate; return d && daysUntil(d)<0;}).length;
+  const shaping=ids.filter(id=>master[id]&&isShaping(master[id])&&!TERMINAL.has(PIPELINE[id].stage)).length;
+  const won=ids.filter(id=>PIPELINE[id].stage==="Won").length;
+  const t=[["",active.length,"Active pursuits"],["",fmtVal(val)||"$0","Pipeline value (active)"],
+    ["shape",shaping,"Shaping window"],["cold",overdue,"Overdue next-action"],["warm",won,"Won"]];
+  const box=$("#pTiles"); box.innerHTML="";
+  for(const [cls,n,l] of t){const d=el("div","tile "+cls); d.appendChild(el("div","n",String(n))); d.appendChild(el("div","l",l)); box.appendChild(d);}
+}
+function pcard(id){
+  const l=master[id]||{id,title:id}; const p=PIPELINE[id];
+  const card=el("div","pcard"); card.dataset.id=id;
+  card.appendChild(el("div","pt", l.title||id));
+  const bits=[]; if(l.agency)bits.push(l.agency); if(l.value)bits.push(fmtVal(l.value));
+  card.appendChild(el("div","pm", bits.join("  ·  ")));
+  const row=el("div","prow");
+  const r=route(l); row.appendChild(el("span","mini "+(r==="Warm"?"warm":"cold"), r));
+  row.appendChild(el("span","mini", laneLabel(l)));
+  if(p.owner)row.appendChild(el("span","mini", p.owner));
+  if(p.nextActionDate){ const du=daysUntil(p.nextActionDate);
+    row.appendChild(el("span","mini "+(du<0?"due":"ok"), (du<0?"overdue ":"due ")+p.nextActionDate)); }
+  const ds=daysSince(p.stageSince); if(ds!=null && !TERMINAL.has(p.stage))row.appendChild(el("span","mini", ds+"d in stage"));
+  card.appendChild(row);
+  const la=lastActivity(p);
+  if(la)card.appendChild(el("div","pm","Last: "+la.type+(la.note?" — "+la.note:"")+" ("+la.date+")"));
+  // move controls
+  const nav=el("div","nav");
+  const i=STAGES.indexOf(p.stage);
+  const back=el("button",null,"◀"); back.disabled=i<=0; back.title="Move back";
+  back.addEventListener("click",e=>{e.stopPropagation(); if(i>0)setStage(id,STAGES[i-1]);});
+  const fwd=el("button",null,"▶"); fwd.disabled=i>=STAGES.length-1||TERMINAL.has(p.stage); fwd.title="Advance";
+  fwd.addEventListener("click",e=>{e.stopPropagation(); if(i<STAGES.length-1)setStage(id,STAGES[i+1]);});
+  nav.appendChild(back); nav.appendChild(fwd);
+  card.appendChild(nav);
+  card.addEventListener("click",()=>openPursuit(id));
+  return card;
+}
+function renderPipeline(){
+  updatePipeCount();
+  // stage + owner filters
+  const sf=$("#pStageFilter"), of=$("#pOwnerFilter");
+  if(sf){ const keep=sf.value; sf.innerHTML='<option value="">All stages</option>'+STAGES.map(s=>`<option>${esc(s)}</option>`).join(""); sf.value=keep; }
+  if(of){ const keep=of.value; of.innerHTML='<option value="">All owners</option>'+pursuitOwners().map(o=>`<option>${esc(o)}</option>`).join(""); of.value=keep; }
+  renderPipeTiles();
+  const fOwner=of?of.value:"", fStage=sf?sf.value:"";
+  const board=$("#board"); if(!board)return; board.innerHTML="";
+  const ids=Object.keys(PIPELINE).filter(id=>(!fOwner||PIPELINE[id].owner===fOwner));
+  if(ids.length===0){ board.appendChild(el("div","empty","No opportunities in the pipeline yet. On the Sourcing tab, click + Pursue on the ones you want to go after.")); board.style.display="block"; return; }
+  board.style.display="flex";
+  const cols=fStage?[fStage]:STAGES;
+  for(const stage of cols){
+    const col=el("div","col"+(TERMINAL.has(stage)?" terminal":""));
+    const inCol=ids.filter(id=>PIPELINE[id].stage===stage);
+    const sum=inCol.reduce((s,id)=>s+(Number((master[id]||{}).value)||0),0);
+    const h=el("h3"); h.appendChild(el("span",null,stage));
+    h.appendChild(el("span","csum", inCol.length+(sum?" · "+fmtVal(sum):"")));
+    col.appendChild(h);
+    inCol.sort((a,b)=>(Number((master[b]||{}).value)||0)-(Number((master[a]||{}).value)||0));
+    for(const id of inCol) col.appendChild(pcard(id));
+    board.appendChild(col);
+  }
+}
+
+/* ------------------------------------------------------------ pursuit modal */
+function closeModal(){ $("#modalRoot").innerHTML=""; }
+function openPursuit(id){
+  const l=master[id]||{id,title:id}; const p=PIPELINE[id]; if(!p)return;
+  const root=$("#modalRoot"); root.innerHTML="";
+  const overlay=el("div","modal"); overlay.addEventListener("click",e=>{if(e.target===overlay)closeModal();});
+  const sheet=el("div","sheet");
+  const mhead=el("div","mhead"); const hg=el("div");
+  const oppUrl=l.url||((ENRICHMENT[id]||{}).hgPath)||"";
+  if(oppUrl){const a=el("a",null,l.title||id); a.href=oppUrl; a.target="_blank"; a.rel="noopener"; a.style.cssText="font-weight:bold;font-size:15px;color:var(--navy)"; hg.appendChild(a);}
+  else hg.appendChild(el("div",null,l.title||id));
+  const sub=[]; if(l.agency)sub.push(l.agency); if(l.value)sub.push(fmtVal(l.value)); sub.push(l.source||"");
+  hg.appendChild(el("div","hint", sub.filter(Boolean).join("  ·  ")));
+  const x=el("button","x","×"); x.addEventListener("click",closeModal);
+  mhead.appendChild(hg); mhead.appendChild(x); sheet.appendChild(mhead);
+
+  const body=el("div","mbody");
+  // editable fields
+  const grid=el("div","grid");
+  function fld(label,key,kind,opts){
+    const f=el("div","fld"); f.appendChild(el("label",null,label)); let inp;
+    if(kind==="select"){inp=el("select"); optionList(inp,opts,p[key]||"");}
+    else if(kind==="textarea"){inp=el("textarea"); inp.value=p[key]||"";}
+    else if(kind==="date"){inp=el("input"); inp.type="date"; inp.value=(p[key]||"").slice(0,10);}
+    else {inp=el("input"); inp.type="text"; inp.value=p[key]||"";}
+    inp.addEventListener("change",()=>{ if(key==="stage"){setStage(id,inp.value);} else {pipeEdit(id,key,inp.value);} });
+    f.appendChild(inp); return f;
+  }
+  grid.appendChild(fld("Stage","stage","select",STAGES));
+  grid.appendChild(fld("Owner","owner","text"));
+  grid.appendChild(fld("Next action","nextAction","text"));
+  grid.appendChild(fld("Next action date","nextActionDate","date"));
+  const nt=fld("Notes","notes","textarea"); nt.style.gridColumn="1/-1"; grid.appendChild(nt);
+  body.appendChild(grid);
+
+  // contacts (from enrichment)
+  const enr=ENRICHMENT[id]||{};
+  if((enr.contacts||[]).length){
+    const cd=el("div","contacts"); cd.style.marginTop="12px"; cd.appendChild(el("span","clabel","Contacts:"));
+    (enr.contacts||[]).slice(0,4).forEach(c=>{ const span=el("span","contact"); const nm=c.name||c.email||"contact";
+      if(c.email){const a=el("a",null,nm); a.href="mailto:"+c.email; span.appendChild(a);} else span.appendChild(document.createTextNode(nm));
+      if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone)); cd.appendChild(span); });
+    body.appendChild(cd);
+  }
+
+  // activity timeline
+  body.appendChild(el("h2",null,"Activity"));
+  const tl=el("div","tl");
+  const acts=(p.activities||[]).slice().reverse();
+  if(!acts.length) tl.appendChild(el("div","hint","No activity logged yet."));
+  for(const a of acts){ const ev=el("div","ev");
+    ev.appendChild(el("span","ty",a.type)); if(a.note)ev.appendChild(document.createTextNode(" — "+a.note));
+    ev.appendChild(el("div","d",a.date)); tl.appendChild(ev); }
+  body.appendChild(tl);
+
+  // add activity
+  const add=el("div","addact");
+  const tsel=el("select"); optionList(tsel,ACTIVITY_TYPES,"Call");
+  const dinp=el("input"); dinp.type="date"; dinp.value=today();
+  const ninp=el("input"); ninp.type="text"; ninp.placeholder="Note (optional)";
+  const abtn=el("button",null,"Log activity");
+  abtn.addEventListener("click",()=>{ addActivity(id,tsel.value,dinp.value,ninp.value.trim()); openPursuit(id); renderPipeline(); });
+  add.appendChild(tsel); add.appendChild(dinp); add.appendChild(ninp); add.appendChild(abtn);
+  body.appendChild(add);
+
+  // footer: remove
+  const foot=el("div"); foot.style.cssText="margin-top:16px;display:flex;justify-content:space-between;align-items:center";
+  const meta=el("span","hint","Pursued "+(p.pursuedDate||"?")+" · in stage since "+(p.stageSince||"?"));
+  const rm=el("button","warn","Remove from pipeline");
+  rm.addEventListener("click",()=>{ togglePursue(id); closeModal(); });
+  foot.appendChild(meta); foot.appendChild(rm); body.appendChild(foot);
+
+  sheet.appendChild(body); overlay.appendChild(sheet); root.appendChild(overlay);
+}
+
+/* ------------------------------------------------------------ tabs */
+function showTab(which){
+  const src=which==="sourcing";
+  $("#sourcingView").classList.toggle("hidden",!src);
+  $("#pipelineView").classList.toggle("hidden",src);
+  $("#tabSourcing").classList.toggle("active",src);
+  $("#tabPipeline").classList.toggle("active",!src);
+  if(!src) renderPipeline();
+}
+
 /* ------------------------------------------------------------ wire up */
 function init(){
-  loadMaster();
+  loadMaster(); loadPipelineLocal();
   $("#branchInput").value=localStorage.getItem(LS_BRANCH)||CONFIG.branch;
   setDirty(false);
   $("#reloadBtn").addEventListener("click",reload);
@@ -467,8 +802,18 @@ function init(){
    "#fSetAside","#fValMin","#fValMax","#fExpiry","#fHeldVeh","#fExclude"].forEach(sel=>{
     const e=$(sel); const ev=(e.tagName==="INPUT"&&(e.type==="text"||e.type==="number"))?"input":"change";
     e.addEventListener(ev,render);});
+  // tabs + pipeline controls
+  $("#tabSourcing").addEventListener("click",()=>showTab("sourcing"));
+  $("#tabPipeline").addEventListener("click",()=>showTab("pipeline"));
+  $("#pConnectBtn").addEventListener("click",connectGitHub);
+  $("#pSaveBtn").addEventListener("click",saveToGitHub);
+  $("#pStageFilter").addEventListener("change",renderPipeline);
+  $("#pOwnerFilter").addEventListener("change",renderPipeline);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+  updatePipeCount();
+  if(ghToken()) setGStatus("GitHub connected.","ok");
   window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault(); e.returnValue="";}});
-  if(Object.keys(master).length>0) render();
+  if(Object.keys(master).length>0){ render(); renderPipeline(); }
   reload();
 }
 document.addEventListener("DOMContentLoaded",init);
