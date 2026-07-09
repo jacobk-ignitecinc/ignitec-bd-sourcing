@@ -25,7 +25,8 @@ For crawler internals, guardrails, and the lead schema, see `CLAUDE.md`.
   through the pipeline file.
   Recent awards can be filtered by action age (0-30 / 30-90 / 90+ days) for the
   subcontracting play; expiring contracts by horizon (near-term 3-6mo, mid-term
-  6-12mo, long-term 12mo+) and by set-aside (SB or 8(a) - useful because 8(a)
+  6-12mo, long-term 12mo+, plus an "imminent" tag for leads that have aged under
+  3 months since an earlier crawl) and by set-aside (SB or 8(a) - useful because 8(a)
   incumbents graduating or contracts coming off 8(a) open a prime lane). Set-aside
   is sourced from HigherGov enrichment, since the USASpending award search does
   not return it. Each card has a "Find contact" row with pre-filled links to

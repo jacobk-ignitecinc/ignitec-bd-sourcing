@@ -92,6 +92,7 @@
   .chip.pipe{background:var(--warmbg);color:var(--warm);font-weight:bold}
   .chip.rej{background:var(--greybg);color:var(--grey);font-weight:bold}
   .chip.sa{background:#e6f4ec;color:#1b7a43;font-weight:bold}
+  .chip.imm{background:var(--amberbg);color:var(--amber);font-weight:bold}
   .chip.tier{font-weight:bold;cursor:help}
   .chip.tier.tA{background:#e6f4ec;color:#1b7a43} .chip.tier.tB{background:#fbf1dc;color:#946200}
   .chip.tier.tC{background:#eceef2;color:#5b6472}
@@ -206,6 +207,7 @@
       <input type="number" id="fValMax" min="0" step="1" style="width:64px" placeholder="max"></label>
     <select id="fExpiry" title="Expiring contract horizon">
       <option value="">Expiring: any horizon</option>
+      <option value="imminent">Imminent (&lt;3mo)</option>
       <option value="near">Near-term (3-6mo)</option>
       <option value="mid">Mid-term (6-12mo)</option>
       <option value="long">Long-term (12mo+)</option>
@@ -308,8 +310,8 @@ function isShaping(l){const d=daysUntil(l.popEnd); return l.source==="Expiring C
 function awardAgeDays(l){const d=l.actionDate||l.dateAdded; if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null; return Math.round((Date.now()-t)/86400000);}
 function awardAgeBucket(l){const a=awardAgeDays(l); if(a==null)return ""; if(a<=30)return "0-30"; if(a<=90)return "30-90"; return "90+";}
 /* expiring horizon buckets: near 3-6mo, mid 6-12mo, long 12mo+ */
-function expiryHorizon(l){const d=daysUntil(l.popEnd); if(d==null||d<0)return ""; if(d<180)return "near"; if(d<365)return "mid"; return "long";}
-const HORIZON_LABEL={near:"Near-term (3-6mo)",mid:"Mid-term (6-12mo)",long:"Long-term (12mo+)"};
+function expiryHorizon(l){const d=daysUntil(l.popEnd); if(d==null||d<0)return ""; if(d<90)return "imminent"; if(d<180)return "near"; if(d<365)return "mid"; return "long";}
+const HORIZON_LABEL={imminent:"Imminent (<3mo)",near:"Near-term (3-6mo)",mid:"Mid-term (6-12mo)",long:"Long-term (12mo+)"};
 /* set-aside classification. USASpending's award search does not return set-aside,
    so prefer the value HigherGov enrichment resolved; fall back to the lead field. */
 function saValue(l){return ((ENRICHMENT[l.id]||{}).setAside || l.setAside || "");}
@@ -647,7 +649,7 @@ function leadCard(l){
   const du=daysUntil(l.popEnd);
   if(!isAward && du!=null && du>=0){
     const hz=expiryHorizon(l);
-    chips.appendChild(el("span","chip",(HORIZON_LABEL[hz]||"")+" · ends in "+du+"d"+(isShaping(l)?" · shaping":"")));
+    chips.appendChild(el("span","chip"+(hz==="imminent"?" imm":""),(HORIZON_LABEL[hz]||"")+" · ends in "+du+"d"+(isShaping(l)?" · shaping":"")));
   }
   if(isAward){ const ag=awardAgeDays(l); if(ag!=null)chips.appendChild(el("span","chip","action "+ag+"d ago ("+awardAgeBucket(l)+")")); }
   grow.appendChild(chips);
