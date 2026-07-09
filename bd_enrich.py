@@ -383,18 +383,24 @@ def enrich_company(enrichment, leads, hg_key, sam_key):
         need_pocs = rec.get("companyContacts") is None
         if not need_company and not need_pocs:
             continue
-        if attempted >= MAX_SAM_POC_PER_RUN:
-            if not capped:
-                print(f"  Company enrichment cap {MAX_SAM_POC_PER_RUN} reached; identity still set, "
-                      f"profiles finish next run.")
-                capped = True
-            continue
-        attempted += 1
-        # HigherGov company profile (website etc.)
+        wrote = False
+        # HigherGov company profile (website etc.). A cache hit is free (no API
+        # call) and must ALWAYS attach, so leads sharing an already-resolved UEI
+        # get the company even after the per-run lookup cap is spent. Only a cache
+        # miss (a real API call) counts against the cap. Counting cache hits was a
+        # bug: recent awards (iterated first) burned the whole budget on free hits
+        # and starved expiring leads whose UEI was already resolved.
         if need_company:
             if uei in company_cache:
                 company = company_cache[uei]
+            elif attempted >= MAX_SAM_POC_PER_RUN:
+                company = None
+                if not capped:
+                    print(f"  Company enrichment lookup cap {MAX_SAM_POC_PER_RUN} reached; "
+                          f"cached UEIs still attach, new profiles finish next run.")
+                    capped = True
             else:
+                attempted += 1
                 try:
                     company = hg_company(session, hg_key, uei)
                 except AuthError as e:
@@ -404,15 +410,21 @@ def enrich_company(enrichment, leads, hg_key, sam_key):
                 time.sleep(0.2)
             if company:
                 rec["company"] = company
+                wrote = True
                 if company.get("cage") and not inc.get("cage"):
                     inc["cage"] = company["cage"]
-        # SAM.gov points of contact (names)
+        # SAM.gov points of contact (names). Same cap discipline: cached UEIs attach
+        # for free; only a live SAM lookup counts against the cap.
         if need_pocs:
             if not sam_key:
                 rec["companyContacts"] = []
             elif uei in poc_cache:
                 rec["companyContacts"] = poc_cache[uei]
+                wrote = True
+            elif attempted >= MAX_SAM_POC_PER_RUN:
+                pass  # cap spent; POC names finish next run
             else:
+                attempted += 1
                 pocs = sam_company_pocs(session, sam_key, uei)
                 if pocs is None:      # SAM auth failure: stop SAM, keep HG company
                     print("    ! SAM POC auth error; company POCs skipped for the rest.")
@@ -420,8 +432,10 @@ def enrich_company(enrichment, leads, hg_key, sam_key):
                     pocs = []
                 poc_cache[uei] = pocs
                 rec["companyContacts"] = pocs
+                wrote = True
                 time.sleep(0.3)
-        added += 1
+        if wrote:
+            added += 1
     print(f"  Company enrichment: {attempted} UEIs looked up, wrote {added} records "
           f"(company info now on all aligned leads with a UEI).")
 
