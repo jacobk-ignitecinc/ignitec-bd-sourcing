@@ -62,6 +62,7 @@
   .findc .clabel{font-weight:bold;color:var(--muted)}
   .findc a{color:var(--navy);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:1px 8px}
   .findc a:hover{background:var(--coldbg)}
+  .companyline{margin-top:6px;font-size:12px;color:#2a2f36} .companyline .clabel{font-weight:bold;color:var(--navy)}
   .badge{font-size:11.5px;font-weight:bold;padding:4px 9px;border-radius:20px;white-space:nowrap;align-self:center}
   .b-warm{background:var(--warmbg);color:var(--warm)} .b-cold{background:var(--coldbg);color:var(--cold)}
   .panel{border-top:1px solid var(--line);padding:14px;display:none;background:#fcfdff}
@@ -321,22 +322,32 @@ function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.inclu
    search), so those go through a site-scoped Google search that lands on the
    company's actual ZoomInfo / SAM.gov page. LinkedIn's people search does accept
    a keyword query, so it stays a direct link. No API, no data stored. */
+function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
+function domainOf(l){
+  let w=(companyOf(l).website||"").trim().toLowerCase();
+  if(!w)return "";
+  w=w.replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"");
+  return w.includes(".")?w:"";
+}
 function contactLinks(l){
   const inc=(ENRICHMENT[l.id]||{}).incumbent||{};
   const company=(l.prime||l.incumbent||inc.name||"").trim();
   const uei=inc.uei||"";
+  const dom=domainOf(l);
   const row=el("div","findc"); row.appendChild(el("span","clabel","Find contact:"));
   if(!company){ row.appendChild(document.createTextNode(" company unknown")); return row; }
   const q=encodeURIComponent;
   const g=s=>"https://www.google.com/search?q="+q(s);
+  // A known domain makes ZoomInfo/LinkedIn far more precise than a name match.
   const links=[
-    ["LinkedIn","https://www.linkedin.com/search/results/people/?keywords="+q(company+" business development capture")],
-    ["ZoomInfo",g(company+" site:zoominfo.com")],
+    ["LinkedIn","https://www.linkedin.com/search/results/people/?keywords="+q((dom||company)+" business development capture")],
+    ["ZoomInfo",g((dom||company)+" site:zoominfo.com")],
     ["SAM.gov",g((uei||company)+" site:sam.gov")],
-    ["Google",g('"'+company+'" federal business development contact email')]
+    ["Google",g('"'+company+'" '+(dom?dom+" ":"")+"business development contact email")]
   ];
+  if(dom) links.push(["Website","https://"+dom]);
   links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
-    a.title="Opens a search for "+company; a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
+    a.title="Opens "+(label==="Website"?dom:"a search for "+(dom||company)); a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
   return row;
 }
 
@@ -662,6 +673,16 @@ function leadCard(l){
     });
     grow.appendChild(cd);
   }
+  const co=(enr&&enr.company)||null;
+  if(co){
+    const cbits=[];
+    const loc=[co.city,co.state].filter(Boolean).join(", "); if(loc)cbits.push(loc);
+    if(co.employeeCount)cbits.push(co.employeeCount+" emp");
+    if(co.yearFounded)cbits.push("est "+co.yearFounded);
+    if(co.busTypes)cbits.push(String(co.busTypes).slice(0,70));
+    if(cbits.length){ const cl=el("div","companyline"); cl.appendChild(el("span","clabel","Company: "));
+      cl.appendChild(document.createTextNode(cbits.join("  ·  "))); grow.appendChild(cl); }
+  }
   if(enr && (enr.companyContacts||[]).length){
     const cc=el("div","contacts"); cc.appendChild(el("span","clabel","Company POC:"));
     enr.companyContacts.slice(0,3).forEach(c=>{ const s=el("span","contact");
@@ -964,6 +985,25 @@ function openPursuit(id){
     (enr.companyContacts||[]).slice(0,4).forEach(c=>{ const s=el("span","contact");
       s.textContent=c.name+(c.title?" ("+c.title+")":"")+(c.role?" — "+c.role:""); cc.appendChild(s); });
     body.appendChild(cc);
+  }
+  // company profile (HigherGov awardee)
+  const co=enr.company;
+  if(co){
+    const ro=el("div","ro"); ro.style.marginTop="10px"; ro.appendChild(el("h2",null,"Company (HigherGov)"));
+    const dom=domainOf(l);
+    const rows=[["Legal name",co.legalName],["DBA",co.dba],
+      ["Location",[co.city,co.state].filter(Boolean).join(", ")],
+      ["Employees",co.employeeCount],["Founded",co.yearFounded],
+      ["Primary NAICS",co.primaryNaics],["Business types",co.busTypes],
+      ["UEI",co.uei],["CAGE",co.cage],
+      ["Govt business POC",co.govtPOC?(co.govtPOC.name+(co.govtPOC.title?" ("+co.govtPOC.title+")":"")):""]];
+    for(const [k,v] of rows){ if(!v)continue; const r=el("div","row");
+      r.appendChild(el("div","k",k)); r.appendChild(el("div","v",String(v))); ro.appendChild(r); }
+    if(co.website){ const r=el("div","row"); r.appendChild(el("div","k","Website"));
+      const v=el("div","v"); const a=el("a",null,dom||co.website); a.href="https://"+(dom||co.website.replace(/^https?:\/\//,"")); a.target="_blank"; a.rel="noopener"; v.appendChild(a); r.appendChild(v); ro.appendChild(r); }
+    if(co.hgAwardeePath){ const r=el("div","row"); r.appendChild(el("div","k","HigherGov company"));
+      const v=el("div","v"); const a=el("a",null,"open in HigherGov"); a.href=co.hgAwardeePath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); r.appendChild(v); ro.appendChild(r); }
+    body.appendChild(ro);
   }
   const fc=contactLinks(l); fc.style.marginTop="8px"; body.appendChild(fc);
 

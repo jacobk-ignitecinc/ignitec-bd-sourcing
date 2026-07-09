@@ -320,36 +320,89 @@ def sam_company_pocs(session, sam_key, uei):
     return []
 
 
-def enrich_company_pocs(enrichment, sam_key):
-    """Backfill each enrichment record that has an incumbent UEI with the company's
-    SAM points of contact (names). Independent of the HigherGov pass, so it also
-    fills records enriched on earlier runs. Cached by UEI; capped per run."""
+def hg_company(session, hg_key, uei):
+    """Company profile for a UEI from the HigherGov /awardee/ endpoint: website,
+    location, size, socioeconomic types, a government-business POC name, and the
+    HigherGov company page. Returns a dict or None. May raise AuthError."""
+    rec = _query(session, hg_key, "/awardee/", {"uei": uei})
+    if not rec:
+        return None
+    naics = rec.get("primary_naics")
+    naics_code = naics.get("naics_code") if isinstance(naics, dict) else (naics or "")
+    poc_name = " ".join(p for p in (rec.get("govt_bus_poc_first_name"),
+                                    rec.get("govt_bus_poc_last_name")) if p).strip()
+    return {
+        "legalName": rec.get("legal_business_name") or rec.get("clean_name") or "",
+        "dba": rec.get("dba_name") or "",
+        "website": (rec.get("website") or "").strip(),
+        "city": rec.get("physical_address_city") or "",
+        "state": rec.get("physical_address_province_or_state") or "",
+        "employeeCount": rec.get("employee_count") or "",
+        "yearFounded": rec.get("year_founded") or "",
+        "primaryNaics": naics_code or "",
+        "busTypes": rec.get("bus_type_info") or "",
+        "govtPOC": ({"name": poc_name, "title": rec.get("govt_bus_poc_title") or ""}
+                    if poc_name else None),
+        "uei": rec.get("uei") or uei,
+        "cage": rec.get("cage_code") or "",
+        "hgAwardeePath": _full_url(rec.get("path")),
+    }
+
+
+def enrich_company(enrichment, hg_key, sam_key):
+    """Backfill each enrichment record that has an incumbent UEI with (a) the
+    HigherGov company profile (website, location, size, POC) and (b) the SAM.gov
+    points of contact (names). Independent of the award pass, so it also fills
+    records enriched on earlier runs. Both are cached by UEI; capped per run."""
     session = requests.Session()
-    by_uei = {}
+    company_cache, poc_cache = {}, {}
     attempted = added = 0
     for rec in enrichment.values():
-        if rec.get("companyContacts") is not None:
-            continue   # already resolved (even if it was an empty list)
+        # Backfill each field independently so records enriched before 'company'
+        # existed still get it, without re-fetching POCs they already have.
+        need_company = rec.get("company") is None
+        need_pocs = rec.get("companyContacts") is None
+        if not need_company and not need_pocs:
+            continue
         inc = rec.get("incumbent") or {}
         uei = (inc.get("uei") or "").strip()
         if not uei:
             continue
         if attempted >= MAX_SAM_POC_PER_RUN:
-            print(f"  Reached SAM POC per-run cap of {MAX_SAM_POC_PER_RUN}.")
+            print(f"  Reached company enrichment per-run cap of {MAX_SAM_POC_PER_RUN}.")
             break
-        if uei in by_uei:
-            pocs = by_uei[uei]
-        else:
-            attempted += 1
-            pocs = sam_company_pocs(session, sam_key, uei)
-            if pocs is None:      # auth failure: stop hitting SAM this run
-                print("    ! Stopping SAM POC pass after auth error.")
-                break
-            by_uei[uei] = pocs
-            time.sleep(0.3)
-        rec["companyContacts"] = pocs
+        attempted += 1
+        # HigherGov company profile (website etc.)
+        if need_company:
+            if uei in company_cache:
+                company = company_cache[uei]
+            else:
+                try:
+                    company = hg_company(session, hg_key, uei)
+                except AuthError as e:
+                    print(f"    ! HigherGov auth error during company pass ({e}); stopping.")
+                    break
+                company_cache[uei] = company
+                time.sleep(0.2)
+            if company:
+                rec["company"] = company
+        # SAM.gov points of contact (names)
+        if need_pocs:
+            if not sam_key:
+                rec["companyContacts"] = []
+            elif uei in poc_cache:
+                rec["companyContacts"] = poc_cache[uei]
+            else:
+                pocs = sam_company_pocs(session, sam_key, uei)
+                if pocs is None:      # SAM auth failure: stop SAM, keep HG company
+                    print("    ! SAM POC auth error; company POCs skipped for the rest.")
+                    sam_key = None
+                    pocs = []
+                poc_cache[uei] = pocs
+                rec["companyContacts"] = pocs
+                time.sleep(0.3)
         added += 1
-    print(f"  SAM company POCs: {attempted} UEIs looked up, wrote {added} records.")
+    print(f"  Company enrichment: {attempted} UEIs looked up, wrote {added} records.")
 
 
 def main():
@@ -411,13 +464,13 @@ def main():
     except AuthError as e:
         print(f"    ! HigherGov auth error ({e}); stopping. Check HIGHERGOV_API_KEY.")
 
-    # Second pass: add company points of contact from SAM.gov (public tier, names)
-    # for any enrichment record that has an incumbent UEI.
+    # Second pass: company profile from HigherGov (website, location, size, POC)
+    # and points of contact from SAM.gov (names), for records with an incumbent UEI.
     sam_key = os.environ.get("SAM_API_KEY")
-    if RUN_SAM_POC and sam_key:
-        enrich_company_pocs(enrichment, sam_key)
-    elif RUN_SAM_POC:
-        print("  ! SAM_API_KEY not set; skipping company POC lookup.")
+    if RUN_SAM_POC:
+        if not sam_key:
+            print("  ! SAM_API_KEY not set; company POC names will be skipped (HigherGov company profile still runs).")
+        enrich_company(enrichment, api_key, sam_key)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(ENRICH_FILE, "w") as fh:
