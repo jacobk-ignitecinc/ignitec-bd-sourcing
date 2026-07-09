@@ -28,7 +28,10 @@ For crawler internals, guardrails, and the lead schema, see `CLAUDE.md`.
   6-12mo, long-term 12mo+) and by set-aside (SB or 8(a) - useful because 8(a)
   incumbents graduating or contracts coming off 8(a) open a prime lane). Set-aside
   is sourced from HigherGov enrichment, since the USASpending award search does
-  not return it.
+  not return it. Each card has a "Find contact" row with pre-filled links to
+  ZoomInfo, LinkedIn, SAM.gov (by UEI), and Google for the incumbent/awardee
+  company, so a BD contact can be pulled with existing tools; no third-party
+  contact data is stored in the repo.
 - **Pipeline** — a Kanban board of only the pursued opportunities, with stages
   (Pursue → Researching → First contact → In discussion → Teaming/RFI →
   Submitted → Won/Lost/Parked), owners, next actions, and a timestamped

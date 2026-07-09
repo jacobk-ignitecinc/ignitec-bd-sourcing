@@ -58,6 +58,10 @@
   .contacts{margin-top:6px;font-size:12px;color:#2a2f36;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
   .contacts .clabel{font-weight:bold;color:var(--navy)} .contacts .contact{white-space:nowrap}
   .contacts a,.ro .v a{color:var(--navy);text-decoration:none;border-bottom:1px dotted var(--navy)}
+  .findc{margin-top:6px;font-size:12px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+  .findc .clabel{font-weight:bold;color:var(--muted)}
+  .findc a{color:var(--navy);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:1px 8px}
+  .findc a:hover{background:var(--coldbg)}
   .badge{font-size:11.5px;font-weight:bold;padding:4px 9px;border-radius:20px;white-space:nowrap;align-self:center}
   .b-warm{background:var(--warmbg);color:var(--warm)} .b-cold{background:var(--coldbg);color:var(--cold)}
   .panel{border-top:1px solid var(--line);padding:14px;display:none;background:#fcfdff}
@@ -312,6 +316,25 @@ function saText(l){return saValue(l).toUpperCase();}
 function isSetAside(l){const s=saText(l); return !!s && !s.includes("NO SET ASIDE") && s!=="NONE";}
 function is8a(l){const s=saText(l); return s.includes("8(A)")||s.includes("8A")||s.includes("8 A");}
 function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.includes("SMALL DISADVANTAGED")||s.includes("SDB")||is8a(l);}
+/* Bridge links to find a BD/company contact using existing tools (ZoomInfo seat,
+   LinkedIn, SAM.gov, Google). No API and no data stored - just pre-filled searches. */
+function contactLinks(l){
+  const inc=(ENRICHMENT[l.id]||{}).incumbent||{};
+  const company=(l.prime||l.incumbent||inc.name||"").trim();
+  const uei=inc.uei||"";
+  const row=el("div","findc"); row.appendChild(el("span","clabel","Find contact:"));
+  if(!company){ row.appendChild(document.createTextNode(" company unknown")); return row; }
+  const q=encodeURIComponent;
+  const links=[
+    ["ZoomInfo","https://app.zoominfo.com/#/search/companies"],
+    ["LinkedIn","https://www.linkedin.com/search/results/people/?keywords="+q(company+" business development capture")],
+    ["SAM.gov","https://sam.gov/search/?index=ei&q="+q(uei||company)],
+    ["Google","https://www.google.com/search?q="+q('"'+company+'" federal business development contact email')]
+  ];
+  links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
+    a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
+  return row;
+}
 
 /* ---- priority score: transparent, data-grounded, mirrors bd_report.score_lead ---- */
 function anyIncl(hay,list){const h=(hay||"").toLowerCase(); return (list||[]).some(x=>x&&h.includes(String(x).toLowerCase()));}
@@ -635,6 +658,7 @@ function leadCard(l){
     });
     grow.appendChild(cd);
   }
+  grow.appendChild(contactLinks(l));
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
   const st=pipeState(l.id);
   if(st==="pursuing") chips.appendChild(el("span","chip pipe","In pipeline: "+PIPELINE[l.id].stage));
@@ -925,6 +949,7 @@ function openPursuit(id){
       if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone)); cd.appendChild(span); });
     body.appendChild(cd);
   }
+  const fc=contactLinks(l); fc.style.marginTop="8px"; body.appendChild(fc);
 
   // activity timeline
   body.appendChild(el("h2",null,"Activity"));
