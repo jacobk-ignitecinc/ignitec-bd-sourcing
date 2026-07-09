@@ -60,5 +60,17 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "BD sourcing run $(date -u +%Y-%m-%d)"
-            git push
+            # Push resiliently: if the branch advanced while this run was working
+            # (e.g. a concurrent commit), rebase onto it and retry rather than
+            # discarding the freshly generated data.
+            for i in 1 2 3 4 5; do
+              if git push; then
+                echo "Pushed."; break
+              fi
+              echo "Push rejected; rebasing on origin/${GITHUB_REF_NAME} and retrying ($i)..."
+              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || {
+                echo "Rebase hit a conflict; aborting."; git rebase --abort || true; exit 1
+              }
+              sleep $((2 ** i))
+            done
           fi
