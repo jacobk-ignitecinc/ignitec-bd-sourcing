@@ -166,9 +166,15 @@ def score_lead(lead):
     d = days_until(lead.get("popEnd"))
     if lead.get("source") == "Expiring Contract" and d is not None and 270 <= d <= 540:
         s += 8; why.append("shaping window")
-    sa = (lead.get("setAside") or "").upper()
-    if sa and ("SMALL" in sa or "DISADVANTAGED" in sa or "8(A)" in sa):
-        s += 6; why.append("primeable set-aside")
+    # Set-aside matters for the expiring/recompete play only (recent awards are a
+    # subcontracting play). 8(a) ranks highest: incumbents graduating or contracts
+    # coming off 8(a) are prime targets.
+    if lead.get("source") == "Expiring Contract":
+        sa = set_aside_of(lead).upper()
+        if "8(A)" in sa or "8A" in sa:
+            s += 12; why.append("8(a) set-aside (graduation/off-ramp)")
+        elif "SMALL BUSINESS" in sa or "SMALL DISADVANTAGED" in sa or "SDB" in sa:
+            s += 8; why.append("SB set-aside")
 
     s = min(100, s)
     t = "A" if s >= TIER_A_MIN else ("B" if s >= TIER_B_MIN else "C")
@@ -329,8 +335,14 @@ def routing_tag(lead):
     return "Warm" if is_warm(lead.get("prime") or lead.get("incumbent")) else "Cold"
 
 
+def set_aside_of(lead):
+    """Set-aside value, preferring HigherGov enrichment (USASpending's award search
+    does not return it) and falling back to the lead field."""
+    return (enrich_of(lead).get("setAside") or lead.get("setAside") or "").strip()
+
+
 def setaside_short(lead):
-    s = (lead.get("setAside") or "").strip()
+    s = set_aside_of(lead)
     if not s or s.upper() in ("NO SET ASIDE USED.", "NONE"):
         return "-"
     return s.title().replace("Set-Aside", "SA").replace("Set Aside", "SA")
@@ -442,13 +454,13 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not expiring:
         L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| Pri | End date | Days | Shaping | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
+        L.append("| Pri | End date | Days | Set-aside | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
         L.append("|---|---|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
-            shaping = "Yes" if (d is not None and 270 <= d <= 540) else ""
             blurb = summary_text(l) or l.get("nextAction") or ""
-            L.append(f"| {pri_cell(l)} | {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} | {shaping} "
+            L.append(f"| {pri_cell(l)} | {md_cell(l.get('popEnd')) or '-'} | {d if d is not None else '-'} "
+                     f"| {md_trunc(setaside_short(l), 20)} "
                      f"| {md_link(incumbent_text(l), opp_url(l), 24)} | {md_trunc(contact_text(l), 44)} "
                      f"| {md_trunc(l.get('agency'), 20)} "
                      f"| {fmt_value(l.get('value'))} | {lane_label(l)} | {routing_tag(l)} "
@@ -507,9 +519,8 @@ def render_html(awards, expiring, dropped, source_name):
         out = []
         for l in items[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
-            shaping = "<span class='tag shape'>Shaping</span>" if (d is not None and 270 <= d <= 540) else ""
             out.append(f"<tr><td>{pri_span(l)}</td><td>{h(l.get('popEnd') or '-')}</td><td class='num'>{d if d is not None else '-'}</td>"
-                       f"<td>{shaping}</td><td>{name_link(l, incumbent_text(l))}</td>"
+                       f"<td>{h(setaside_short(l))}</td><td>{name_link(l, incumbent_text(l))}</td>"
                        f"<td>{contact_html(l)}</td>"
                        f"<td>{h(l.get('agency'))}</td><td class='num'>{h(fmt_value(l.get('value')))}</td>"
                        f"<td>{h(lane_label(l))}</td><td>{route_span(l)}</td>"
@@ -523,7 +534,7 @@ def render_html(awards, expiring, dropped, source_name):
     empty = "<p class='empty'>None aligned in the current set.</p>"
     aw_head = ("<table><tr><th>Pri</th><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
                "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Contact</th><th>Summary</th></tr>")
-    ex_head = ("<table><tr><th>Pri</th><th>End date</th><th>Days</th><th>Shaping</th><th>Incumbent (target)</th>"
+    ex_head = ("<table><tr><th>Pri</th><th>End date</th><th>Days</th><th>Set-aside</th><th>Incumbent (target)</th>"
                "<th>CO / contact</th><th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">

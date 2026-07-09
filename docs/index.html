@@ -86,6 +86,7 @@
   .rejectBtn.on{background:var(--muted);color:#fff}
   .chip.pipe{background:var(--warmbg);color:var(--warm);font-weight:bold}
   .chip.rej{background:var(--greybg);color:var(--grey);font-weight:bold}
+  .chip.sa{background:#e6f4ec;color:#1b7a43;font-weight:bold}
   .chip.tier{font-weight:bold;cursor:help}
   .chip.tier.tA{background:#e6f4ec;color:#1b7a43} .chip.tier.tB{background:#fbf1dc;color:#946200}
   .chip.tier.tC{background:#eceef2;color:#5b6472}
@@ -188,15 +189,27 @@
     <label class="hint"><input type="checkbox" id="fShowUnaligned"> Show out-of-lane</label>
   </div>
   <div class="filters">
-    <select id="fSetAside"><option value="">Set-aside: any</option><option value="has">Has a set-aside</option><option value="none">No set-aside</option></select>
+    <select id="fSetAside" title="Set-aside (applies to expiring/recompete)">
+      <option value="">Set-aside: any</option>
+      <option value="sb">SB or 8(a) set-aside</option>
+      <option value="8a">8(a) set-aside</option>
+      <option value="has">Any set-aside</option>
+      <option value="none">No set-aside</option>
+    </select>
     <label class="hint">Value $M
       <input type="number" id="fValMin" min="0" step="1" style="width:64px" placeholder="min">
       <input type="number" id="fValMax" min="0" step="1" style="width:64px" placeholder="max"></label>
-    <select id="fExpiry">
-      <option value="">Expiring: any</option>
-      <option value="shaping">Shaping window (9-18mo)</option>
-      <option value="180">Ends within 180d</option>
-      <option value="365">Ends within 365d</option>
+    <select id="fExpiry" title="Expiring contract horizon">
+      <option value="">Expiring: any horizon</option>
+      <option value="near">Near-term (3-6mo)</option>
+      <option value="mid">Mid-term (6-12mo)</option>
+      <option value="long">Long-term (12mo+)</option>
+    </select>
+    <select id="fAwardAge" title="Recent award action age">
+      <option value="">Award age: any</option>
+      <option value="0-30">0-30 days</option>
+      <option value="30-90">30-90 days</option>
+      <option value="90+">90+ days</option>
     </select>
     <label class="hint"><input type="checkbox" id="fHeldVeh"> Held-vehicle only</label>
     <input type="text" id="fExclude" placeholder="Exclude keywords (comma separated)">
@@ -251,7 +264,7 @@ const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Pos
 const STATUSES = ["Tracking","Reviewing","Contacted","In discussion","Pursuing","Submitted","Won","Lost","Parked"];
 /* source-derived fields the crawler owns; everything else is user triage and preserved on reload */
 const SOURCE_FIELDS = ["source","title","prime","agency","subAgency","value","awardId","solicitationNumber",
-  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent","url"];
+  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent","url","actionDate"];
 const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","notes","routing"];
 
 let master = {}, dirty = false;
@@ -286,6 +299,19 @@ function aligned(l){ return !!laneMatch(l) || CORE_NAICS.has(String(l.naics||"")
 function laneLabel(l){const m=laneMatch(l); if(m)return m.id+" (T"+m.tier+")";
   if(CORE_NAICS.has(String(l.naics||"")))return "NAICS "+l.naics; if(pscInLane(l.psc))return "PSC "+l.psc; return "-";}
 function isShaping(l){const d=daysUntil(l.popEnd); return l.source==="Expiring Contract" && d!=null && d>=270 && d<=540;}
+/* recent-award recency: days since the latest action (Last Modified Date), fallback to when we first saw it */
+function awardAgeDays(l){const d=l.actionDate||l.dateAdded; if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null; return Math.round((Date.now()-t)/86400000);}
+function awardAgeBucket(l){const a=awardAgeDays(l); if(a==null)return ""; if(a<=30)return "0-30"; if(a<=90)return "30-90"; return "90+";}
+/* expiring horizon buckets: near 3-6mo, mid 6-12mo, long 12mo+ */
+function expiryHorizon(l){const d=daysUntil(l.popEnd); if(d==null||d<0)return ""; if(d<180)return "near"; if(d<365)return "mid"; return "long";}
+const HORIZON_LABEL={near:"Near-term (3-6mo)",mid:"Mid-term (6-12mo)",long:"Long-term (12mo+)"};
+/* set-aside classification. USASpending's award search does not return set-aside,
+   so prefer the value HigherGov enrichment resolved; fall back to the lead field. */
+function saValue(l){return ((ENRICHMENT[l.id]||{}).setAside || l.setAside || "");}
+function saText(l){return saValue(l).toUpperCase();}
+function isSetAside(l){const s=saText(l); return !!s && !s.includes("NO SET ASIDE") && s!=="NONE";}
+function is8a(l){const s=saText(l); return s.includes("8(A)")||s.includes("8A")||s.includes("8 A");}
+function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.includes("SMALL DISADVANTAGED")||s.includes("SDB")||is8a(l);}
 
 /* ---- priority score: transparent, data-grounded, mirrors bd_report.score_lead ---- */
 function anyIncl(hay,list){const h=(hay||"").toLowerCase(); return (list||[]).some(x=>x&&h.includes(String(x).toLowerCase()));}
@@ -317,8 +343,13 @@ function scoreLead(l){
   else if(v>=5e7&&v<2.5e8){s+=4;}
   else if(v>=2.5e8){s+=2;}
   if(isShaping(l)){s+=8; why.push("shaping window");}
-  const sa=(l.setAside||"").toUpperCase();
-  if(sa&&(sa.includes("SMALL")||sa.includes("DISADVANTAGED")||sa.includes("8(A)"))){s+=6; why.push("primeable set-aside");}
+  // Set-aside matters for the expiring/recompete play (prime-able, and 8(a)
+  // incumbents graduating or contracts coming off 8(a) are prime targets).
+  // Recent awards are a subcontracting play, so set-aside is not scored there.
+  if(l.source==="Expiring Contract"){
+    if(is8a(l)){s+=12; why.push("8(a) set-aside (graduation/off-ramp)");}
+    else if(isSB(l)){s+=8; why.push("SB set-aside");}
+  }
   s=Math.min(100,s);
   const tier = s>=TIER_A_MIN?"A":(s>=TIER_B_MIN?"B":"C");
   return {score:s, tier, why};
@@ -571,11 +602,16 @@ function leadCard(l){
   chips.appendChild(el("span","chip lane", laneLabel(l)));
   if(l.status)chips.appendChild(el("span","chip", l.status));
   if(l.owner)chips.appendChild(el("span","chip","Owner: "+l.owner));
-  if(l.setAside)chips.appendChild(el("span","chip", String(l.setAside).slice(0,28)));
+  const sav=saValue(l);
+  if(sav)chips.appendChild(el("span","chip"+(isSB(l)?" sa":""), String(sav).slice(0,30)));
   const vehChip=((ENRICHMENT[l.id]||{}).vehicle)||l.vehicle;
   if(vehChip)chips.appendChild(el("span","chip"+(l.vehicleHeld?" held":""), (l.vehicleHeld?"Vehicle HELD: ":"Vehicle: ")+vehChip));
   const du=daysUntil(l.popEnd);
-  if(!isAward && du!=null && du>=0)chips.appendChild(el("span","chip",(isShaping(l)?"Shaping window · ":"")+"ends in "+du+"d"));
+  if(!isAward && du!=null && du>=0){
+    const hz=expiryHorizon(l);
+    chips.appendChild(el("span","chip",(HORIZON_LABEL[hz]||"")+" · ends in "+du+"d"+(isShaping(l)?" · shaping":"")));
+  }
+  if(isAward){ const ag=awardAgeDays(l); if(ag!=null)chips.appendChild(el("span","chip","action "+ag+"d ago ("+awardAgeBucket(l)+")")); }
   grow.appendChild(chips);
   const sum=SUMMARIES[l.id];
   if(sum && sum.summary){
@@ -640,7 +676,7 @@ function leadCard(l){
   const vehDisp=((enr&&enr.vehicle)||l.vehicle||"");
   const rows=[["Source",l.source],["Award ID",l.awardId],[isAward?"Prime":"Incumbent",incDisp],
     ["Agency",l.agency],["Sub-agency",l.subAgency],["Value",fmtVal(l.value)],["NAICS",l.naics],["PSC",l.psc],
-    ["Set-aside",l.setAside],["Vehicle",vehDisp+(l.vehicleHeld?" (HELD by Ignitec)":"")],
+    ["Set-aside",saValue(l)],["Vehicle",vehDisp+(l.vehicleHeld?" (HELD by Ignitec)":"")],
     ["PoP start",l.popStart],["PoP end",l.popEnd],["Lane match",laneLabel(l)],
     ["Date added",l.dateAdded],["Lead id",l.id]];
   for(const [k,v] of rows){ if(v==null||v===""||v==="-")continue;
@@ -673,7 +709,8 @@ function currentFilters(){return{
   decision:$("#fDecision").value, tier:$("#fTier").value,
   showUnaligned:$("#fShowUnaligned").checked, setAside:$("#fSetAside").value,
   valMin:parseFloat($("#fValMin").value), valMax:parseFloat($("#fValMax").value),
-  expiry:$("#fExpiry").value, heldVeh:$("#fHeldVeh").checked, exclude:$("#fExclude").value.trim().toLowerCase()
+  expiry:$("#fExpiry").value, awardAge:$("#fAwardAge").value,
+  heldVeh:$("#fHeldVeh").checked, exclude:$("#fExclude").value.trim().toLowerCase()
 };}
 function matches(l,f){
   if(l.source!=="Recent Award" && l.source!=="Expiring Contract") return false;   // RFI feed paused
@@ -690,14 +727,15 @@ function matches(l,f){
   if(f.lane){ const m=laneMatch(l); if(!m||m.id!==f.lane) return false; }
   if(f.agency && l.agency!==f.agency) return false;
   if(f.heldVeh && !l.vehicleHeld) return false;
-  if(f.setAside==="has" && !l.setAside) return false;
-  if(f.setAside==="none" && l.setAside) return false;
+  if(f.setAside==="has" && !isSetAside(l)) return false;
+  if(f.setAside==="none" && isSetAside(l)) return false;
+  if(f.setAside==="sb" && !isSB(l)) return false;
+  if(f.setAside==="8a" && !is8a(l)) return false;
   const v=Number(l.value)||0;
   if(!isNaN(f.valMin) && v<f.valMin*1e6) return false;
   if(!isNaN(f.valMax) && f.valMax>0 && v>f.valMax*1e6) return false;
-  if(f.expiry){ const d=daysUntil(l.popEnd);
-    if(f.expiry==="shaping"){ if(!isShaping(l)) return false; }
-    else { if(l.source!=="Expiring Contract"||d===null||d<0||d>Number(f.expiry)) return false; } }
+  if(f.expiry){ if(l.source!=="Expiring Contract"||expiryHorizon(l)!==f.expiry) return false; }
+  if(f.awardAge){ if(l.source!=="Recent Award"||awardAgeBucket(l)!==f.awardAge) return false; }
   if(f.q){ const hay=(l.title+" "+l.agency+" "+l.prime+" "+l.incumbent+" "+l.awardId+" "+l.notes).toLowerCase();
     if(!hay.includes(f.q)) return false; }
   if(f.exclude){ const terms=f.exclude.split(",").map(t=>t.trim()).filter(Boolean);
@@ -945,10 +983,10 @@ function init(){
     master={}; saveMaster(); setDirty(false); render(); $("#srcInfo").textContent="Local data cleared. Use Reload from crawler.";}});
   $("#clearFilters").addEventListener("click",()=>{
     ["#search","#fExclude","#fValMin","#fValMax"].forEach(s=>$(s).value="");
-    ["#fSource","#fRoute","#fLane","#fAgency","#fSetAside","#fExpiry"].forEach(s=>$(s).value="");
+    ["#fSource","#fRoute","#fLane","#fAgency","#fSetAside","#fExpiry","#fAwardAge"].forEach(s=>$(s).value="");
     $("#fSort").value="score"; $("#fTier").value="AB"; $("#fDecision").value="undecided"; $("#fShowUnaligned").checked=false; $("#fHeldVeh").checked=false; render();});
   ["#search","#fSource","#fRoute","#fLane","#fAgency","#fSort","#fTier","#fDecision","#fShowUnaligned",
-   "#fSetAside","#fValMin","#fValMax","#fExpiry","#fHeldVeh","#fExclude"].forEach(sel=>{
+   "#fSetAside","#fValMin","#fValMax","#fExpiry","#fAwardAge","#fHeldVeh","#fExclude"].forEach(sel=>{
     const e=$(sel); const ev=(e.tagName==="INPUT"&&(e.type==="text"||e.type==="number"))?"input":"change";
     e.addEventListener(ev,render);});
   // tabs + pipeline controls
