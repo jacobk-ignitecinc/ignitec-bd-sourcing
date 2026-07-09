@@ -55,6 +55,14 @@ EXPIRING_MIN_DAYS = 60
 EXPIRING_MAX_DAYS = 730
 EXPIRING_LOOKBACK_YEARS = 6
 
+# USASpending reliability guards. The API intermittently degrades: it can accept
+# a connection and then trickle response bytes, which resets requests' read timeout
+# on each byte so a single call hangs far past USA_TIMEOUT. CRAWL_DEADLINE_SECS is a
+# hard wall-clock cap on the whole USASpending crawl so a degraded upstream can never
+# run the crawl for an hour; whatever was pulled by then is handed to enrichment/commit.
+USA_TIMEOUT = 30
+CRAWL_DEADLINE_SECS = 1500
+
 # SAM.gov Sources Sought / Special Notices (RFI cadence feed)
 RUN_SAM_PASS = True
 SAM_LOOKBACK_DAYS = 14
@@ -77,6 +85,7 @@ def _apply_config():
     global EXPIRING_MIN_DAYS, EXPIRING_MAX_DAYS, SAM_LOOKBACK_DAYS
     global RUN_EXPIRING_PASS, RUN_SAM_PASS
     global HELD_VEHICLE_PIIDS, EXCLUDE_RECIPIENT_NAMES
+    global USA_TIMEOUT, CRAWL_DEADLINE_SECS
     try:
         with open(CONFIG_FILE) as f:
             crawl = (json.load(f) or {}).get("crawl", {})
@@ -92,6 +101,8 @@ def _apply_config():
     SAM_LOOKBACK_DAYS = crawl.get("sam_lookback_days", SAM_LOOKBACK_DAYS)
     RUN_EXPIRING_PASS = crawl.get("run_expiring_pass", RUN_EXPIRING_PASS)
     RUN_SAM_PASS = crawl.get("run_sam_pass", RUN_SAM_PASS)
+    USA_TIMEOUT = crawl.get("usa_timeout_secs", USA_TIMEOUT)
+    CRAWL_DEADLINE_SECS = crawl.get("crawl_deadline_secs", CRAWL_DEADLINE_SECS)
     HELD_VEHICLE_PIIDS = crawl.get("held_vehicle_piids") or HELD_VEHICLE_PIIDS
     EXCLUDE_RECIPIENT_NAMES = crawl.get("exclude_recipient_names") or EXCLUDE_RECIPIENT_NAMES
     print(f"  Config loaded: {len(NAICS_CODES)} NAICS, {len(TARGET_AGENCIES)} agencies, "
@@ -113,6 +124,7 @@ USA_FIELDS = ["Award ID", "Recipient Name", "Recipient UEI", "Awarding Agency", 
               "Contract Award Type", "NAICS", "PSC", "Type of Set Aside"]
 NAICS_SET = set(NAICS_CODES)
 TODAY = dt.date.today().isoformat()
+_crawl_deadline = None   # epoch seconds; set by main() at crawl start, enforced in usa_query
 SRC_PREFIX = {"Recent Award": "RA", "Expiring Contract": "EX", "RFI/Sources Sought": "RFI"}
 
 
@@ -200,6 +212,10 @@ def warn_missing(sample, expected, feed):
 def usa_query(award_type_codes, start_date, end_date):
     rows, page = [], 1
     while True:
+        if _crawl_deadline is not None and time.time() > _crawl_deadline:
+            print(f"  ! USASpending: crawl wall-clock deadline reached; stopping pagination at "
+                  f"page {page} with {len(rows)} rows collected for this query.")
+            break
         payload = {
             "filters": {
                 "award_type_codes": award_type_codes,
@@ -216,7 +232,7 @@ def usa_query(award_type_codes, start_date, end_date):
         data = None
         for attempt in range(4):
             try:
-                r = requests.post(USA_API, json=payload, timeout=90)
+                r = requests.post(USA_API, json=payload, timeout=USA_TIMEOUT)
                 r.raise_for_status()
                 data = r.json()
                 break
@@ -383,6 +399,8 @@ def save_state(seen):
 
 
 def main():
+    global _crawl_deadline
+    _crawl_deadline = time.time() + CRAWL_DEADLINE_SECS
     seen = load_state()
     collected = []
     print("Recent awards...");  collected += recent_awards()
