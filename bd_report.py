@@ -228,16 +228,20 @@ def enrich_of(lead):
     return ENRICHMENT.get(lead.get("id")) or {}
 
 
-def contact_text(lead):
-    """Top contracting-office contact from HigherGov, as 'Name <email>'."""
-    contacts = enrich_of(lead).get("contacts") or []
-    if not contacts:
+def company_website(lead):
+    w = ((enrich_of(lead).get("company") or {}).get("website") or "").strip()
+    if not w:
         return ""
-    c = contacts[0]
-    label = c.get("name") or c.get("email") or ""
-    if c.get("email") and c.get("name"):
-        label = f"{c['name']} <{c['email']}>"
-    return label
+    return w.replace("https://", "").replace("http://", "").replace("www.", "").rstrip("/")
+
+
+def contact_text(lead):
+    """Company contact for outreach: the company website, then a SAM POC name."""
+    site = company_website(lead)
+    if site:
+        return site
+    pocs = enrich_of(lead).get("companyContacts") or []
+    return pocs[0].get("name", "") if pocs else ""
 
 
 def incumbent_text(lead):
@@ -437,7 +441,7 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not awards:
         L.append("_No aligned recent awards in the current set._")
     else:
-        L.append("| Pri | Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Contact | Summary |")
+        L.append("| Pri | Route | Prime (target) | Agency | Value | Lane | Set-aside | Vehicle | Company site | Summary |")
         L.append("|---|---|---|---|---|---|---|---|---|---|")
         for l in awards[:SECTION_CAP]:
             blurb = summary_text(l) or l.get("nextAction") or ""
@@ -454,7 +458,7 @@ def render_markdown(awards, expiring, dropped, source_name):
     if not expiring:
         L.append("_No aligned expiring contracts in the current set._")
     else:
-        L.append("| Pri | End date | Days | Set-aside | Incumbent (target) | CO / contact | Agency | Value | Lane | Route | Summary |")
+        L.append("| Pri | End date | Days | Set-aside | Incumbent (target) | Company site | Agency | Value | Lane | Route | Summary |")
         L.append("|---|---|---|---|---|---|---|---|---|---|---|")
         for l in expiring[:SECTION_CAP]:
             d = days_until(l.get("popEnd"))
@@ -478,18 +482,15 @@ def h(s):
 
 
 def contact_html(lead):
-    """First HigherGov contact as a name + mailto link, with phone if present."""
-    contacts = enrich_of(lead).get("contacts") or []
-    if not contacts:
-        return "<span class='muted'>-</span>"
-    c = contacts[0]
-    name = h(c.get("name") or c.get("email") or "contact")
-    email = c.get("email") or ""
-    phone = c.get("phone") or ""
-    inner = f"<a href='mailto:{h(email)}'>{name}</a>" if email else name
-    if phone:
-        inner += f"<br><span class='muted'>{h(phone)}</span>"
-    return inner
+    """Company website link (outreach entry point), then a SAM POC name."""
+    site = company_website(lead)
+    pocs = enrich_of(lead).get("companyContacts") or []
+    parts = []
+    if site:
+        parts.append(f"<a href='https://{h(site)}' target='_blank' rel='noopener'>{h(site)}</a>")
+    if pocs:
+        parts.append(f"<span class='muted'>{h(pocs[0].get('name',''))}</span>")
+    return "<br>".join(parts) if parts else "<span class='muted'>-</span>"
 
 
 def render_html(awards, expiring, dropped, source_name):
@@ -533,9 +534,9 @@ def render_html(awards, expiring, dropped, source_name):
 
     empty = "<p class='empty'>None aligned in the current set.</p>"
     aw_head = ("<table><tr><th>Pri</th><th>Route</th><th>Prime (target)</th><th>Agency</th><th>Value</th>"
-               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Contact</th><th>Summary</th></tr>")
+               "<th>Lane</th><th>Set-aside</th><th>Vehicle</th><th>Company site</th><th>Summary</th></tr>")
     ex_head = ("<table><tr><th>Pri</th><th>End date</th><th>Days</th><th>Set-aside</th><th>Incumbent (target)</th>"
-               "<th>CO / contact</th><th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
+               "<th>Company site</th><th>Agency</th><th>Value</th><th>Lane</th><th>Route</th><th>Summary</th></tr>")
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

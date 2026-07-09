@@ -266,14 +266,14 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-09.6";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-09.7";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
 const STATUSES = ["Tracking","Reviewing","Contacted","In discussion","Pursuing","Submitted","Won","Lost","Parked"];
 /* source-derived fields the crawler owns; everything else is user triage and preserved on reload */
 const SOURCE_FIELDS = ["source","title","prime","agency","subAgency","value","awardId","solicitationNumber",
-  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent","url","actionDate"];
+  "naics","psc","popStart","popEnd","setAside","vehicle","vehicleHeld","incumbent","url","actionDate","awardeeUei"];
 const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","notes","routing"];
 
 let master = {}, dirty = false;
@@ -666,19 +666,6 @@ function leadCard(l){
     grow.appendChild(sd);
   }
   const enr=ENRICHMENT[l.id];
-  if(enr && (enr.contacts||[]).length){
-    const cd=el("div","contacts");
-    cd.appendChild(el("span","clabel","Contacts:"));
-    (enr.contacts||[]).slice(0,3).forEach((c,i)=>{
-      const span=el("span","contact");
-      const nm=c.name||c.email||"contact";
-      if(c.email){ const a=el("a",null,nm); a.href="mailto:"+c.email; a.addEventListener("click",e=>e.stopPropagation()); span.appendChild(a); }
-      else span.appendChild(document.createTextNode(nm));
-      if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone));
-      cd.appendChild(span);
-    });
-    grow.appendChild(cd);
-  }
   const co=(enr&&enr.company)||null;
   if(co){
     const cbits=[];
@@ -744,20 +731,21 @@ function leadCard(l){
     const row=el("div","row"); row.appendChild(el("div","k",k)); row.appendChild(el("div","v",String(v))); ro.appendChild(row); }
   if(l.url){ const row=el("div","row"); row.appendChild(el("div","k","Opportunity"));
     const v=el("div","v"); const a=el("a",null,"open in USASpending"); a.href=l.url; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
-  if(enr && (enr.contacts||[]).length){
-    (enr.contacts||[]).forEach(c=>{
-      const row=el("div","row"); row.appendChild(el("div","k",c.role||"Contact"));
-      const v=el("div","v"); const nm=c.name||c.email||"contact";
-      if(c.email){ const a=el("a",null,nm); a.href="mailto:"+c.email; v.appendChild(a);} else v.appendChild(document.createTextNode(nm));
-      const extra=[c.title,c.email&&c.name?c.email:null,c.phone].filter(Boolean).join(" · ");
-      if(extra)v.appendChild(document.createTextNode(" — "+extra));
-      row.appendChild(v); ro.appendChild(row);
-    });
+  if(co){
+    const dom=domainOf(l);
+    const crows=[["Company",co.legalName],["Location",[co.city,co.state].filter(Boolean).join(", ")],
+      ["Employees",co.employeeCount],["Founded",co.yearFounded],["Business types",busTypesText(co.busTypes)],
+      ["UEI",(enr.incumbent||{}).uei||co.uei],["CAGE",co.cage]];
+    for(const [k,v] of crows){ if(!v)continue; const row=el("div","row"); row.appendChild(el("div","k",k)); row.appendChild(el("div","v",String(v))); ro.appendChild(row); }
+    if(co.website){ const row=el("div","row"); row.appendChild(el("div","k","Website"));
+      const v=el("div","v"); const a=el("a",null,dom||co.website); a.href="https://"+(dom||co.website.replace(/^https?:\/\//,"")); a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
+    if(co.hgAwardeePath){ const row=el("div","row"); row.appendChild(el("div","k","HigherGov company"));
+      const v=el("div","v"); const a=el("a",null,"open in HigherGov"); a.href=co.hgAwardeePath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
+  } else if(!enr || !(enr.incumbent||{}).uei){
+    const row=el("div","row"); row.appendChild(el("div","k","Company")); row.appendChild(el("div","v","pending enrichment")); ro.appendChild(row);
   }
-  if(enr && enr.hgPath){ const row=el("div","row"); row.appendChild(el("div","k","HigherGov record"));
-    const v=el("div","v"); const a=el("a",null,"open in HigherGov"); a.href=enr.hgPath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
-  if(!enr){ const row=el("div","row"); row.appendChild(el("div","k","Contacts"));
-    row.appendChild(el("div","v","pending HigherGov enrichment")); ro.appendChild(row); }
+  (((enr||{}).companyContacts)||[]).forEach(c=>{ const row=el("div","row"); row.appendChild(el("div","k","Company POC"));
+    row.appendChild(el("div","v",c.name+(c.title?" ("+c.title+")":"")+(c.role?" — "+c.role:""))); ro.appendChild(row); });
   if(l.notes){const row=el("div","row"); row.appendChild(el("div","k","Crawler notes")); row.appendChild(el("div","v",l.notes)); ro.appendChild(row);}
   panel.appendChild(ro);
   card.appendChild(panel);
@@ -977,15 +965,7 @@ function openPursuit(id){
   const nt=fld("Notes","notes","textarea"); nt.style.gridColumn="1/-1"; grid.appendChild(nt);
   body.appendChild(grid);
 
-  // contacts (from enrichment)
   const enr=ENRICHMENT[id]||{};
-  if((enr.contacts||[]).length){
-    const cd=el("div","contacts"); cd.style.marginTop="12px"; cd.appendChild(el("span","clabel","Contacts:"));
-    (enr.contacts||[]).slice(0,4).forEach(c=>{ const span=el("span","contact"); const nm=c.name||c.email||"contact";
-      if(c.email){const a=el("a",null,nm); a.href="mailto:"+c.email; span.appendChild(a);} else span.appendChild(document.createTextNode(nm));
-      if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone)); cd.appendChild(span); });
-    body.appendChild(cd);
-  }
   if((enr.companyContacts||[]).length){
     const cc=el("div","contacts"); cc.style.marginTop="8px"; cc.appendChild(el("span","clabel","Company POC (SAM):"));
     (enr.companyContacts||[]).slice(0,4).forEach(c=>{ const s=el("span","contact");

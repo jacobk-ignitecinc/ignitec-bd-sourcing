@@ -241,11 +241,13 @@ def fetch_record(session, api_key, award_id, parent_id, parent_cache, stats):
 
 
 def enrich_record(record, kind, match_level):
-    contacts = _contacts_from(record)
+    """Contract/IDV-level facts we can only get from HigherGov: the contract
+    set-aside (the USASpending award search does not return it) and the vehicle
+    name. The company profile and contacts come from the company pass, keyed off
+    the awardee UEI USASpending gives us directly."""
     pop_end = (record.get("period_of_performance_current_end_date")
                or record.get("ordering_period_end_date") or "")
-    data = {
-        "contacts": contacts,
+    return {
         "vehicle": _vehicle_name(record),
         "agency": _agency_name(record),
         "setAside": record.get("type_of_set_aside") or "",
@@ -255,18 +257,6 @@ def enrich_record(record, kind, match_level):
         "matchLevel": match_level,
         "dateEnriched": TODAY,
     }
-    if match_level == "order":
-        # This record IS the order/award, so its awardee and contacts are the
-        # order's incumbent and contracting office.
-        data["incumbent"] = _awardee(record)
-    else:
-        # Vehicle-level match: the IDV awardee is the vehicle holder, not
-        # necessarily this order's winner, so we do NOT assert an incumbent.
-        # The contacts belong to the vehicle's contracting office; relabel them.
-        data["incumbent"] = None
-        for c in data["contacts"]:
-            c["role"] = "Vehicle " + c.get("role", "contact")
-    return data
 
 
 # --------------------------------------------------------------- SAM entity POC
@@ -357,28 +347,46 @@ def hg_company(session, hg_key, uei):
     }
 
 
-def enrich_company(enrichment, hg_key, sam_key):
-    """Backfill each enrichment record that has an incumbent UEI with (a) the
-    HigherGov company profile (website, location, size, POC) and (b) the SAM.gov
-    points of contact (names). Independent of the award pass, so it also fills
-    records enriched on earlier runs. Both are cached by UEI; capped per run."""
+def enrich_company(enrichment, leads, hg_key, sam_key):
+    """For EVERY aligned award/expiring lead, using the awardee UEI USASpending
+    provides directly, record the incumbent/awardee identity and enrich the
+    company: (a) HigherGov /awardee/ profile (website, location, size, socioec
+    types, HigherGov page) and (b) SAM.gov points of contact (names). Incumbent
+    identity is set for all leads immediately (free); the API-backed company
+    profile and POCs fill in as the per-run cap allows and are cached by UEI."""
     session = requests.Session()
     company_cache, poc_cache = {}, {}
     attempted = added = 0
-    for rec in enrichment.values():
-        # Backfill each field independently so records enriched before 'company'
-        # existed still get it, without re-fetching POCs they already have.
+    capped = False
+    for l in leads:
+        if l.get("source") not in ("Recent Award", "Expiring Contract"):
+            continue
+        if not aligned(l):
+            continue
+        uei = (l.get("awardeeUei") or "").strip()
+        if not uei:
+            continue
+        rec = enrichment.setdefault(l["id"], {"source": l.get("source"), "dateEnriched": TODAY})
+        # Incumbent/awardee identity from USASpending (authoritative for this award).
+        name = l.get("prime") or l.get("incumbent") or ""
+        inc = rec.get("incumbent")
+        if not isinstance(inc, dict):
+            inc = {}
+        inc["uei"] = uei
+        inc.setdefault("name", name)
+        if name and not inc.get("name"):
+            inc["name"] = name
+        rec["incumbent"] = inc
         need_company = rec.get("company") is None
         need_pocs = rec.get("companyContacts") is None
         if not need_company and not need_pocs:
             continue
-        inc = rec.get("incumbent") or {}
-        uei = (inc.get("uei") or "").strip()
-        if not uei:
-            continue
         if attempted >= MAX_SAM_POC_PER_RUN:
-            print(f"  Reached company enrichment per-run cap of {MAX_SAM_POC_PER_RUN}.")
-            break
+            if not capped:
+                print(f"  Company enrichment cap {MAX_SAM_POC_PER_RUN} reached; identity still set, "
+                      f"profiles finish next run.")
+                capped = True
+            continue
         attempted += 1
         # HigherGov company profile (website etc.)
         if need_company:
@@ -394,6 +402,8 @@ def enrich_company(enrichment, hg_key, sam_key):
                 time.sleep(0.2)
             if company:
                 rec["company"] = company
+                if company.get("cage") and not inc.get("cage"):
+                    inc["cage"] = company["cage"]
         # SAM.gov points of contact (names)
         if need_pocs:
             if not sam_key:
@@ -410,7 +420,8 @@ def enrich_company(enrichment, hg_key, sam_key):
                 rec["companyContacts"] = pocs
                 time.sleep(0.3)
         added += 1
-    print(f"  Company enrichment: {attempted} UEIs looked up, wrote {added} records.")
+    print(f"  Company enrichment: {attempted} UEIs looked up, wrote {added} records "
+          f"(company info now on all aligned leads with a UEI).")
 
 
 def main():
@@ -440,7 +451,10 @@ def main():
             if l.get("source") not in ("Recent Award", "Expiring Contract"):
                 continue
             lead_id = l.get("id")
-            if not lead_id or lead_id in enrichment:
+            # Skip only leads already resolved at the contract/IDV level (they have
+            # matchLevel); a company-only record from a prior run still needs its
+            # set-aside/vehicle, so it is not skipped here.
+            if not lead_id or (enrichment.get(lead_id) or {}).get("matchLevel"):
                 continue
             if not aligned(l):
                 continue
@@ -467,7 +481,10 @@ def main():
                 time.sleep(0.2)   # be polite to the API
 
             if data:
-                enrichment[lead_id] = data
+                # Merge into any existing record (e.g. a company-only record from
+                # a prior run) so company/incumbent/companyContacts are preserved.
+                rec = enrichment.setdefault(lead_id, {})
+                rec.update(data)
                 added += 1
     except AuthError as e:
         print(f"    ! HigherGov auth error ({e}); stopping. Check HIGHERGOV_API_KEY.")
@@ -478,7 +495,7 @@ def main():
     if RUN_SAM_POC:
         if not sam_key:
             print("  ! SAM_API_KEY not set; company POC names will be skipped (HigherGov company profile still runs).")
-        enrich_company(enrichment, api_key, sam_key)
+        enrich_company(enrichment, leads, api_key, sam_key)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(ENRICH_FILE, "w") as fh:

@@ -108,7 +108,7 @@ USA_API = "https://api.usaspending.gov/api/v2/search/spending_by_award/"
 SAM_API = "https://api.sam.gov/opportunities/v2/search"
 CONTRACT_TYPES = ["A", "B", "C", "D"]
 IDV_TYPES = ["IDV_A", "IDV_B", "IDV_B_A", "IDV_B_B", "IDV_B_C", "IDV_C", "IDV_D", "IDV_E"]
-USA_FIELDS = ["Award ID", "Recipient Name", "Awarding Agency", "Awarding Sub Agency",
+USA_FIELDS = ["Award ID", "Recipient Name", "Recipient UEI", "Awarding Agency", "Awarding Sub Agency",
               "Award Amount", "Start Date", "End Date", "Last Modified Date", "Description",
               "Contract Award Type", "NAICS", "PSC", "Type of Set Aside"]
 NAICS_SET = set(NAICS_CODES)
@@ -129,7 +129,7 @@ def lead(source, key, **fields):
         "value": "", "awardId": "", "solicitationNumber": "", "naics": "", "psc": "",
         "popStart": "", "popEnd": "", "posture": "", "tier": "", "lane": "",
         "setAside": "", "vehicle": "", "vehicleHeld": False, "incumbent": "", "routing": "", "url": "",
-        "actionDate": "",
+        "actionDate": "", "awardeeUei": "",
         "gates": [None, None, None, None, None, None],
         "status": "Tracking", "owner": "", "nextAction": "", "nextActionDate": "",
         "notes": "", "dateAdded": TODAY, "lastTouched": TODAY,
@@ -247,7 +247,7 @@ def recent_awards():
             prime=name, agency=a.get("Awarding Agency"), subAgency=a.get("Awarding Sub Agency"),
             value=amt, awardId=a.get("Award ID"), naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=a.get("End Date"), url=usa_award_url(a.get("generated_internal_id")),
-            actionDate=str(a.get("Last Modified Date") or "")[:10],
+            actionDate=str(a.get("Last Modified Date") or "")[:10], awardeeUei=a.get("Recipient UEI") or "",
             setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
             posture=routing_for(name), routing=routing_for(name),
             nextAction="Cold outreach to prime for subcontracting/staffing"
@@ -293,7 +293,7 @@ def expiring_contracts():
             naics=code_of(a.get("NAICS")), psc=code_of(a.get("PSC")),
             popStart=a.get("Start Date"), popEnd=str(end_raw)[:10], posture=posture,
             url=usa_award_url(a.get("generated_internal_id")),
-            actionDate=str(a.get("Last Modified Date") or "")[:10],
+            actionDate=str(a.get("Last Modified Date") or "")[:10], awardeeUei=a.get("Recipient UEI") or "",
             setAside=a.get("Type of Set Aside") or "", vehicle=vehicle, vehicleHeld=held,
             incumbent=name, routing=routing_for(name),
             nextAction=("Reach CO/COR now to shape the recompete" if shaping
