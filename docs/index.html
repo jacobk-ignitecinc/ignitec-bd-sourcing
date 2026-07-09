@@ -316,8 +316,11 @@ function saText(l){return saValue(l).toUpperCase();}
 function isSetAside(l){const s=saText(l); return !!s && !s.includes("NO SET ASIDE") && s!=="NONE";}
 function is8a(l){const s=saText(l); return s.includes("8(A)")||s.includes("8A")||s.includes("8 A");}
 function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.includes("SMALL DISADVANTAGED")||s.includes("SDB")||is8a(l);}
-/* Bridge links to find a BD/company contact using existing tools (ZoomInfo seat,
-   LinkedIn, SAM.gov, Google). No API and no data stored - just pre-filled searches. */
+/* Bridge links to find a BD/company contact using existing tools. ZoomInfo and
+   SAM.gov are single-page apps that ignore a query in the URL (they open a blank
+   search), so those go through a site-scoped Google search that lands on the
+   company's actual ZoomInfo / SAM.gov page. LinkedIn's people search does accept
+   a keyword query, so it stays a direct link. No API, no data stored. */
 function contactLinks(l){
   const inc=(ENRICHMENT[l.id]||{}).incumbent||{};
   const company=(l.prime||l.incumbent||inc.name||"").trim();
@@ -325,14 +328,15 @@ function contactLinks(l){
   const row=el("div","findc"); row.appendChild(el("span","clabel","Find contact:"));
   if(!company){ row.appendChild(document.createTextNode(" company unknown")); return row; }
   const q=encodeURIComponent;
+  const g=s=>"https://www.google.com/search?q="+q(s);
   const links=[
-    ["ZoomInfo","https://app.zoominfo.com/#/search/companies"],
     ["LinkedIn","https://www.linkedin.com/search/results/people/?keywords="+q(company+" business development capture")],
-    ["SAM.gov","https://sam.gov/search/?index=ei&q="+q(uei||company)],
-    ["Google","https://www.google.com/search?q="+q('"'+company+'" federal business development contact email')]
+    ["ZoomInfo",g(company+" site:zoominfo.com")],
+    ["SAM.gov",g((uei||company)+" site:sam.gov")],
+    ["Google",g('"'+company+'" federal business development contact email')]
   ];
   links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
-    a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
+    a.title="Opens a search for "+company; a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
   return row;
 }
 
