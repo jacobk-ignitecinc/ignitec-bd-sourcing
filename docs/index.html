@@ -137,6 +137,7 @@
 <header class="app">
   <h1>Ignitec BD Sourcing Cockpit</h1>
   <div class="sub">Capability-aligned federal opportunities for two plays: subcontracting to recent-award primes, and getting ahead of expiring-contract recompetes.</div>
+  <div class="sub" id="buildStamp" style="margin-top:4px;font-size:11.5px"></div>
 </header>
 
 <div class="tabs">
@@ -265,6 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
+const BUILD = "2026-07-09.6";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -596,6 +598,7 @@ async function reload(){
     const {data,url}=await fetchLeads(branch);
     const res=mergeLeads(data);
     const short=url.startsWith("..")?"repo (Pages)":"raw.githubusercontent.com";
+    setBuildStamp();
     $("#srcInfo").innerHTML=`Loaded <b>${res.total}</b> from ${short} on <b>${esc(branch)}</b>. `+
       `Added ${res.added}, ${res.seen} already tracked. Working set: <b>${Object.keys(master).length}</b>. `+
       `Lanes loaded: ${LANES.length}.`;
@@ -1051,8 +1054,17 @@ function showTab(which){
 }
 
 /* ------------------------------------------------------------ wire up */
+function dataAsOf(){
+  let m=""; for(const l of Object.values(master)){ const d=l.actionDate||l.dateAdded||""; if(d>m)m=d; }
+  return m;
+}
+function setBuildStamp(){
+  const d=dataAsOf();
+  $("#buildStamp").textContent = "Dashboard build "+BUILD+(d?"  ·  data as of "+d:"");
+}
 function init(){
   loadMaster(); loadPipelineLocal();
+  setBuildStamp();
   $("#branchInput").value=localStorage.getItem(LS_BRANCH)||CONFIG.branch;
   setDirty(false);
   $("#reloadBtn").addEventListener("click",reload);
