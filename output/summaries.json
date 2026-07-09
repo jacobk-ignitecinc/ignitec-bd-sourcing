@@ -28009,5 +28009,27 @@
     ],
     "model": "claude-haiku-4-5",
     "dateSummarized": "2026-07-09"
+  },
+  "RA-12f90a6756": {
+    "summary": "The General Services Administration awarded ELECTROSOFT SERVICES, LLC a contract to provide Federal Identity, Credential, and Access Management (FICAM) subject matter expert support services through June 2027. GSA's Office of Administrative Services manages federal procurement policy and administrative operations across the government.",
+    "outreach_angle": "Contact ELECTROSOFT directly as a warm subcontract opportunity in Lane 1A (Federal IT Staff Augmentation), given GSA is proven past performance and the FICAM SME support work aligns with federal IT staffing.",
+    "fit": "This maps directly to Lane 1A and GSA is on Ignitec's proven agency list, making a subcontract beneath ELECTROSOFT realistic for FICAM staffing augmentation or support operations.",
+    "concerns": "FICAM is a specialized federal identity and access management domain; confirm Ignitec has staff or partners with active FICAM or federal identity/credentialing expertise before outreach.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-3d3ae39b78": {
+    "summary": "Black River Systems Company, Inc. won a delivery order from the Department of the Air Force to deliver software version 1.14 under an existing contract vehicle. The Air Force executes its mission through this IT and software delivery work, which runs through September 2026.",
+    "outreach_angle": "Approach Black River Systems Company, Inc. directly as a warm subcontracting target in lane 1A (Federal IT Staff Augmentation and Workforce Solutions), leveraging Ignitec's proven subcontracting history with large defense primes like Accenture and Deloitte.",
+    "fit": "This maps cleanly to Ignitec's Tier 1 lane 1A strength in federal IT staff augmentation, and the Department of Defense is an agency where Ignitec has demonstrated past performance. The award value and software delivery nature suggest a realistic subcontracting role rather than a prime opportunity.",
+    "concerns": "No specific staffing or skill requirements are detailed in the description, so the exact technical scope and any clearance requirements are unknown.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
   }
 }
