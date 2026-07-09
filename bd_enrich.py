@@ -331,6 +331,14 @@ def hg_company(session, hg_key, uei):
     naics_code = naics.get("naics_code") if isinstance(naics, dict) else (naics or "")
     poc_name = " ".join(p for p in (rec.get("govt_bus_poc_first_name"),
                                     rec.get("govt_bus_poc_last_name")) if p).strip()
+    bus = rec.get("bus_type_info")
+    if isinstance(bus, list):   # HigherGov returns a list of {bus_type_description,...}
+        seen, descs = set(), []
+        for d in bus:
+            desc = d.get("bus_type_description") if isinstance(d, dict) else None
+            if desc and desc.lower() not in seen:
+                seen.add(desc.lower()); descs.append(desc)
+        bus = "; ".join(descs)
     return {
         "legalName": rec.get("legal_business_name") or rec.get("clean_name") or "",
         "dba": rec.get("dba_name") or "",
@@ -340,7 +348,7 @@ def hg_company(session, hg_key, uei):
         "employeeCount": rec.get("employee_count") or "",
         "yearFounded": rec.get("year_founded") or "",
         "primaryNaics": naics_code or "",
-        "busTypes": rec.get("bus_type_info") or "",
+        "busTypes": bus or "",
         "govtPOC": ({"name": poc_name, "title": rec.get("govt_bus_poc_title") or ""}
                     if poc_name else None),
         "uei": rec.get("uei") or uei,

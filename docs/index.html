@@ -325,6 +325,7 @@ function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.inclu
    company's actual ZoomInfo / SAM.gov page. LinkedIn's people search does accept
    a keyword query, so it stays a direct link. No API, no data stored. */
 function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
+function busTypesText(bt){return Array.isArray(bt)?bt.map(d=>d&&d.bus_type_description).filter(Boolean).join("; "):(bt||"");}
 function domainOf(l){
   let w=(companyOf(l).website||"").trim().toLowerCase();
   if(!w)return "";
@@ -681,7 +682,7 @@ function leadCard(l){
     const loc=[co.city,co.state].filter(Boolean).join(", "); if(loc)cbits.push(loc);
     if(co.employeeCount)cbits.push(co.employeeCount+" emp");
     if(co.yearFounded)cbits.push("est "+co.yearFounded);
-    if(co.busTypes)cbits.push(String(co.busTypes).slice(0,70));
+    if(busTypesText(co.busTypes))cbits.push(busTypesText(co.busTypes).slice(0,70));
     if(cbits.length){ const cl=el("div","companyline"); cl.appendChild(el("span","clabel","Company: "));
       cl.appendChild(document.createTextNode(cbits.join("  ·  "))); grow.appendChild(cl); }
   }
@@ -996,7 +997,7 @@ function openPursuit(id){
     const rows=[["Legal name",co.legalName],["DBA",co.dba],
       ["Location",[co.city,co.state].filter(Boolean).join(", ")],
       ["Employees",co.employeeCount],["Founded",co.yearFounded],
-      ["Primary NAICS",co.primaryNaics],["Business types",co.busTypes],
+      ["Primary NAICS",co.primaryNaics],["Business types",busTypesText(co.busTypes)],
       ["UEI",co.uei],["CAGE",co.cage],
       ["Govt business POC",co.govtPOC?(co.govtPOC.name+(co.govtPOC.title?" ("+co.govtPOC.title+")":"")):""]];
     for(const [k,v] of rows){ if(!v)continue; const r=el("div","row");
