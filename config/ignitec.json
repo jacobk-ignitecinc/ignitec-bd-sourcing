@@ -88,7 +88,7 @@
     "max_enrich_per_run": 1500,
     "_enrich_note": "HigherGov enrichment (bd_enrich.py) looks up each aligned award/expiring lead by government Award ID and backfills contracting-office contacts, incumbent identity (UEI/CAGE), and vehicle. Incremental (skips already-enriched ids). Base usage is 10,000 records/month; the per-run cap and incremental skip keep spend bounded. Needs HIGHERGOV_API_KEY.",
     "run_sam_poc": true,
-    "max_sam_poc_per_run": 1000,
+    "max_sam_poc_per_run": 1500,
     "_sam_poc_note": "Company enrichment runs for EVERY aligned lead using the awardee UEI USASpending returns directly (Recipient UEI), so company info lands on all cards, not just HigherGov-matched ones. Per UEI: (1) HigherGov /awardee/ -> company profile (website, location, employees, founded, business/socioeconomic types, HigherGov company page); (2) SAM.gov Entity API -> company POC names (public tier: names/titles only). The website/domain drives precise ZoomInfo/LinkedIn lookups. Government contracting-office POCs are intentionally NOT collected; focus is the company and its contacts. Needs HIGHERGOV_API_KEY and SAM_API_KEY (Entity read-public). Incumbent identity is set for all leads immediately; profiles fill as max_sam_poc_per_run allows.",
     "held_vehicle_piids": ["47QTCA24D0060", "N0017825D7445"],
     "exclude_recipient_names": ["ignitec"],
