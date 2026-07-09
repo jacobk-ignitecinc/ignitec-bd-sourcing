@@ -34,9 +34,11 @@ jobs:
       - name: Enrich with HigherGov (contacts, incumbent, vehicle)
         # Looks up each aligned award/expiring lead by Award ID and backfills
         # contracting-office contacts, incumbent identity, and vehicle into
-        # output/enrichment.json. Incremental; skips if no key.
+        # output/enrichment.json. A second pass adds company POC names from the
+        # SAM.gov Entity API (by UEI). Incremental; skips if keys are absent.
         env:
           HIGHERGOV_API_KEY: ${{ secrets.HIGHERGOV_API_KEY }}
+          SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
         run: python bd_enrich.py
 
       - name: Generate AI summaries

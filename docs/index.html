@@ -658,6 +658,12 @@ function leadCard(l){
     });
     grow.appendChild(cd);
   }
+  if(enr && (enr.companyContacts||[]).length){
+    const cc=el("div","contacts"); cc.appendChild(el("span","clabel","Company POC:"));
+    enr.companyContacts.slice(0,3).forEach(c=>{ const s=el("span","contact");
+      s.textContent=c.name+(c.title?" ("+c.title+")":""); cc.appendChild(s); });
+    grow.appendChild(cc);
+  }
   grow.appendChild(contactLinks(l));
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
   const st=pipeState(l.id);
@@ -948,6 +954,12 @@ function openPursuit(id){
       if(c.email){const a=el("a",null,nm); a.href="mailto:"+c.email; span.appendChild(a);} else span.appendChild(document.createTextNode(nm));
       if(c.phone)span.appendChild(document.createTextNode(" · "+c.phone)); cd.appendChild(span); });
     body.appendChild(cd);
+  }
+  if((enr.companyContacts||[]).length){
+    const cc=el("div","contacts"); cc.style.marginTop="8px"; cc.appendChild(el("span","clabel","Company POC (SAM):"));
+    (enr.companyContacts||[]).slice(0,4).forEach(c=>{ const s=el("span","contact");
+      s.textContent=c.name+(c.title?" ("+c.title+")":"")+(c.role?" — "+c.role:""); cc.appendChild(s); });
+    body.appendChild(cc);
   }
   const fc=contactLinks(l); fc.style.marginTop="8px"; body.appendChild(fc);
 

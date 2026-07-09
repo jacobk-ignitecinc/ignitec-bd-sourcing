@@ -67,6 +67,9 @@ except (FileNotFoundError, json.JSONDecodeError, OSError):
 _CRAWL = _cfg.get("crawl", {}) or {}
 RUN_ENRICHMENT = bool(_CRAWL.get("run_enrichment", True))
 MAX_PER_RUN = int(_CRAWL.get("max_enrich_per_run", 1000))
+RUN_SAM_POC = bool(_CRAWL.get("run_sam_poc", True))
+MAX_SAM_POC_PER_RUN = int(_CRAWL.get("max_sam_poc_per_run", 1000))
+SAM_ENTITY_BASE = "https://api.sam.gov/entity-information"
 
 
 def load_leads():
@@ -266,6 +269,89 @@ def enrich_record(record, kind, match_level):
     return data
 
 
+# --------------------------------------------------------------- SAM entity POC
+def _poc(obj, role):
+    """Normalize a SAM pointsOfContact person (public tier: name/title, no email)."""
+    if not isinstance(obj, dict):
+        return None
+    name = " ".join(p for p in (obj.get("firstName"), obj.get("middleInitial"),
+                                obj.get("lastName")) if p).strip()
+    title = (obj.get("title") or "").strip()
+    if not name:
+        return None
+    return {"name": name, "title": title, "role": role, "source": "SAM entity"}
+
+
+def sam_company_pocs(session, sam_key, uei):
+    """Company points of contact for a UEI from the SAM.gov Entity Management API
+    (public tier -> names/titles only, no email/phone). Tries v3 then v2. Returns a
+    list (possibly empty) or None on an auth/permission failure."""
+    roles = [("governmentBusinessPOC", "Government Business POC"),
+             ("electronicBusinessPOC", "Electronic Business POC")]
+    for ver in ("v3", "v2"):
+        try:
+            r = session.get(
+                f"{SAM_ENTITY_BASE}/{ver}/entities",
+                params={"api_key": sam_key, "ueiSAM": uei,
+                        "includeSections": "pointsOfContact"},
+                timeout=TIMEOUT,
+            )
+        except requests.RequestException as e:
+            print(f"    ! SAM entity lookup failed for {uei}: {e}")
+            return None
+        if r.status_code in (401, 403):
+            print(f"    ! SAM entity auth/permission error ({r.status_code}) for {uei}: "
+                  f"{r.text[:120]}. Key may lack 'Entity: read public'.")
+            return None
+        if r.status_code == 404:
+            continue   # try the next version
+        if r.status_code != 200:
+            return []
+        entities = (r.json() or {}).get("entityData") or []
+        if not entities:
+            return []
+        poc = (entities[0] or {}).get("pointsOfContact") or {}
+        out = []
+        for field, label in roles:
+            person = _poc(poc.get(field), label)
+            if person and person["name"].lower() not in {p["name"].lower() for p in out}:
+                out.append(person)
+        return out
+    return []
+
+
+def enrich_company_pocs(enrichment, sam_key):
+    """Backfill each enrichment record that has an incumbent UEI with the company's
+    SAM points of contact (names). Independent of the HigherGov pass, so it also
+    fills records enriched on earlier runs. Cached by UEI; capped per run."""
+    session = requests.Session()
+    by_uei = {}
+    attempted = added = 0
+    for rec in enrichment.values():
+        if rec.get("companyContacts") is not None:
+            continue   # already resolved (even if it was an empty list)
+        inc = rec.get("incumbent") or {}
+        uei = (inc.get("uei") or "").strip()
+        if not uei:
+            continue
+        if attempted >= MAX_SAM_POC_PER_RUN:
+            print(f"  Reached SAM POC per-run cap of {MAX_SAM_POC_PER_RUN}.")
+            break
+        if uei in by_uei:
+            pocs = by_uei[uei]
+        else:
+            attempted += 1
+            pocs = sam_company_pocs(session, sam_key, uei)
+            if pocs is None:      # auth failure: stop hitting SAM this run
+                print("    ! Stopping SAM POC pass after auth error.")
+                break
+            by_uei[uei] = pocs
+            time.sleep(0.3)
+        rec["companyContacts"] = pocs
+        added += 1
+    print(f"  SAM company POCs: {attempted} UEIs looked up, wrote {added} records.")
+
+
 def main():
     if not RUN_ENRICHMENT:
         print("  HigherGov enrichment disabled in config (run_enrichment=false).")
@@ -324,6 +410,14 @@ def main():
                 added += 1
     except AuthError as e:
         print(f"    ! HigherGov auth error ({e}); stopping. Check HIGHERGOV_API_KEY.")
+
+    # Second pass: add company points of contact from SAM.gov (public tier, names)
+    # for any enrichment record that has an incumbent UEI.
+    sam_key = os.environ.get("SAM_API_KEY")
+    if RUN_SAM_POC and sam_key:
+        enrich_company_pocs(enrichment, sam_key)
+    elif RUN_SAM_POC:
+        print("  ! SAM_API_KEY not set; skipping company POC lookup.")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     with open(ENRICH_FILE, "w") as fh:
