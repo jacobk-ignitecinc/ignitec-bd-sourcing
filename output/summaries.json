@@ -41483,5 +41483,50 @@
     ],
     "model": "claude-haiku-4-5",
     "dateSummarized": "2026-07-09"
+  },
+  "RA-6198812315": {
+    "summary": "The Department of the Army awarded DecisionPoint Corporation a contract to provide non-personal services supporting the Personnel Enterprise Decision Support System (PEDSS) Personnel Authorization Module (PAM). This is IT staff augmentation and system support work for Army personnel operations, valued at approximately $1.7 million through April 2027.",
+    "outreach_angle": "Contact DecisionPoint directly as a warm subcontracting prospect in lane 1A (Federal IT Staff Augmentation), citing Ignitec's SDB status and prior Army IT staffing experience.",
+    "fit": "Lane 1A (Federal IT Staff Augmentation and Workforce Solutions) is a direct match for PEDSS PAM support work. Ignitec has proven past performance with the Department of Defense and the Army, and has subcontracted successfully to primes on IT staffing initiatives.",
+    "concerns": "Contract is already awarded to DecisionPoint; subcontracting opportunity depends on their willingness to partner and the scope of labor they plan to flow down.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-98df9e2c5f": {
+    "summary": "Department of the Navy is procuring end user hardware devices as a service. HPI Federal LLC has won the contract and will manage the supply and support of EUHW devices for Navy operations.",
+    "outreach_angle": "Contact HPI Federal LLC immediately as a subcontractor for IT staff augmentation and help desk support roles under lane 1A or 1C, leveraging Ignitec's prior Navy and Defense subcontracting experience.",
+    "fit": "Ignitec has real past performance with Defense and has subcontracted to Accenture and Deloitte on similar IT services. Lane 1A (Federal IT Staff Augmentation) and Lane 1C (Federal Help Desk and IT Service Desk Operations) directly support hardware-as-a-service delivery and user support.",
+    "concerns": "The contract appears hardware-centric; clarity needed on whether HPI plans to engage staffing and services subs or will self-perform most delivery.",
+    "lanes": [
+      "1A",
+      "1C"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-cceb353a69": {
+    "summary": "The Department of Defense, through the Missile Defense Agency, awarded Decibel Research, Inc. a contract to develop and sustain software enhancements. The work is systems software development in support of missile defense operations.",
+    "outreach_angle": "Pursue Decibel Research as a warm contact for IT staff augmentation and staffing (Lane 1A) to backfill or expand their engineering team on this MDA contract.",
+    "fit": "Lane 1A (Federal IT Staff Augmentation) aligns with software enhancement delivery; DoD and MDA are proven agencies in Ignitec's portfolio, and the contract value and scope suggest room for subcontractor staffing support.",
+    "concerns": "No clearance level specified; if TS or higher is required, Ignitec's TS Facility Clearance may limit individual deployments, and details on the software domain (e.g., real-time systems, classified environments) are not provided.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-ef2ba68a0e": {
+    "summary": "The Department of the Navy awarded Integrated Data Services, LLC a contract for comprehensive and cost requirement system support, serving the Navy's operational and financial planning needs. The work involves IT staffing and system support across a 5.6 million dollar contract through November 2026.",
+    "outreach_angle": "Target Integrated Data Services as a subcontracting partner under lane 1A (Federal IT Staff Augmentation), leveraging Ignitec's proven past performance with the Department of Defense and established subcontracting relationships with similar primes.",
+    "fit": "This aligns directly with lane 1A and Ignitec's real past performance with the Department of Defense. The Navy contract for system support is a natural fit for IT workforce augmentation services that Ignitec has delivered to defense agencies before.",
+    "concerns": "The specific scope of 'comprehensive and cost requirement system support' is not fully detailed; clarification on whether this involves financial systems, budget analysis, or pure IT staffing would refine the fit further.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
   }
 }
