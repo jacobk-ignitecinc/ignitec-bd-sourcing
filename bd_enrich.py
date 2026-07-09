@@ -363,10 +363,12 @@ def enrich_company(enrichment, leads, hg_key, sam_key):
             continue
         if not aligned(l):
             continue
-        uei = (l.get("awardeeUei") or "").strip()
+        rec = enrichment.setdefault(l["id"], {"source": l.get("source"), "dateEnriched": TODAY})
+        # UEI from USASpending (present on freshly crawled leads); fall back to a
+        # UEI resolved on a prior run so leads not re-pulled this run keep company.
+        uei = (l.get("awardeeUei") or (rec.get("incumbent") or {}).get("uei") or "").strip()
         if not uei:
             continue
-        rec = enrichment.setdefault(l["id"], {"source": l.get("source"), "dateEnriched": TODAY})
         # Incumbent/awardee identity from USASpending (authoritative for this award).
         name = l.get("prime") or l.get("incumbent") or ""
         inc = rec.get("incumbent")

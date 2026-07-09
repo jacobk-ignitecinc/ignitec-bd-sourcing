@@ -210,13 +210,27 @@ def usa_query(award_type_codes, start_date, end_date):
             "fields": USA_FIELDS, "page": page, "limit": 100,
             "sort": "Award Amount", "order": "desc",
         }
-        try:
-            r = requests.post(USA_API, json=payload, timeout=60)
-            r.raise_for_status()
-        except requests.RequestException as e:
-            print(f"  ! USASpending request failed (page {page}): {e}")
+        # Retry each page a few times with backoff. USASpending intermittently
+        # returns 502/timeout; a single failure must NOT abandon the whole crawl
+        # (that silently truncated the pull to a few hundred leads).
+        data = None
+        for attempt in range(4):
+            try:
+                r = requests.post(USA_API, json=payload, timeout=90)
+                r.raise_for_status()
+                data = r.json()
+                break
+            except requests.RequestException as e:
+                wait = 2 ** attempt
+                print(f"  ! USASpending request failed (page {page}, attempt {attempt + 1}/4): {e}"
+                      + (f"; retrying in {wait}s" if attempt < 3 else "; giving up on this page"))
+                if attempt < 3:
+                    time.sleep(wait)
+        if data is None:
+            # Persistent failure on this page: stop paginating this query but keep
+            # what we already collected rather than losing the run.
+            print(f"  ! USASpending: stopping pagination at page {page} after repeated failures.")
             break
-        data = r.json()
         rows.extend(data.get("results", []))
         if not data.get("page_metadata", {}).get("hasNext") or page >= 50:
             break
