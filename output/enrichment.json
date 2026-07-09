@@ -22,7 +22,15 @@
     "popEnd": "2027-09-29",
     "hgPath": "https://www.highergov.com/contract/75ACF124C00022/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "BENJAMIN L HARRIS",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-88cbae9118": {
     "contacts": [],
@@ -39,7 +47,21 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/75N98024P02184/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Shane Muncy",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Karen Hensley",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6c13e3d28b": {
     "contacts": [
@@ -64,7 +86,15 @@
     "popEnd": "2027-09-28",
     "hgPath": "https://www.highergov.com/contract/75ACF122C00026/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "GASTON BOISSON",
+        "title": "Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6d3eb6b323": {
     "contacts": [],
@@ -81,7 +111,21 @@
     "popEnd": "2025-09-30",
     "hgPath": "https://www.highergov.com/contract/75H71022P01338/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kelsey Moena",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "JENNY HANLON",
+        "title": "CFO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e65a630bae": {
     "contacts": [
@@ -106,7 +150,15 @@
     "popEnd": "2027-09-29",
     "hgPath": "https://www.highergov.com/contract/75ACF124C00022/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "BENJAMIN L HARRIS",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-07761105a6": {
     "contacts": [
@@ -131,7 +183,15 @@
     "popEnd": "2026-09-18",
     "hgPath": "https://www.highergov.com/contract/HC102825C0008/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brian Benz",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-58e472346b": {
     "contacts": [],
@@ -148,7 +208,21 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/75R60219C00001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Elizabeth Robbins",
+        "title": "ASSOCIATE GENERAL COUNSEL",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Joe D McCollum",
+        "title": "Assistant Director of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-dfa35b4fc7": {
     "contacts": [
@@ -173,7 +247,21 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/47PC0822C0002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "HEATHER BROUGHTON",
+        "title": "CEO/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Robyn Mortensen",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-35a0d55d94": {
     "contacts": [],
@@ -190,7 +278,15 @@
     "popEnd": "2027-09-29",
     "hgPath": "https://www.highergov.com/contract/75D30123C17570/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Joe Durbin",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c243a32d8f": {
     "contacts": [],
@@ -207,7 +303,21 @@
     "popEnd": "2026-09-22",
     "hgPath": "https://www.highergov.com/contract/47QFMA24C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "RAYMOND ZDANCEWICZ",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "JANE CROSS",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8bee7b230e": {
     "contacts": [
@@ -239,7 +349,15 @@
     "popEnd": "2027-04-14",
     "hgPath": "https://www.highergov.com/contract/15F06724C0000577/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "MATTHEW Nisley",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c0b24adbed": {
     "contacts": [],
@@ -256,7 +374,15 @@
     "popEnd": "2026-10-14",
     "hgPath": "https://www.highergov.com/contract/75N93020C00002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Dominic M Johnson",
+        "title": "VP Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c34784dda3": {
     "contacts": [
@@ -288,7 +414,21 @@
     "popEnd": "2027-12-24",
     "hgPath": "https://www.highergov.com/contract/75ACF124C00017/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "LINA GONG",
+        "title": "EVP of Finance and Operations",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Erly Garba",
+        "title": "Finance Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-97e32768ba": {
     "contacts": [],
@@ -305,7 +445,21 @@
     "popEnd": "2027-07-25",
     "hgPath": "https://www.highergov.com/contract/75R60226C00001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Elizabeth Robbins",
+        "title": "ASSOCIATE GENERAL COUNSEL",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Joe D McCollum",
+        "title": "Assistant Director of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d19a936026": {
     "contacts": [],
@@ -322,7 +476,21 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/75F40125C00106/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "GREGORY PETERSEN",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "SHARON MILLER",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d96e8e6167": {
     "contacts": [],
@@ -339,7 +507,15 @@
     "popEnd": "2022-08-31",
     "hgPath": "https://www.highergov.com/contract/HHSN261201700007C/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Angela Y Moody",
+        "title": "President and CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-955e644503": {
     "contacts": [
@@ -371,7 +547,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00019/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jeff Bell",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-962f8666d0": {
     "contacts": [
@@ -396,7 +580,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00013/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karolyn Gardner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-78ae3ec62b": {
     "contacts": [
@@ -428,7 +620,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00016/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jeff Bell",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-a4a4600eab": {
     "contacts": [
@@ -460,7 +660,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00020/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jeff Bell",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8b72a9f4b9": {
     "contacts": [
@@ -485,7 +693,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00018/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karolyn Gardner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e1eb6560f2": {
     "contacts": [
@@ -517,7 +733,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00012/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karolyn Gardner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-640737cf7c": {
     "contacts": [
@@ -542,7 +766,21 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00017/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jacqueline McPherson",
+        "title": "Sr VP Strategy and Resource Mobilization",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Rasheedah Graham",
+        "title": "CMS Business Systems Analyst",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-679de9ae13": {
     "contacts": [
@@ -574,7 +812,21 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00011/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kristy S. Reese",
+        "title": "Director, Office of Pre Award Services",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kristy S Reese",
+        "title": "Director, Office of Pre Award Services",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-1b3f581a97": {
     "contacts": [],
@@ -591,7 +843,15 @@
     "popEnd": "2027-06-17",
     "hgPath": "https://www.highergov.com/contract/75P00124P00056/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Priyank K Shah",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-04d370c02d": {
     "contacts": [],
@@ -608,7 +868,21 @@
     "popEnd": "2026-09-12",
     "hgPath": "https://www.highergov.com/contract/75FCMC24C0030/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Hari Krishna Nallure",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Anitha Timiri Gopalakrishnan",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-b133cd3958": {
     "contacts": [],
@@ -625,7 +899,15 @@
     "popEnd": "2025-07-25",
     "hgPath": "https://www.highergov.com/contract/75F40124C00056/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "HOANG  TRINH",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d5ea2d5944": {
     "contacts": [],
@@ -642,7 +924,21 @@
     "popEnd": "2027-04-29",
     "hgPath": "https://www.highergov.com/contract/75F40124C00044/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Ketki Shah",
+        "title": "Principal",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Dushyant Lowe",
+        "title": "Principal",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c7285c7e2a": {
     "contacts": [],
@@ -659,7 +955,15 @@
     "popEnd": "2026-09-14",
     "hgPath": "https://www.highergov.com/contract/75FCMC23C0053/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Ketan Patel",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-4747b06d63": {
     "contacts": [
@@ -684,7 +988,21 @@
     "popEnd": "2026-08-31",
     "hgPath": "https://www.highergov.com/contract/47QFPA23P0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Cynthia E Mason",
+        "title": "Ms.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Cynthia Mason",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-998b6c0f6d": {
     "contacts": [],
@@ -701,7 +1019,15 @@
     "popEnd": "2024-10-14",
     "hgPath": "https://www.highergov.com/contract/75N95020C00028/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "ANTON C BIZZELL",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-52f388034d": {
     "contacts": [],
@@ -718,7 +1044,21 @@
     "popEnd": "2026-06-17",
     "hgPath": "https://www.highergov.com/contract/75FCMC25CJ016/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Pamela Azar",
+        "title": "Contracts Lead",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "SRINIVASU TOGARI",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-b32cb20a6d": {
     "contacts": [],
@@ -735,7 +1075,21 @@
     "popEnd": "2026-03-29",
     "hgPath": "https://www.highergov.com/contract/75D30120C08280/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Harshi Krishnaswamy",
+        "title": "CFO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Harshila Krishnaswamy",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9e9ed2f25b": {
     "contacts": [],
@@ -752,7 +1106,15 @@
     "popEnd": "2027-01-06",
     "hgPath": "https://www.highergov.com/contract/75F40125P00122/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Eleanor Hyman",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e55db03861": {
     "contacts": [],
@@ -769,7 +1131,15 @@
     "popEnd": "2026-08-14",
     "hgPath": "https://www.highergov.com/contract/75P00124P00074/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Priyank K Shah",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-1153221155": {
     "contacts": [
@@ -794,7 +1164,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/47QFSA21C0008/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "LINDA L BLAKEMORE",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c4ed845f8b": {
     "contacts": [],
@@ -811,7 +1189,15 @@
     "popEnd": "2025-05-10",
     "hgPath": "https://www.highergov.com/contract/75F40121C00048/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Theressa K Thomas",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-f479fccc91": {
     "contacts": [],
@@ -828,7 +1214,15 @@
     "popEnd": "2025-08-26",
     "hgPath": "https://www.highergov.com/contract/75F40124C00111/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Robert Im",
+        "title": "Managing Member",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-b6ecc41036": {
     "contacts": [
@@ -860,7 +1254,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00021/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jeff Bell",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-02f0f0bd38": {
     "contacts": [],
@@ -877,7 +1279,15 @@
     "popEnd": "2027-01-31",
     "hgPath": "https://www.highergov.com/contract/75H70725C00004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Joshua Wiltgen",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0c2acb9dc1": {
     "contacts": [
@@ -902,7 +1312,21 @@
     "popEnd": "2026-09-23",
     "hgPath": "https://www.highergov.com/contract/15F06722C0000968/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Michael C Mainwold",
+        "title": "Chief Executive Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jessica L Myers",
+        "title": "Chief Compliance Officer",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e988c3408c": {
     "contacts": [],
@@ -919,7 +1343,15 @@
     "popEnd": "2021-09-29",
     "hgPath": "https://www.highergov.com/contract/75N98019P03325/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "BRET Jones",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0caf1e003b": {
     "contacts": [
@@ -951,7 +1383,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00022/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karolyn Gardner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d67cf8a18b": {
     "contacts": [
@@ -976,7 +1416,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/15JPSS25C00000232/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Syed Shabahat Ali Shah",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9faacaa110": {
     "contacts": [
@@ -1001,7 +1449,15 @@
     "popEnd": "2027-05-11",
     "hgPath": "https://www.highergov.com/contract/15F06723C0001674/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Larry M Grant",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8cb8952f67": {
     "contacts": [],
@@ -1018,7 +1474,21 @@
     "popEnd": "2027-01-31",
     "hgPath": "https://www.highergov.com/contract/75H70725C00003/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Osmany Duany",
+        "title": "COO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "April M Crawford",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-12e3a5bb46": {
     "contacts": [
@@ -1050,7 +1520,15 @@
     "popEnd": "2026-10-31",
     "hgPath": "https://www.highergov.com/contract/75H71024P00812/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Courtney Gould",
+        "title": "VP of Government Services",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-bca20e2575": {
     "contacts": [
@@ -1082,7 +1560,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/7571MN26C00015/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karolyn Gardner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-ae6f7d224d": {
     "contacts": [],
@@ -1099,7 +1585,15 @@
     "popEnd": "2027-06-15",
     "hgPath": "https://www.highergov.com/contract/75F40125C00066/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Robert Im",
+        "title": "Managing Member",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fa2f2193b6": {
     "contacts": [
@@ -1124,7 +1618,21 @@
     "popEnd": "2028-06-13",
     "hgPath": "https://www.highergov.com/contract/15DDHQ23P00000478/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Andrew Holmes",
+        "title": "Senior Director, Sales Operations",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Andrew Holmves",
+        "title": "Senior Director, Sales Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-24653c34fa": {
     "contacts": [],
@@ -1141,7 +1649,15 @@
     "popEnd": "2026-09-20",
     "hgPath": "https://www.highergov.com/contract/75FCMC24C0022/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Raghu Akkapeddi",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-aa1c0a8259": {
     "contacts": [],
@@ -1158,7 +1674,15 @@
     "popEnd": "2027-01-31",
     "hgPath": "https://www.highergov.com/contract/75H70725C00002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jackson Weaver",
+        "title": "President/CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c4c8888281": {
     "contacts": [
@@ -1190,7 +1714,15 @@
     "popEnd": "2027-06-30",
     "hgPath": "https://www.highergov.com/contract/75F40125P00096/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Pawan K Khatri",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8e950b8af1": {
     "contacts": [],
@@ -1207,7 +1739,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/75ACF123C00010/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "MANI K KUCHAN",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fba036a343": {
     "contacts": [
@@ -1232,7 +1772,21 @@
     "popEnd": "2026-12-31",
     "hgPath": "https://www.highergov.com/contract/75H71025P00228/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brent Cavender",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Shane Smith",
+        "title": "Senior VP of Client Services",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-75a33327b9": {
     "contacts": [
@@ -1257,7 +1811,15 @@
     "popEnd": "2026-08-25",
     "hgPath": "https://www.highergov.com/contract/47QFSA23C0004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Peter Kim",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-faa6b44892": {
     "contacts": [],
@@ -1274,7 +1836,21 @@
     "popEnd": "2026-09-25",
     "hgPath": "https://www.highergov.com/contract/15DDHQ23P00000934/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Zach Kebetz",
+        "title": "Dir. of Business Development, Federal Sales",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Ryan Suneson",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-4e833410e8": {
     "contacts": [],
@@ -1291,7 +1867,15 @@
     "popEnd": "2027-07-12",
     "hgPath": "https://www.highergov.com/contract/47QACA25C0008/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "mary mathews",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-5501f362e2": {
     "contacts": [],
@@ -1308,7 +1892,15 @@
     "popEnd": "2026-11-14",
     "hgPath": "https://www.highergov.com/contract/47HAA023C0005/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Ian Perkins",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9e84e24c2d": {
     "contacts": [
@@ -1333,7 +1925,15 @@
     "popEnd": "2027-07-18",
     "hgPath": "https://www.highergov.com/contract/75D30124C18633/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Michael Bosley",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0820b03fc2": {
     "contacts": [
@@ -1358,7 +1958,15 @@
     "popEnd": "2027-04-30",
     "hgPath": "https://www.highergov.com/contract/75H70724P00167/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Michael Shvenderman",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c9a3124b55": {
     "contacts": [],
@@ -1375,7 +1983,21 @@
     "popEnd": "2027-02-11",
     "hgPath": "https://www.highergov.com/contract/75P00122P00111/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Denise L DAVIS",
+        "title": "Ms.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Denise L. Davis",
+        "title": "Ms",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-f489a61d7d": {
     "contacts": [],
@@ -1392,7 +2014,15 @@
     "popEnd": "2025-04-19",
     "hgPath": "https://www.highergov.com/contract/75FCMC21C0012/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "DENISE A. RAINEY",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-de17668293": {
     "contacts": [
@@ -1417,7 +2047,21 @@
     "popEnd": "2026-12-31",
     "hgPath": "https://www.highergov.com/contract/75H71025P00240/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Osmany Duany",
+        "title": "COO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "April M Crawford",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c08613cbc5": {
     "contacts": [
@@ -1442,7 +2086,15 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/47PD0221C0017/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Hyung-Jun M Kim",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8bae4209f7": {
     "contacts": [],
@@ -1459,7 +2111,21 @@
     "popEnd": "2026-09-20",
     "hgPath": "https://www.highergov.com/contract/75H71024P00632/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Osmany Duany",
+        "title": "COO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "April M Crawford",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-18fd19f9dd": {
     "contacts": [
@@ -1491,7 +2157,15 @@
     "popEnd": "2027-09-30",
     "hgPath": "https://www.highergov.com/contract/75H71025P01174/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Debra A Goodier",
+        "title": "Managing Partner",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-084d476525": {
     "contacts": [
@@ -1516,7 +2190,15 @@
     "popEnd": "2026-08-21",
     "hgPath": "https://www.highergov.com/contract/47QFSA21C0003/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sophia HARRIS",
+        "title": "Managing Member",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-46da0b7da0": {
     "contacts": [],
@@ -1533,7 +2215,21 @@
     "popEnd": "2024-08-15",
     "hgPath": "https://www.highergov.com/contract/75FCMC23C0046/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Antoinette Williams",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Antoinette P Williams",
+        "title": "CEO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-016eca00f3": {
     "contacts": [
@@ -1558,7 +2254,21 @@
     "popEnd": "2026-09-02",
     "hgPath": "https://www.highergov.com/contract/75H71023P01918/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brent Cavender",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Shane Smith",
+        "title": "Senior VP of Client Services",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-afbcb234ae": {
     "contacts": [],
@@ -1575,7 +2285,15 @@
     "popEnd": "2025-09-30",
     "hgPath": "https://www.highergov.com/contract/75H71022P01465/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sri Pacharu",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-38e683d17d": {
     "contacts": [],
@@ -1592,7 +2310,15 @@
     "popEnd": "2025-08-27",
     "hgPath": "https://www.highergov.com/contract/75F40124C00109/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Robert Im",
+        "title": "Managing Member",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fd32116a53": {
     "contacts": [
@@ -1617,7 +2343,15 @@
     "popEnd": "2027-04-30",
     "hgPath": "https://www.highergov.com/contract/47PB5426C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sulaiman Harris",
+        "title": "Principal",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-1632c0f1a4": {
     "contacts": [
@@ -1649,7 +2383,21 @@
     "popEnd": "2027-09-30",
     "hgPath": "https://www.highergov.com/contract/75H71025P01171/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brent Cavender",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Shane Smith",
+        "title": "Senior VP of Client Services",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6f7c00d269": {
     "contacts": [],
@@ -1666,7 +2414,15 @@
     "popEnd": "2023-04-14",
     "hgPath": "https://www.highergov.com/contract/75P00122P00126/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "C.K. Park",
+        "title": "President & CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6a6cda834c": {
     "contacts": [],
@@ -1683,7 +2439,15 @@
     "popEnd": "2027-04-16",
     "hgPath": "https://www.highergov.com/contract/75D30122C13180/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Vincent Lott",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6a887bdf13": {
     "contacts": [],
@@ -1700,7 +2464,15 @@
     "popEnd": "2022-09-07",
     "hgPath": "https://www.highergov.com/contract/75N95020C00023/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Justin Clark",
+        "title": "Chief Operations Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c33cb30e0b": {
     "contacts": [],
@@ -1717,7 +2489,15 @@
     "popEnd": "2025-07-26",
     "hgPath": "https://www.highergov.com/contract/75F40124C00074/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Emil Hinkefent",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d082e992b2": {
     "contacts": [
@@ -1749,7 +2529,15 @@
     "popEnd": "2026-10-31",
     "hgPath": "https://www.highergov.com/contract/75H71024P00804/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Lynn Holton",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-aac68d0906": {
     "contacts": [],
@@ -1766,7 +2554,15 @@
     "popEnd": "2027-01-15",
     "hgPath": "https://www.highergov.com/idv/75N98021D00037/",
     "source": "idv",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Stacy E Philipson Grenis",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-73d81bb930": {
     "contacts": [],
@@ -1783,7 +2579,21 @@
     "popEnd": "2024-03-22",
     "hgPath": "https://www.highergov.com/idv/47QFMA21G0001/",
     "source": "idv",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "RAYMOND ZDANCEWICZ",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "JANE CROSS",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-ad083c5c64": {
     "contacts": [],
@@ -1800,7 +2610,21 @@
     "popEnd": "2018-09-29",
     "hgPath": "https://www.highergov.com/idv/HHSP233201500058C/",
     "source": "idv",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Erin Smalley",
+        "title": "Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Erin L Smalley",
+        "title": "Sr Manager Contracts and Proposals",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0a147a9d20": {
     "contacts": [],
@@ -1817,7 +2641,15 @@
     "popEnd": "2029-04-27",
     "hgPath": "https://www.highergov.com/idv/75N99024D00008/",
     "source": "idv",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Ali Khorramshahi",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-2c1f84fe71": {
     "contacts": [],
@@ -1834,7 +2666,21 @@
     "popEnd": "2028-09-13",
     "hgPath": "https://www.highergov.com/idv/HHSM500200400005I/",
     "source": "idv",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "JEFF PETERSON",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "MARIA LAGOUTARIS",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-669ba51958": {
     "contacts": [],
@@ -1851,7 +2697,21 @@
     "popEnd": "2027-03-31",
     "hgPath": "https://www.highergov.com/contract/HHSM500201700002C/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Tony Pappano",
+        "title": "Contract Admin Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Procurement Inbox",
+        "title": "Group Inbox",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-062f1c2cdf": {
     "contacts": [],
@@ -1868,7 +2728,15 @@
     "popEnd": "2027-10-31",
     "hgPath": "https://www.highergov.com/contract/HQ079618C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karen SOBIESKI",
+        "title": "Sr. Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-2b9de9a0fe": {
     "contacts": [
@@ -1893,7 +2761,21 @@
     "popEnd": "2027-01-28",
     "hgPath": "https://www.highergov.com/contract/47QFMA21C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Ryan S O'Leary",
+        "title": "Chief Commercial Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Laurie Zelesnikar",
+        "title": "Director, Client Relations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-fe425cc066": {
     "contacts": [
@@ -1918,7 +2800,21 @@
     "popEnd": "2027-04-06",
     "hgPath": "https://www.highergov.com/contract/FA877025CB004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Michelle W Lanier",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sarah M Mikeal",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f075813914": {
     "contacts": [],
@@ -1935,7 +2831,21 @@
     "popEnd": "2026-10-08",
     "hgPath": "https://www.highergov.com/contract/W91CRB25C5007/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Curtis Mobly",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Phil HAN",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-58e472346b": {
     "contacts": [],
@@ -1952,7 +2862,21 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/75R60219C00001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Elizabeth Robbins",
+        "title": "ASSOCIATE GENERAL COUNSEL",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Joe D McCollum",
+        "title": "Assistant Director of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1d2533b1a3": {
     "contacts": [],
@@ -1969,7 +2893,21 @@
     "popEnd": "2027-05-31",
     "hgPath": "https://www.highergov.com/contract/FA873021C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jennifer M McElroy",
+        "title": "Bus Devel Analyst Sr Stf",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Pamela Rieg",
+        "title": "Project Mgt & Plng Opns Asc Mgr",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a0fe0f79a7": {
     "contacts": [],
@@ -1986,7 +2924,21 @@
     "popEnd": "2026-10-31",
     "hgPath": "https://www.highergov.com/contract/W9124D21C0007/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Merrick Rosenberg",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Lori Stoneburner",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-4eddb7e2ca": {
     "contacts": [],
@@ -2003,7 +2955,21 @@
     "popEnd": "2027-06-15",
     "hgPath": "https://www.highergov.com/contract/N3220525C1201/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "BRYAN JONES",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "WENDY CORBIN",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-79c7a5e013": {
     "contacts": [
@@ -2028,7 +2994,15 @@
     "popEnd": "2027-03-03",
     "hgPath": "https://www.highergov.com/contract/M6785422C0500/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Adam Schroeder",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-93df6dcb00": {
     "contacts": [],
@@ -2045,7 +3019,15 @@
     "popEnd": "2026-10-02",
     "hgPath": "https://www.highergov.com/contract/HQ085820C0008/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "MARGIE HEMINGER",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d712f5930f": {
     "contacts": [],
@@ -2062,7 +3044,21 @@
     "popEnd": "2026-11-30",
     "hgPath": "https://www.highergov.com/contract/FA703724C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Corey Chambliss",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Marta Colon",
+        "title": "Senior Contract Compliance Specialis",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-b0889d080c": {
     "contacts": [],
@@ -2079,7 +3075,15 @@
     "popEnd": "2027-05-31",
     "hgPath": "https://www.highergov.com/contract/75N91021C00009/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Dominic M Johnson",
+        "title": "VP Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-82dc626bcd": {
     "contacts": [],
@@ -2096,7 +3100,21 @@
     "popEnd": "2027-02-28",
     "hgPath": "https://www.highergov.com/contract/H9241523C0009/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-15ab907dc2": {
     "contacts": [
@@ -2121,7 +3139,21 @@
     "popEnd": "2026-11-22",
     "hgPath": "https://www.highergov.com/contract/FA857122C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Monica Rust",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Brian Day",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-b6bc65a058": {
     "contacts": [],
@@ -2138,7 +3170,21 @@
     "popEnd": "2027-02-12",
     "hgPath": "https://www.highergov.com/contract/N0003924C0004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kelly Irreno",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Matt Huston",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3846a0604a": {
     "contacts": [],
@@ -2155,7 +3201,15 @@
     "popEnd": "2027-02-28",
     "hgPath": "https://www.highergov.com/contract/W91RUS22C0021/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Michael Sweeney",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-ab03490d7a": {
     "contacts": [],
@@ -2172,7 +3226,15 @@
     "popEnd": "2027-02-14",
     "hgPath": "https://www.highergov.com/contract/W91RUS23C0014/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Todd P Lawson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-4fb3bd26e8": {
     "contacts": [],
@@ -2189,7 +3251,21 @@
     "popEnd": "2027-02-21",
     "hgPath": "https://www.highergov.com/contract/W911QY23C0045/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kevin W Meeder",
+        "title": "Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Stuart M Abrahamson",
+        "title": "Chief Financial Officer",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-2cae9a2cdf": {
     "contacts": [],
@@ -2206,7 +3282,15 @@
     "popEnd": "2027-03-31",
     "hgPath": "https://www.highergov.com/contract/M6785423C4902/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Greta Brant",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-0c9a7695ad": {
     "contacts": [],
@@ -2223,7 +3307,15 @@
     "popEnd": "2027-09-30",
     "hgPath": "https://www.highergov.com/contract/W91RUS24C0007/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Joseph Cavano",
+        "title": "Director of Business Affairs",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-370a384ab0": {
     "contacts": [],
@@ -2240,7 +3332,15 @@
     "popEnd": "2027-03-05",
     "hgPath": "https://www.highergov.com/contract/W519TC24C0011/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brittney Benson",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d1cf844316": {
     "contacts": [],
@@ -2257,7 +3357,21 @@
     "popEnd": "2026-10-22",
     "hgPath": "https://www.highergov.com/contract/W81XWH21C0086/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "Div Bus Program Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Chris Moody",
+        "title": "EGM",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-481168ec3d": {
     "contacts": [],
@@ -2274,7 +3388,21 @@
     "popEnd": "2027-03-20",
     "hgPath": "https://www.highergov.com/contract/W91CRB24C0002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "April M Lambert",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-bf2f238878": {
     "contacts": [
@@ -2299,7 +3427,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/HT001121C0021/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kerrie McCabe",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-724d676e7c": {
     "contacts": [],
@@ -2316,7 +3452,15 @@
     "popEnd": "2026-12-31",
     "hgPath": "https://www.highergov.com/contract/FA702222C0002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Marion Whitely",
+        "title": "Contracts Associate",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-ed9b80e4bf": {
     "contacts": [
@@ -2341,7 +3485,21 @@
     "popEnd": "2026-09-25",
     "hgPath": "https://www.highergov.com/contract/H9240025C0003/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sean McNamara",
+        "title": "Oper General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d22e7b5324": {
     "contacts": [
@@ -2366,7 +3524,21 @@
     "popEnd": "2026-12-06",
     "hgPath": "https://www.highergov.com/contract/HT001124C0007/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Monica Rust",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Brian Day",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a584a53433": {
     "contacts": [
@@ -2391,7 +3563,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/HT001123C0099/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kerrie McCabe",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e0a10f6ae4": {
     "contacts": [
@@ -2416,7 +3596,21 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/FA873023CB037/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Brian Hobbs",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Stephanie White",
+        "title": "VP of Contracts",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-997f1a3064": {
     "contacts": [
@@ -2441,7 +3635,15 @@
     "popEnd": "2026-12-10",
     "hgPath": "https://www.highergov.com/contract/FA830725CB004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Kelly Bower",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-72fda9fa6a": {
     "contacts": [
@@ -2466,7 +3668,21 @@
     "popEnd": "2027-03-21",
     "hgPath": "https://www.highergov.com/contract/HQ003423C0014/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Geraldine Harper",
+        "title": "Vice President - Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Peter Gaaserud",
+        "title": "SVP of Contracts and Procurement",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-5a2b9cec58": {
     "contacts": [],
@@ -2483,7 +3699,15 @@
     "popEnd": "2027-03-12",
     "hgPath": "https://www.highergov.com/contract/75S20422C00001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Charles D Williams",
+        "title": "Chief Financial Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6e9bd5743d": {
     "contacts": [],
@@ -2500,7 +3724,15 @@
     "popEnd": "2026-12-31",
     "hgPath": "https://www.highergov.com/contract/FA489023C0019/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Melissa England",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-4489acc181": {
     "contacts": [
@@ -2525,7 +3757,15 @@
     "popEnd": "2026-09-27",
     "hgPath": "https://www.highergov.com/contract/15F06722C0000662/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "SIDDHARTHA CHOWDHARY",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-9b8c0abd2d": {
     "contacts": [],
@@ -2542,7 +3782,15 @@
     "popEnd": "2027-01-11",
     "hgPath": "https://www.highergov.com/contract/FA873022C8510/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Melissa England",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3195a0d423": {
     "contacts": [
@@ -2567,7 +3815,21 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/FA254123CB002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Dawn Dozier",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "KAREN MELANCON",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-dfa35b4fc7": {
     "contacts": [
@@ -2592,7 +3854,21 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/47PC0822C0002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "HEATHER BROUGHTON",
+        "title": "CEO/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Robyn Mortensen",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1d7ad3b789": {
     "contacts": [],
@@ -2609,7 +3885,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/75D30121C12798/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-c14e96c3e9": {
     "contacts": [
@@ -2634,7 +3918,15 @@
     "popEnd": "2027-02-28",
     "hgPath": "https://www.highergov.com/contract/M6785424C7700/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Shandy Kurth",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a4382fee7e": {
     "contacts": [
@@ -2659,7 +3951,21 @@
     "popEnd": "2026-12-31",
     "hgPath": "https://www.highergov.com/contract/H9241522C0003/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1d03529b43": {
     "contacts": [],
@@ -2676,7 +3982,15 @@
     "popEnd": "2027-02-26",
     "hgPath": "https://www.highergov.com/contract/75FCMC23C0010/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Leanne Cozad",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-71345b5a44": {
     "contacts": [
@@ -2701,7 +4015,15 @@
     "popEnd": "2026-09-29",
     "hgPath": "https://www.highergov.com/contract/W912DY22C0027/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jeffrey Babos",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e5cc3066df": {
     "contacts": [],
@@ -2718,7 +4040,21 @@
     "popEnd": "2027-03-17",
     "hgPath": "https://www.highergov.com/contract/HB000123C1000/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "BRYAN JONES",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "WENDY CORBIN",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3c921ec8ba": {
     "contacts": [
@@ -2743,7 +4079,21 @@
     "popEnd": "2027-03-28",
     "hgPath": "https://www.highergov.com/contract/HT001524C0005/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Anita Fligge",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sandra Atwood",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a7b7b231a4": {
     "contacts": [],
@@ -2760,7 +4110,21 @@
     "popEnd": "2027-06-15",
     "hgPath": "https://www.highergov.com/contract/FA882322C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Jerry D Jones",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jerry Jones",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6821b190b4": {
     "contacts": [],
@@ -2777,7 +4141,15 @@
     "popEnd": "2026-12-30",
     "hgPath": "https://www.highergov.com/contract/N0060423C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sherry Gibson",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-ab80822a02": {
     "contacts": [
@@ -2802,7 +4174,15 @@
     "popEnd": "2026-09-30",
     "hgPath": "https://www.highergov.com/contract/FA861223CB014/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Marlu Oswald",
+        "title": "CEO/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8af3648ae2": {
     "contacts": [
@@ -2827,7 +4207,15 @@
     "popEnd": "2027-01-17",
     "hgPath": "https://www.highergov.com/contract/15F06723C0002262/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Larry M Grant",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-b4f1f1c670": {
     "contacts": [
@@ -2852,7 +4240,15 @@
     "popEnd": "2026-09-26",
     "hgPath": "https://www.highergov.com/contract/N0018922PZ302/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Daniel Isgro",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-0a2f307d4f": {
     "contacts": [],
@@ -2869,7 +4265,21 @@
     "popEnd": "2027-03-31",
     "hgPath": "https://www.highergov.com/contract/FA940122C0005/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "David Zalcmann",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "David  Zalcmann",
+        "title": "COO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6d506770d1": {
     "contacts": [
@@ -2894,7 +4304,21 @@
     "popEnd": "2026-11-23",
     "hgPath": "https://www.highergov.com/contract/HT001123C0080/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "JAMES O'FARRELL",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Christine Taylor",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e9bfae6972": {
     "contacts": [],
@@ -2911,7 +4335,21 @@
     "popEnd": "2026-09-28",
     "hgPath": "https://www.highergov.com/contract/75D30122C14496/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "James B Luther",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "James Luther",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e30230507b": {
     "contacts": [
@@ -2936,7 +4374,21 @@
     "popEnd": "2027-02-28",
     "hgPath": "https://www.highergov.com/contract/HT001122C0009/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Mike Gelsleichter",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sandra Atwood",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-35a0d55d94": {
     "contacts": [],
@@ -2953,7 +4405,15 @@
     "popEnd": "2027-09-29",
     "hgPath": "https://www.highergov.com/contract/75D30123C17570/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Joe Durbin",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d0cfa9f1ea": {
     "contacts": [
@@ -2978,7 +4438,15 @@
     "popEnd": "2027-01-21",
     "hgPath": "https://www.highergov.com/contract/FA877024CB003/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "PTARMICA GARNICK",
+        "title": "CAO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-669ad9bbbc": {
     "contacts": [
@@ -3003,7 +4471,15 @@
     "popEnd": "2026-10-31",
     "hgPath": "https://www.highergov.com/contract/FA810124C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8ae4db8940": {
     "contacts": [],
@@ -3020,7 +4496,21 @@
     "popEnd": "2027-03-30",
     "hgPath": "https://www.highergov.com/contract/W91RUS23C0009/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Greg Kolean",
+        "title": "President of PBDC Federal",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Heather Esau",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-533f7c1ba3": {
     "contacts": [],
@@ -3037,7 +4527,21 @@
     "popEnd": "2028-02-18",
     "hgPath": "https://www.highergov.com/contract/W15P7T25C0001/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Curtis Rotan",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Ashley Padgett",
+        "title": "SBA Compliance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-feedf5db52": {
     "contacts": [
@@ -3062,7 +4566,15 @@
     "popEnd": "2026-09-10",
     "hgPath": "https://www.highergov.com/contract/HQ003424C0120/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "TJ Rodebaugh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-c0dcb98ef3": {
     "contacts": [],
@@ -3079,7 +4591,21 @@
     "popEnd": "2027-03-21",
     "hgPath": "https://www.highergov.com/contract/75P00123P00127/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sheila Hamlin",
+        "title": "LLC Manager/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kari Pyszko",
+        "title": "Compliance Program Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-b17071a51f": {
     "contacts": [
@@ -3104,7 +4630,21 @@
     "popEnd": "2027-03-16",
     "hgPath": "https://www.highergov.com/contract/HT001123C0073/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Sean Tafoya",
+        "title": "President\\LLC Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kari Pyszko",
+        "title": "Compliance Program Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-acd9dc7a5f": {
     "contacts": [
@@ -3129,7 +4669,21 @@
     "popEnd": "2027-02-28",
     "hgPath": "https://www.highergov.com/contract/FA489023C0008/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Karla Stogsdill",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "SANDRA Hutches",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-5a33bcfb91": {
     "contacts": [
@@ -3154,7 +4708,15 @@
     "popEnd": "2027-01-31",
     "hgPath": "https://www.highergov.com/contract/FA877023CB002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-36e2d085a8": {
     "contacts": [],
@@ -3171,7 +4733,21 @@
     "popEnd": "2027-01-30",
     "hgPath": "https://www.highergov.com/contract/FA703724C0002/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Adrienne Freeland",
+        "title": "Interim President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jerald Forrest",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-c5fa7a977d": {
     "contacts": [],
@@ -3188,7 +4764,21 @@
     "popEnd": "2027-04-08",
     "hgPath": "https://www.highergov.com/contract/N0003022C4200/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Monica Rust",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Brian Day",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-fdc9098705": {
     "contacts": [
@@ -3213,7 +4803,21 @@
     "popEnd": "2026-11-19",
     "hgPath": "https://www.highergov.com/contract/HT001122C0006/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "george fukumoto",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "renee puels",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6774da6516": {
     "contacts": [],
@@ -3230,7 +4834,21 @@
     "popEnd": "2027-11-13",
     "hgPath": "https://www.highergov.com/contract/W56KGU25C0004/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "GARY D BUTLER",
+        "title": "CEO/Chairman",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "FRANCES M PARISI",
+        "title": "CFO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-cb00a62fb9": {
     "contacts": [],
@@ -3247,7 +4865,21 @@
     "popEnd": "2027-07-31",
     "hgPath": "https://www.highergov.com/contract/W91CRB21C5007/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Chad Gatlin",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Robyn McColligan",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-76ff831055": {
     "contacts": [],
@@ -3264,7 +4896,15 @@
     "popEnd": "2027-02-25",
     "hgPath": "https://www.highergov.com/contract/W91RUS24C0014/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Scott Carroll",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-9472b403a5": {
     "contacts": [
@@ -3289,7 +4929,15 @@
     "popEnd": "2026-09-28",
     "hgPath": "https://www.highergov.com/contract/W9133L22C3305/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Daniel Isgro",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-0d69a674bb": {
     "contacts": [
@@ -3314,7 +4962,21 @@
     "popEnd": "2027-01-03",
     "hgPath": "https://www.highergov.com/contract/HT001123C0087/",
     "source": "contract",
-    "dateEnriched": "2026-07-08"
+    "dateEnriched": "2026-07-08",
+    "companyContacts": [
+      {
+        "name": "Mark Lamont",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Maya Ogden",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-2940e7c5a6": {
     "contacts": [
@@ -15216,7 +16878,15 @@
       "uei": "YANAVG43GCB6",
       "cage": "7LTM1",
       "hgPath": "https://www.highergov.com/awardee/nisgaa-tek-llc-10111592/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Eric A Carlson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1f51036ee1": {
     "contacts": [],
@@ -15298,7 +16968,21 @@
       "uei": "J2DBH63BPDN3",
       "cage": "8H7D3",
       "hgPath": "https://www.highergov.com/awardee/koniag-it-systems-llc-12697347/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Chris Hockenberry",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1f2fab1813": {
     "contacts": [],
@@ -15384,7 +17068,21 @@
       "uei": "K218AKKG7SH6",
       "cage": "7W2N1",
       "hgPath": "https://www.highergov.com/awardee/akima-facilities-operations-llc-10004361/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-71dc33c87f": {
     "contacts": [],
@@ -15426,7 +17124,21 @@
       "uei": "DJBTEEVJXCH8",
       "cage": "9NJF1",
       "hgPath": "https://www.highergov.com/awardee/alaska-northstar-federal-llc-540190849/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Chris Turnham",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Ptarmica Garnick",
+        "title": "CAO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e16b4f47db": {
     "contacts": [],
@@ -15464,7 +17176,15 @@
       "uei": "V6WFXPAQNYC7",
       "cage": "7XWP4",
       "hgPath": "https://www.highergov.com/awardee/echelon-services-llc-10003546/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Angela Rice",
+        "title": "Ms",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3a847f8555": {
     "contacts": [],
@@ -15494,7 +17214,15 @@
       "uei": "GFFEGV4LU163",
       "cage": "5LEK6",
       "hgPath": "https://www.highergov.com/awardee/blue-yonder-inc-10119558/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Aaron S Haas",
+        "title": "Dir Of Program Operations - GAD",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-fcbb9aaa3e": {
     "contacts": [
@@ -15628,7 +17356,21 @@
       "uei": "WDAKBC8NA214",
       "cage": "0FVN8",
       "hgPath": "https://www.highergov.com/awardee/abacus-technology-corporation-10001222/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "RAYMOND ZDANCEWICZ",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "JANE CROSS",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-64b4899786": {
     "contacts": [
@@ -15734,7 +17476,15 @@
       "uei": "HFK9V1G2B513",
       "cage": "78205",
       "hgPath": "https://www.highergov.com/awardee/motorola-solutions-inc-10109750/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jessica Henning",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-dbe99ac03a": {
     "contacts": [],
@@ -15796,7 +17546,21 @@
       "uei": "EWSLADQCSMS1",
       "cage": "375B5",
       "hgPath": "https://www.highergov.com/awardee/edenred-benefits-llc-10112165/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jacqui Patel",
+        "title": "Sales Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "DHARMESH Parikh",
+        "title": "VP of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d05987e5d0": {
     "contacts": [],
@@ -15834,7 +17598,21 @@
       "uei": "HGUJN4N569C4",
       "cage": "8PJ91",
       "hgPath": "https://www.highergov.com/awardee/pdo-ahusaka-jv-ii-llc-12731636/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Aaron Finnigan",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Heather Esau",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6f54ed6dad": {
     "contacts": [
@@ -15880,7 +17658,15 @@
       "uei": "CXH4JDVF3QD7",
       "cage": "8SMF8",
       "hgPath": "https://www.highergov.com/awardee/coho-technology-solutions-llc-12740743/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jeffrey Babos",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d66bfc3fba": {
     "contacts": [],
@@ -16090,7 +17876,21 @@
       "uei": "L9CRNSMZHRF5",
       "cage": "8JMA2",
       "hgPath": "https://www.highergov.com/awardee/cyberstar-llc-12712095/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "April M Lambert",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-9e795c8b65": {
     "contacts": [],
@@ -16188,7 +17988,15 @@
       "uei": "D3DYHNPJ6W14",
       "cage": "821D8",
       "hgPath": "https://www.highergov.com/awardee/great-hill-solutions-llc-12512157/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "TJ Rodebaugh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-12b25e2d0e": {
     "contacts": [
@@ -16414,7 +18222,15 @@
       "uei": "ZRNYZUB8ZF44",
       "cage": "07N78",
       "hgPath": "https://www.highergov.com/awardee/nfb-management-consultants-llc-966944596/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Fogle",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-340ab506de": {
     "contacts": [],
@@ -16464,7 +18280,15 @@
       "uei": "SMNWM6HN79X5",
       "cage": "07MU1",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-information-technology-inc-10115071/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Bianca Maheia",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-5f68220436": {
     "contacts": [],
@@ -16482,7 +18306,21 @@
       "uei": "DRB4CPKGSA45",
       "cage": "95CR6",
       "hgPath": "https://www.highergov.com/awardee/summome-native-ventures-llc-12787021/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Nicholas B Dunn",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jill Gravatt",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a00064deec": {
     "contacts": [
@@ -16540,7 +18378,15 @@
       "uei": "G3MDK3Z5GHH7",
       "cage": "7BEG9",
       "hgPath": "https://www.highergov.com/awardee/significance-inc-10006044/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mary M Ahern-Snyder",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e9533650ab": {
     "contacts": [],
@@ -16570,7 +18416,15 @@
       "uei": "VTEEHXB443Z7",
       "cage": "9R0E6",
       "hgPath": "https://www.highergov.com/awardee/sault-tribe-solution-services-llc-628219233/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Cheryl L Sands",
+        "title": "Contracts & Compliance Administrator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-78e30176c2": {
     "contacts": [
@@ -16676,7 +18530,21 @@
       "uei": "EDL1ZNGUV8Y9",
       "cage": "7WU36",
       "hgPath": "https://www.highergov.com/awardee/systems-intelligence-llc-12491724/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f762a2c0a0": {
     "contacts": [],
@@ -16714,7 +18582,21 @@
       "uei": "W1MAMVS52R27",
       "cage": "689V3",
       "hgPath": "https://www.highergov.com/awardee/horus-technology-solutions-inc-10006587/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gin-hua Goh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Mehdi Bousaidi",
+        "title": "COO & Co-Founder",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6cd8c1575a": {
     "contacts": [],
@@ -16784,7 +18666,21 @@
       "uei": "S58NJBBDKRF5",
       "cage": "7MX68",
       "hgPath": "https://www.highergov.com/awardee/kadiak-llc-10112561/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joshua Vo",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-9073499073": {
     "contacts": [
@@ -16862,7 +18758,21 @@
       "uei": "LE5DMBV7HME5",
       "cage": "8H4J0",
       "hgPath": "https://www.highergov.com/awardee/koniag-professional-services-llc-12695796/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joshua Vo",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-9a77486890": {
     "contacts": [],
@@ -16892,7 +18802,15 @@
       "uei": "XHX2MLMGRK67",
       "cage": "7F6M0",
       "hgPath": "https://www.highergov.com/awardee/mid-atlantic-technical-and-executive-consulting-10079929/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mark R Magnotta",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-004533a853": {
     "contacts": [],
@@ -16922,7 +18840,15 @@
       "uei": "EKYYYAQFUSV4",
       "cage": "8KNU1",
       "hgPath": "https://www.highergov.com/awardee/cognito-systems-llc-12716485/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Theressa Kim Thomas",
+        "title": "Managing Partner",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a55078004e": {
     "contacts": [],
@@ -16960,7 +18886,21 @@
       "uei": "W4JMN6B97WC4",
       "cage": "7LQW8",
       "hgPath": "https://www.highergov.com/awardee/chenega-it-enterprise-services-10001592/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jeffrey Sallee",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-571e59ff66": {
     "contacts": [],
@@ -16998,7 +18938,15 @@
       "uei": "MQ2ETHPEB7T6",
       "cage": "8TBG2",
       "hgPath": "https://www.highergov.com/awardee/goldbelt-apex-llc-12313853/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jasmine Stewart",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e24aef4377": {
     "contacts": [],
@@ -17016,7 +18964,21 @@
       "uei": "DMAEU39PEEK5",
       "cage": "9SPJ3",
       "hgPath": "https://www.highergov.com/awardee/chenega-supply-chain-solutions-llc-680152766/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "C.A. Turner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-dd216c28db": {
     "contacts": [
@@ -17074,7 +19036,21 @@
       "uei": "MZK8TCNF24G2",
       "cage": "3W1D7",
       "hgPath": "https://www.highergov.com/awardee/raytheon-company-10118397/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Josephine Fenton",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sean McKenna",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d03eaa0751": {
     "contacts": [],
@@ -17143,7 +19119,15 @@
       "uei": "JP79C5JMY4C9",
       "cage": "36AN7",
       "hgPath": "https://www.highergov.com/awardee/eagle-security-group-inc-10070813/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "MATTHEW Nisley",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1e8038346a": {
     "contacts": [
@@ -17169,7 +19153,15 @@
       "uei": "TMEKKBCYLSR1",
       "cage": "3D060",
       "hgPath": "https://www.highergov.com/awardee/the-columbia-group-inc-10117082/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Martin Arase",
+        "title": "Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-bb4377f8e1": {
     "contacts": [],
@@ -17243,7 +19235,21 @@
       "uei": "LFWYEHL5DCJ7",
       "cage": "3VRY7",
       "hgPath": "https://www.highergov.com/awardee/the-hill-group-inc-10008419/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "FREDERICK L Hill",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "BEVERLY Sehhat",
+        "title": "VP of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-45b03a3ad5": {
     "contacts": [],
@@ -17273,7 +19279,15 @@
       "uei": "F1QZXZNLZJF2",
       "cage": "7QNG6",
       "hgPath": "https://www.highergov.com/awardee/skylight-inc-10010384/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Eleanor Hyman",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8d65b38fe6": {
     "contacts": [
@@ -17379,7 +19393,15 @@
       "uei": "KHLFC1HXCKL1",
       "cage": "7YTL2",
       "hgPath": "https://www.highergov.com/awardee/kikaha-solutions-llc-12500518/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tricia Sewnarine",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-4826ed173f": {
     "contacts": [
@@ -17477,7 +19499,15 @@
       "uei": "MMLKPW9JLX64",
       "cage": "6XWA8",
       "hgPath": "https://www.highergov.com/awardee/science-applications-international-corporation-10117683/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dianne Gaspar",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-be42852bfe": {
     "contacts": [],
@@ -17495,7 +19525,21 @@
       "uei": "CVEMGYV2YJW1",
       "cage": "57ZD8",
       "hgPath": "https://www.highergov.com/awardee/cherokee-nation-defense-solutions-llc-13290027/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Robert Maldonado",
+        "title": "Operations General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1b4fabae7e": {
     "contacts": [],
@@ -17545,7 +19589,21 @@
       "uei": "DRB4CPKGSA45",
       "cage": "95CR6",
       "hgPath": "https://www.highergov.com/awardee/summome-native-ventures-llc-12787021/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Nicholas B Dunn",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jill Gravatt",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-7822fe5b5b": {
     "contacts": [],
@@ -17583,7 +19641,21 @@
       "uei": "N19BZQQSEUV4",
       "cage": "8H6Y4",
       "hgPath": "https://www.highergov.com/awardee/koniag-data-solutions-llc-12697307/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jens Curtis",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-41d71ef7ea": {
     "contacts": [],
@@ -17601,7 +19673,15 @@
       "uei": "XJKYQJGYDKM7",
       "cage": "88Z25",
       "hgPath": "https://www.highergov.com/awardee/shift5-inc-10012605/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennifer L Ogren",
+        "title": "Contracts & Legal Operations Lead",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-817e5d42a3": {
     "contacts": [
@@ -17627,7 +19707,21 @@
       "uei": "JSCHHWMLJHA5",
       "cage": "78WS1",
       "hgPath": "https://www.highergov.com/awardee/ho-chunk-shared-services-company-10006075/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Janis Dearman",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Michael Jelken",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-234189c96e": {
     "contacts": [
@@ -17677,7 +19771,15 @@
       "uei": "NBQCBJ6FXBU4",
       "cage": "3EX59",
       "hgPath": "https://www.highergov.com/awardee/the-emmes-company-llc-10000695/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dominic M Johnson",
+        "title": "VP Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8f4bfa593c": {
     "contacts": [
@@ -17703,7 +19805,15 @@
       "uei": "N3GDEB78RNF8",
       "cage": "7VP89",
       "hgPath": "https://www.highergov.com/awardee/galapagos-federal-systems-llc-10005273/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Todd P Lawson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-c1c2226fc4": {
     "contacts": [],
@@ -17761,7 +19871,15 @@
       "uei": "TXANNMGHB6N5",
       "cage": "061G8",
       "hgPath": "https://www.highergov.com/awardee/advanced-navigation-positioning-corporation-12013870/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tim Arbogast",
+        "title": "CFO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a4f1e6a82a": {
     "contacts": [],
@@ -17799,7 +19917,8 @@
       "uei": "N5ZXE5L9UC66",
       "cage": "1D611",
       "hgPath": "https://www.highergov.com/awardee/pricewaterhousecoopers-llp-10009976/"
-    }
+    },
+    "companyContacts": []
   },
   "EX-4821daea45": {
     "contacts": [],
@@ -17853,7 +19972,15 @@
       "uei": "MRFZLZXYFHN6",
       "cage": "887C3",
       "hgPath": "https://www.highergov.com/awardee/namauu-technological-and-industrial-llc-12671525/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Kanakaokekai  Namauu",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-a2398d94b1": {
     "contacts": [],
@@ -17935,7 +20062,21 @@
       "uei": "S6SET38AQ2N7",
       "cage": "4DBC3",
       "hgPath": "https://www.highergov.com/awardee/lone-star-aerospace-inc-10009819/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Steve ROEMERMAN",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "MATTHEW BOWERS",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-90abcf08f8": {
     "contacts": [
@@ -18125,7 +20266,21 @@
       "uei": "Q2M4FYALZJ89",
       "cage": "55RC1",
       "hgPath": "https://www.highergov.com/awardee/iron-bow-technologies-llc-10116479/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Richard Hartman",
+        "title": "Chief Legal Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jodie Vaughn",
+        "title": "Contracts, Director",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-34387c0313": {
     "contacts": [],
@@ -18163,7 +20318,15 @@
       "uei": "MAA3SBSDQVM1",
       "cage": "7QEG9",
       "hgPath": "https://www.highergov.com/awardee/kpmg-10114568/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michelle Brooke",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f66f04dacf": {
     "contacts": [
@@ -18348,7 +20511,15 @@
       "uei": "D3DYHNPJ6W14",
       "cage": "821D8",
       "hgPath": "https://www.highergov.com/awardee/great-hill-solutions-llc-12512157/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "TJ Rodebaugh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-db7ea1fba8": {
     "contacts": [
@@ -18374,7 +20545,15 @@
       "uei": "MKAQAB8ECG69",
       "cage": "8Q2A9",
       "hgPath": "https://www.highergov.com/awardee/dni-emerging-technologies-llc-12731540/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-ceeccffc06": {
     "contacts": [
@@ -18440,7 +20619,21 @@
       "uei": "JCA9NYK4G1M9",
       "cage": "7K1H7",
       "hgPath": "https://www.highergov.com/awardee/mb-solutions-inc-10006830/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Rosalyn D Thompson-Blackwell",
+        "title": "CEO/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Derrick Blackwell",
+        "title": "Chief Operations Officer",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-31571dd79d": {
     "contacts": [],
@@ -18458,7 +20651,21 @@
       "uei": "C47BNA8GM833",
       "cage": "1ZD18",
       "hgPath": "https://www.highergov.com/awardee/accenture-federal-services-llc-10109693/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michelle W Lanier",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sarah M Mikeal",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-fbdb039431": {
     "contacts": [
@@ -18504,7 +20711,21 @@
       "uei": "F7B6FDR8X8E4",
       "cage": "8PK51",
       "hgPath": "https://www.highergov.com/awardee/nativearc-llc-10090210/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Lara  Snow",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Niki Simoneaux",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f0f049a48a": {
     "contacts": [
@@ -18530,7 +20751,21 @@
       "uei": "NE4LCFKM1T44",
       "cage": "58LL9",
       "hgPath": "https://www.highergov.com/awardee/quiet-professionals-llc-10003772/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Jones",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Danielle Gonzalez",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d44a05d30a": {
     "contacts": [],
@@ -18568,7 +20803,15 @@
       "uei": "ZJEJHF7J5NX1",
       "cage": "7Q7H2",
       "hgPath": "https://www.highergov.com/awardee/humanit-solutions-llc-10002984/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mark Human",
+        "title": "President/CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3ac1a21b00": {
     "contacts": [],
@@ -18625,7 +20868,21 @@
       "uei": "JPBAJRKKMW26",
       "cage": "3N1N9",
       "hgPath": "https://www.highergov.com/awardee/james-bell-associates-inc-10004347/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "LINA GONG",
+        "title": "EVP of Finance and Operations",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Erly Garba",
+        "title": "Finance Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1247951cb4": {
     "contacts": [],
@@ -18643,7 +20900,21 @@
       "uei": "HD1WMN6945W6",
       "cage": "1HEX5",
       "hgPath": "https://www.highergov.com/awardee/university-of-washington-10111381/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Amanda C Snyder",
+        "title": "Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "ADELIA YEE",
+        "title": "Central Operations Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-bf74730cf7": {
     "contacts": [],
@@ -18741,7 +21012,15 @@
       "uei": "WT7KNDWBFLK5",
       "cage": "5AJF6",
       "hgPath": "https://www.highergov.com/awardee/tm3-solutions-inc-10004966/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Thomas Moore",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8185723a82": {
     "contacts": [],
@@ -18771,7 +21050,21 @@
       "uei": "K8RNMK1CCQW3",
       "cage": "7BV53",
       "hgPath": "https://www.highergov.com/awardee/paragon-professional-services-llc-10020692/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Christopher Smith",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Rhonda Gildersleeve",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f3f36c1980": {
     "contacts": [
@@ -18881,7 +21174,21 @@
       "uei": "UJJVZKS13H49",
       "cage": "7XKB7",
       "hgPath": "https://www.highergov.com/awardee/cherokee-nation-integrated-health-l-l-c-12496604/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "JENNYLYNN GATES",
+        "title": "SBA Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Chase A Evans",
+        "title": "Operations General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d020a51b3c": {
     "contacts": [],
@@ -18943,7 +21250,15 @@
       "uei": "FU9CTUNLXNP2",
       "cage": "9D8B4",
       "hgPath": "https://www.highergov.com/awardee/fedpath-solutions-llc-264641665/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Anitha Timiri Gopalakrishnan",
+        "title": "Ms.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-5cf8c1519d": {
     "contacts": [],
@@ -19021,7 +21336,15 @@
       "uei": "DUMUHNHQJZG5",
       "cage": "7WED0",
       "hgPath": "https://www.highergov.com/awardee/alaska-northstar-resources-llc-10003300/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "PTARMICA GARNICK",
+        "title": "CAO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8276d53944": {
     "contacts": [],
@@ -19091,7 +21414,21 @@
       "uei": "EMNDBXF7JSK9",
       "cage": "8QYZ6",
       "hgPath": "https://www.highergov.com/awardee/alaka-i-services-group-inc-12739540/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Ken Bautista",
+        "title": "Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Warren Loo",
+        "title": "Member",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-722589fbfd": {
     "contacts": [],
@@ -19193,7 +21530,15 @@
       "uei": "V4GVJZF4S263",
       "cage": "81GP1",
       "hgPath": "https://www.highergov.com/awardee/nakupuna-solutions-llc-10001183/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Fogle",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-03eb1aabd4": {
     "contacts": [
@@ -19263,7 +21608,15 @@
       "uei": "MKAQAB8ECG69",
       "cage": "8Q2A9",
       "hgPath": "https://www.highergov.com/awardee/dni-emerging-technologies-llc-12731540/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1ab39fe6f0": {
     "contacts": [
@@ -19289,7 +21642,15 @@
       "uei": "NG2LMHAKSM55",
       "cage": "69CD1",
       "hgPath": "https://www.highergov.com/awardee/duchancell-engineering-consulting-llc-10012414/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Fernando A Cancel III",
+        "title": "President & CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-dbc1ab391d": {
     "contacts": [],
@@ -19327,7 +21688,15 @@
       "uei": "K6YQDN9NAPG7",
       "cage": "60KW1",
       "hgPath": "https://www.highergov.com/awardee/insignia-federal-group-llc-10002688/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "KAREN Lee",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1a42072536": {
     "contacts": [
@@ -19353,7 +21722,21 @@
       "uei": "LE5DMBV7HME5",
       "cage": "8H4J0",
       "hgPath": "https://www.highergov.com/awardee/koniag-professional-services-llc-12695796/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joshua Vo",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-e7d93e6b1f": {
     "contacts": [],
@@ -19371,7 +21754,15 @@
       "uei": "NAY6BAD7UDX4",
       "cage": "7FQZ7",
       "hgPath": "https://www.highergov.com/awardee/tanaq-government-services-llc-10120421/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mark Thomas",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-d9eed218d6": {
     "contacts": [],
@@ -19457,7 +21848,15 @@
       "uei": "LJHDHAE4FB75",
       "cage": "8N8J5",
       "hgPath": "https://www.highergov.com/awardee/kaiva-tech-llc-12725758/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Cameron EchoHawk",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f947d5e146": {
     "contacts": [],
@@ -19639,7 +22038,21 @@
       "uei": "NMNLQN6T66Z5",
       "cage": "8JYD2",
       "hgPath": "https://www.highergov.com/awardee/lawelawe-technology-services-inc-12714435/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gerald Lam",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jerald Forrest",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-93b2ea5267": {
     "contacts": [
@@ -19677,7 +22090,21 @@
       "uei": "ME3TGWRFMU94",
       "cage": "31QX7",
       "hgPath": "https://www.highergov.com/awardee/united-network-for-organ-sharing-10005119/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Elizabeth Robbins",
+        "title": "ASSOCIATE GENERAL COUNSEL",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Joe D McCollum",
+        "title": "Assistant Director of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-43ea712d77": {
     "contacts": [
@@ -19943,7 +22370,15 @@
       "uei": "UM53UXL5QNF5",
       "cage": "816Z3",
       "hgPath": "https://www.highergov.com/awardee/tanaq-support-services-llc-10002654/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Sharon Burks",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-6a2604abb4": {
     "contacts": [
@@ -20117,7 +22552,21 @@
       "uei": "GXL9RAYKASF5",
       "cage": "7W2L8",
       "hgPath": "https://www.highergov.com/awardee/compass-point-llc-10005469/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1b87302cb9": {
     "contacts": [],
@@ -20147,7 +22596,21 @@
       "uei": "EY7ZKMMAA7D7",
       "cage": "8V6C6",
       "hgPath": "https://www.highergov.com/awardee/lawelawe-defense-inc-12605230/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Adrienne Freeland",
+        "title": "Interim President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jerald Forrest",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-067fc0a6d1": {
     "contacts": [],
@@ -20253,7 +22716,15 @@
       "uei": "YH2KNCLY7DD7",
       "cage": "1TZ88",
       "hgPath": "https://www.highergov.com/awardee/advanced-systems-supportability-engineering-technologies-and-tools-inc-10006761/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Christopher Renz",
+        "title": "Vice President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-2078822b87": {
     "contacts": [],
@@ -20295,7 +22766,15 @@
       "uei": "KV92LMGED2C8",
       "cage": "9FWT0",
       "hgPath": "https://www.highergov.com/awardee/taku-health-services-llc-362804244/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Brett Wilson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-3abc187302": {
     "contacts": [],
@@ -20345,7 +22824,21 @@
       "uei": "T5HWQF3R8J93",
       "cage": "5FTW3",
       "hgPath": "https://www.highergov.com/awardee/9line-llc-10004475/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "DAVID S HEINTZ",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "LoAn N Kramer",
+        "title": "COO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-21244ff0bc": {
     "contacts": [],
@@ -20415,7 +22908,21 @@
       "uei": "DRB4CPKGSA45",
       "cage": "95CR6",
       "hgPath": "https://www.highergov.com/awardee/summome-native-ventures-llc-12787021/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Nicholas B Dunn",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jill Gravatt",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-cc2eeac44e": {
     "contacts": [
@@ -20477,7 +22984,15 @@
       "uei": "GHWPJSA2LFX5",
       "cage": "SJTK5",
       "hgPath": "https://www.highergov.com/awardee/three-lines-spare-parts-company-306304822/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Christopher P Balint",
+        "title": "Chief Business Development Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-8500f5e4b7": {
     "contacts": [
@@ -20603,7 +23118,15 @@
       "uei": "C1HBCJ9RMBV3",
       "cage": "88898",
       "hgPath": "https://www.highergov.com/awardee/the-johns-hopkins-university-applied-physics-laboratory-llc-55371555/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Julie W Pattison",
+        "title": "Sr. Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-edec9b6892": {
     "contacts": [],
@@ -20621,7 +23144,21 @@
       "uei": "LG5PXWCQ4YU5",
       "cage": "7JW16",
       "hgPath": "https://www.highergov.com/awardee/chickasaw-aerospace-llc-10087795/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Sean Tafoya",
+        "title": "President\\LLC Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kari Pyszko",
+        "title": "Compliance Program Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-1a98b6633d": {
     "contacts": [],
@@ -20803,7 +23340,21 @@
       "uei": "TJNDFEALGTB5",
       "cage": "3NKX7",
       "hgPath": "https://www.highergov.com/awardee/national-government-services-inc-10112144/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tony Pappano",
+        "title": "Contract Admin Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Procurement Inbox",
+        "title": "Group Inbox",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-099fd4a90f": {
     "contacts": [],
@@ -20997,7 +23548,21 @@
       "uei": "VV9KH3L99VE3",
       "cage": "3BXY7",
       "hgPath": "https://www.highergov.com/awardee/international-business-machines-corporation-10111613/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "LaTeashia Sherman",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Paul Young",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-7877fe91ae": {
     "contacts": [
@@ -21247,7 +23812,15 @@
       "uei": "ZAG3K25C4KU7",
       "cage": "1JQS1",
       "hgPath": "https://www.highergov.com/awardee/network-management-resources-inc-10001484/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Karen SOBIESKI",
+        "title": "Sr. Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-107ade899e": {
     "contacts": [
@@ -21581,7 +24154,21 @@
       "uei": "C6EMRJ67V4M3",
       "cage": "7VVF6",
       "hgPath": "https://www.highergov.com/awardee/agile-decision-sciences-llc-10005368/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Monica Rust",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Brian Day",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-cd87295d08": {
     "contacts": [
@@ -21731,7 +24318,21 @@
       "uei": "KGZ7ELR8QJM6",
       "cage": "7R332",
       "hgPath": "https://www.highergov.com/awardee/personnel-decisions-research-institutes-llc-10117322/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Ryan S O'Leary",
+        "title": "Chief Commercial Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Laurie Zelesnikar",
+        "title": "Director, Client Relations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fb19735481": {
     "contacts": [],
@@ -21749,7 +24350,15 @@
       "uei": "SMNWM6HN79X5",
       "cage": "07MU1",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-information-technology-inc-10115071/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Bianca Maheia",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c73ddcd4d7": {
     "contacts": [
@@ -21923,7 +24532,21 @@
       "uei": "C47BNA8GM833",
       "cage": "1ZD18",
       "hgPath": "https://www.highergov.com/awardee/accenture-federal-services-llc-10109693/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michelle W Lanier",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sarah M Mikeal",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-70fc7993b6": {
     "contacts": [],
@@ -22021,7 +24644,21 @@
       "uei": "Y5ZZFR2AQC63",
       "cage": "04071",
       "hgPath": "https://www.highergov.com/awardee/raytheon-company-10114776/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Josephine Fenton",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sean McKenna",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-88c6296c2e": {
     "contacts": [
@@ -22167,7 +24804,15 @@
       "uei": "D93YKLC3MK67",
       "cage": "474R7",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-one-source-llc-10112519/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Bianca Maheia",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-26c6088248": {
     "contacts": [],
@@ -22185,7 +24830,15 @@
       "uei": "R1V7DQ3VKQP5",
       "cage": "4ZCG3",
       "hgPath": "https://www.highergov.com/awardee/enlighten-it-consulting-10115140/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Kelly Bower",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-b0e6e7e662": {
     "contacts": [],
@@ -22251,7 +24904,21 @@
       "uei": "N3PBJAVNKF61",
       "cage": "1QU78",
       "hgPath": "https://www.highergov.com/awardee/caci-10119724/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Curtis Mobly",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Phil HAN",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-14296a4534": {
     "contacts": [],
@@ -22461,7 +25128,21 @@
       "uei": "P4X8JNU7TMQ7",
       "cage": "79TZ3",
       "hgPath": "https://www.highergov.com/awardee/softrams-llc-10001001/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Timothy Borchert",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Thomas Campbell",
+        "title": "Director of Contracts",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0d896cbbe6": {
     "contacts": [],
@@ -22535,7 +25216,15 @@
       "uei": "SMNWM6HN79X5",
       "cage": "07MU1",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-information-technology-inc-10115071/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Bianca Maheia",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0ef2abf5bf": {
     "contacts": [
@@ -22925,7 +25614,21 @@
       "uei": "HJP4JZG1FUL9",
       "cage": "03640",
       "hgPath": "https://www.highergov.com/awardee/lockheed-martin-corporation-10113797/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennifer M McElroy",
+        "title": "Bus Devel Analyst Sr Stf",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Pamela Rieg",
+        "title": "Project Mgt & Plng Opns Asc Mgr",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fe1f0c1369": {
     "contacts": [],
@@ -22943,7 +25646,15 @@
       "uei": "DKJ1R5ABCN48",
       "cage": "022Q2",
       "hgPath": "https://www.highergov.com/awardee/serco-inc-10113237/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dana Ho",
+        "title": "Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-cb5148409c": {
     "contacts": [
@@ -23069,7 +25780,21 @@
       "uei": "SM3DL16FHN43",
       "cage": "7CB39",
       "hgPath": "https://www.highergov.com/awardee/arcticom-llc-10006990/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Richard H Foster",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Rhonda Gildersleeve",
+        "title": "Project Acct Mgr",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-4eddb7e2ca": {
     "contacts": [],
@@ -23087,7 +25812,21 @@
       "uei": "JCBMLGPE6Z71",
       "cage": "17038",
       "hgPath": "https://www.highergov.com/awardee/booz-allen-hamilton-inc-10107948/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BRYAN JONES",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "WENDY CORBIN",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-71326eb08c": {
     "contacts": [
@@ -23157,7 +25896,15 @@
       "uei": "HVXKAJL5DMC7",
       "cage": "1WU70",
       "hgPath": "https://www.highergov.com/awardee/kepler-research-inc-10009941/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "MARGIE HEMINGER",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-83cd5a136d": {
     "contacts": [
@@ -23227,7 +25974,15 @@
       "uei": "PZAMGK8HM3W5",
       "cage": "5XMJ1",
       "hgPath": "https://www.highergov.com/awardee/kupono-government-services-llc-10001539/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Haris Zdralic",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-f6742aa6c2": {
     "contacts": [],
@@ -23317,7 +26072,15 @@
       "uei": "FMAPV49B2UE7",
       "cage": "9FQK8",
       "hgPath": "https://www.highergov.com/awardee/ihit-jv-llc-362922806/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Will Emerson",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8c0b364486": {
     "contacts": [],
@@ -23355,7 +26118,21 @@
       "uei": "NMNLQN6T66Z5",
       "cage": "8JYD2",
       "hgPath": "https://www.highergov.com/awardee/lawelawe-technology-services-inc-12714435/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gerald Lam",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jerald Forrest",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-bedf61452d": {
     "contacts": [],
@@ -23473,7 +26250,15 @@
       "uei": "NBQCBJ6FXBU4",
       "cage": "3EX59",
       "hgPath": "https://www.highergov.com/awardee/the-emmes-company-llc-10000695/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dominic M Johnson",
+        "title": "VP Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-afd5774ab3": {
     "contacts": [],
@@ -23515,7 +26300,21 @@
       "uei": "GXL9RAYKASF5",
       "cage": "7W2L8",
       "hgPath": "https://www.highergov.com/awardee/compass-point-llc-10005469/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gregory Petersen",
+        "title": "Sr. Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sharon Miller",
+        "title": "Director, Billing Operations",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e924207b82": {
     "contacts": [
@@ -23817,7 +26616,21 @@
       "uei": "CKV2L9GZKJK3",
       "cage": "1TTG5",
       "hgPath": "https://www.highergov.com/awardee/deloitte-consulting-llp-10110437/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Kelly Irreno",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Matt Huston",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6ff50eff3b": {
     "contacts": [],
@@ -23871,7 +26684,15 @@
       "uei": "N3GDEB78RNF8",
       "cage": "7VP89",
       "hgPath": "https://www.highergov.com/awardee/galapagos-federal-systems-llc-10005273/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Todd P Lawson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-96c53a01fe": {
     "contacts": [],
@@ -23973,7 +26794,21 @@
       "uei": "SAB5XACK9258",
       "cage": "80H10",
       "hgPath": "https://www.highergov.com/awardee/sherpa-6-inc-10005781/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Kevin W Meeder",
+        "title": "Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Stuart M Abrahamson",
+        "title": "Chief Financial Officer",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-27acb10b60": {
     "contacts": [],
@@ -23991,7 +26826,15 @@
       "uei": "DKJ1R5ABCN48",
       "cage": "022Q2",
       "hgPath": "https://www.highergov.com/awardee/serco-inc-10113237/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dana Ho",
+        "title": "Director, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-82d91aa663": {
     "contacts": [
@@ -24157,7 +27000,21 @@
       "uei": "GWJRC3WZ3HS8",
       "cage": "09GC1",
       "hgPath": "https://www.highergov.com/awardee/tapestry-solutions-inc-10112282/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Eric Wendle",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kim Checksfield",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-36e66e92b8": {
     "contacts": [
@@ -24207,7 +27064,15 @@
       "uei": "PK35MEQEASD5",
       "cage": "63CL1",
       "hgPath": "https://www.highergov.com/awardee/hexagon-us-federal-inc-10114577/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Greta Brant",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-676058def7": {
     "contacts": [],
@@ -24225,7 +27090,15 @@
       "uei": "GHLJX6LSQET8",
       "cage": "69K56",
       "hgPath": "https://www.highergov.com/awardee/katmai-integrated-solutions-llc-10002944/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Teresa Derrickson",
+        "title": "Chief Ethics & Comp Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-0c9a7695ad": {
     "contacts": [],
@@ -24243,7 +27116,15 @@
       "uei": "V1NDQKKGJ7G4",
       "cage": "760W5",
       "hgPath": "https://www.highergov.com/awardee/oneida-technical-solutions-llc-10009601/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joseph Cavano",
+        "title": "Director of Business Affairs",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c2e62b8e05": {
     "contacts": [
@@ -24505,7 +27386,21 @@
       "uei": "L9CRNSMZHRF5",
       "cage": "8JMA2",
       "hgPath": "https://www.highergov.com/awardee/cyberstar-llc-12712095/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "April M Lambert",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-4ed623452f": {
     "contacts": [
@@ -24551,7 +27446,15 @@
       "uei": "KGG4VCLEBG93",
       "cage": "7STM7",
       "hgPath": "https://www.highergov.com/awardee/kira-information-solutions-llc-10119085/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Richard Rinehart",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-289d2ca30c": {
     "contacts": [],
@@ -24709,7 +27612,21 @@
       "uei": "FAHJL6MBXS15",
       "cage": "75V96",
       "hgPath": "https://www.highergov.com/awardee/cherokee-insights-llc-10115009/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sean McNamara",
+        "title": "Oper General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-07b1a46a25": {
     "contacts": [
@@ -24799,7 +27716,21 @@
       "uei": "MLCEWFN6PHL3",
       "cage": "6CF64",
       "hgPath": "https://www.highergov.com/awardee/clarity-innovations-llc-10005637/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Brian Hobbs",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Stephanie White",
+        "title": "VP of Contracts",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-f3a6dd8421": {
     "contacts": [],
@@ -24941,7 +27872,15 @@
       "uei": "DJUCEANK2KP4",
       "cage": "5FVX5",
       "hgPath": "https://www.highergov.com/awardee/northrop-grumman-systems-corporation-10107553/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Melissa England",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-529d728ed8": {
     "contacts": [],
@@ -25059,7 +27998,21 @@
       "uei": "G1K6NSNALMJ8",
       "cage": "3RVQ4",
       "hgPath": "https://www.highergov.com/awardee/group-w-inc-10003102/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Geraldine Harper",
+        "title": "Vice President - Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Peter Gaaserud",
+        "title": "SVP of Contracts and Procurement",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8bf867fdac": {
     "contacts": [
@@ -25085,7 +28038,21 @@
       "uei": "LZ53AT1DCF44",
       "cage": "57X59",
       "hgPath": "https://www.highergov.com/awardee/cherokee-nation-operational-solutions-l-l-c-10001203/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "SBA Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Chase Evans",
+        "title": "Operations General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-7dc84158e9": {
     "contacts": [],
@@ -25115,7 +28082,15 @@
       "uei": "YSR7G1CCKBQ7",
       "cage": "3QBN1",
       "hgPath": "https://www.highergov.com/awardee/center-for-children-and-family-futures-inc-10430828/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Charles D Williams",
+        "title": "Chief Financial Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9819fae3e3": {
     "contacts": [],
@@ -25201,7 +28176,15 @@
       "uei": "GHLJX6LSQET8",
       "cage": "69K56",
       "hgPath": "https://www.highergov.com/awardee/katmai-integrated-solutions-llc-10002944/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Teresa Derrickson",
+        "title": "Chief Ethics & Comp Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-78597162e5": {
     "contacts": [
@@ -25283,7 +28266,15 @@
       "uei": "T2SDN8AHFSY6",
       "cage": "1TPV6",
       "hgPath": "https://www.highergov.com/awardee/optumserve-technology-services-inc-10107147/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mercy McLaughlin",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6e9bd5743d": {
     "contacts": [],
@@ -25301,7 +28292,15 @@
       "uei": "DJUCEANK2KP4",
       "cage": "5FVX5",
       "hgPath": "https://www.highergov.com/awardee/northrop-grumman-systems-corporation-10107553/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Melissa England",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-92d23fb5f7": {
     "contacts": [],
@@ -25339,7 +28338,15 @@
       "uei": "FZNCSKF4X6D9",
       "cage": "4WPK2",
       "hgPath": "https://www.highergov.com/awardee/credence-management-solutions-limited-liability-company-10000254/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "SIDDHARTHA CHOWDHARY",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e3d782302d": {
     "contacts": [],
@@ -25425,7 +28432,15 @@
       "uei": "RNJEG6TBZM41",
       "cage": "7RWA7",
       "hgPath": "https://www.highergov.com/awardee/dine-source-llc-10026938/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Scott McKee",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d1e7046964": {
     "contacts": [],
@@ -25631,7 +28646,21 @@
       "uei": "MWDRZJ2ZVPV7",
       "cage": "1VPW8",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-mission-systems-inc-10113514/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dawn Dozier",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "KAREN MELANCON",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-874a46b1a5": {
     "contacts": [
@@ -25725,7 +28754,15 @@
       "uei": "DSHBDPKJC569",
       "cage": "7CX10",
       "hgPath": "https://www.highergov.com/awardee/create-it-solutions-10001086/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Laura Ponder",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-5c93aa53b3": {
     "contacts": [],
@@ -25843,7 +28880,21 @@
       "uei": "M5LUG7KAKEJ4",
       "cage": "7Z7B6",
       "hgPath": "https://www.highergov.com/awardee/bowhead-enterprise-science-and-technology-llc-12498966/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "LORI SCHENDEL",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "JC BOTT",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8b38119979": {
     "contacts": [],
@@ -25969,7 +29020,21 @@
       "uei": "UY43FBN7NHK8",
       "cage": "3J401",
       "hgPath": "https://www.highergov.com/awardee/faac-incorporated-10117413/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Angie Silver",
+        "title": "Director of Contracts and Trade Compliance",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Nate Cook",
+        "title": "Revenue Accounting Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-718520e99a": {
     "contacts": [],
@@ -26007,7 +29072,21 @@
       "uei": "L2YJNMP67MD5",
       "cage": "91MY0",
       "hgPath": "https://www.highergov.com/awardee/dawson-cms-llc-12773559/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Anita Fligge",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Sandra Atwood",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-70fa76dfa1": {
     "contacts": [
@@ -26209,7 +29288,21 @@
       "uei": "TYGNVN2NS549",
       "cage": "6ASH6",
       "hgPath": "https://www.highergov.com/awardee/malasha-technologies-inc-10006412/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Grant Schenk",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "NIGAM DALAL",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-acc2171bb2": {
     "contacts": [
@@ -26279,7 +29372,15 @@
       "uei": "XLUHULEBPHK5",
       "cage": "6XAD7",
       "hgPath": "https://www.highergov.com/awardee/seed-innovations-llc-10005579/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Marlu Oswald",
+        "title": "CEO/President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-fcd28fb18c": {
     "contacts": [],
@@ -26329,7 +29430,15 @@
       "uei": "XWMMKN745MS5",
       "cage": "6VR51",
       "hgPath": "https://www.highergov.com/awardee/enprovera-corp-10543312/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Larry M Grant",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-883e61b187": {
     "contacts": [],
@@ -26347,7 +29456,15 @@
       "uei": "MMLKPW9JLX64",
       "cage": "6XWA8",
       "hgPath": "https://www.highergov.com/awardee/science-applications-international-corporation-10117683/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dianne Gaspar",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8d8bdce1bd": {
     "contacts": [],
@@ -26377,7 +29494,21 @@
       "uei": "DMGTCCJ2ZKG7",
       "cage": "054Y0",
       "hgPath": "https://www.highergov.com/awardee/solipsys-corporation-10118546/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tammy Harris",
+        "title": "Contracts Director",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Tammy M Harris",
+        "title": "Contracts Director",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-909b04e813": {
     "contacts": [],
@@ -26479,7 +29610,21 @@
       "uei": "PQNNHF72NNM6",
       "cage": "70UT1",
       "hgPath": "https://www.highergov.com/awardee/cherokee-nation-strategic-programs-l-l-c-10112951/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jennylynn Gates",
+        "title": "Coordinator",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "John Arnold",
+        "title": "Operations General Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6c18a48134": {
     "contacts": [],
@@ -26509,7 +29654,21 @@
       "uei": "ZDBVU71NQVT1",
       "cage": "0W3R9",
       "hgPath": "https://www.highergov.com/awardee/universal-technical-resource-services-inc-10003750/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "David Zalcmann",
+        "title": "Chief Operating Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "David  Zalcmann",
+        "title": "COO",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e9bfae6972": {
     "contacts": [],
@@ -26527,7 +29686,21 @@
       "uei": "J96GRLW649P3",
       "cage": "3KPC0",
       "hgPath": "https://www.highergov.com/awardee/luther-consulting-llc-10006150/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "James B Luther",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "James Luther",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-ec52cf4919": {
     "contacts": [
@@ -26601,7 +29774,15 @@
       "uei": "WC2WA7J7DJJ9",
       "cage": "85RW7",
       "hgPath": "https://www.highergov.com/awardee/hive-group-llc-10006438/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Will Fortier",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-89ddcbe0b7": {
     "contacts": [],
@@ -26783,7 +29964,21 @@
       "uei": "GX2WMLVX8JH9",
       "cage": "3B3Y0",
       "hgPath": "https://www.highergov.com/awardee/1prospect-technologies-llc-10118598/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Greg Kolean",
+        "title": "President of PBDC Federal",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Heather Esau",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-533f7c1ba3": {
     "contacts": [],
@@ -26801,7 +29996,21 @@
       "uei": "ECN9QQAS3RR7",
       "cage": "8SP32",
       "hgPath": "https://www.highergov.com/awardee/kwaan-bear-it-solutions-12744334/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Curtis Rotan",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Ashley Padgett",
+        "title": "SBA Compliance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-97a4baa437": {
     "contacts": [],
@@ -26819,7 +30028,15 @@
       "uei": "KHLFC1HXCKL1",
       "cage": "7YTL2",
       "hgPath": "https://www.highergov.com/awardee/kikaha-solutions-llc-12500518/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tricia Sewnarine",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-feedf5db52": {
     "contacts": [
@@ -26845,7 +30062,15 @@
       "uei": "D3DYHNPJ6W14",
       "cage": "821D8",
       "hgPath": "https://www.highergov.com/awardee/great-hill-solutions-llc-12512157/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "TJ Rodebaugh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-f5d51cdc53": {
     "contacts": [
@@ -26987,7 +30212,21 @@
       "uei": "LG5PXWCQ4YU5",
       "cage": "7JW16",
       "hgPath": "https://www.highergov.com/awardee/chickasaw-aerospace-llc-10087795/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Sean Tafoya",
+        "title": "President\\LLC Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Kari Pyszko",
+        "title": "Compliance Program Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-7996b7062b": {
     "contacts": [],
@@ -27369,7 +30608,21 @@
       "uei": "DUENN2W6JAK3",
       "cage": "1RUU6",
       "hgPath": "https://www.highergov.com/awardee/delta-solutions-strategies-llc-10002682/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mark W Stafford",
+        "title": "President/CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Leslie J Alexander",
+        "title": "Contracts Director",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-bfac6a4b8f": {
     "contacts": [],
@@ -27591,7 +30844,21 @@
       "uei": "DGA4AQ4DJYY9",
       "cage": "5RWC4",
       "hgPath": "https://www.highergov.com/awardee/broadleaf-inc-10000743/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Monica Rust",
+        "title": "Director of Contract",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Brian Day",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-cca927b20e": {
     "contacts": [
@@ -27680,7 +30947,15 @@
       "uei": "HC9BNH3BCHY4",
       "cage": "7A8A8",
       "hgPath": "https://www.highergov.com/awardee/glasshouse-systems-inc-10065138/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tom Longawa",
+        "title": "Regional Operations Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-eddd012ce9": {
     "contacts": [],
@@ -27698,7 +30973,15 @@
       "uei": "HFK9V1G2B513",
       "cage": "78205",
       "hgPath": "https://www.highergov.com/awardee/motorola-solutions-inc-10109750/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jessica Henning",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-dbe99ac03a": {
     "contacts": [],
@@ -27760,7 +31043,21 @@
       "uei": "EWSLADQCSMS1",
       "cage": "375B5",
       "hgPath": "https://www.highergov.com/awardee/edenred-benefits-llc-10112165/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jacqui Patel",
+        "title": "Sales Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "DHARMESH Parikh",
+        "title": "VP of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d05987e5d0": {
     "contacts": [],
@@ -27798,7 +31095,21 @@
       "uei": "HGUJN4N569C4",
       "cage": "8PJ91",
       "hgPath": "https://www.highergov.com/awardee/pdo-ahusaka-jv-ii-llc-12731636/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Aaron Finnigan",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Heather Esau",
+        "title": "Controller",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6f54ed6dad": {
     "contacts": [
@@ -27856,7 +31167,15 @@
       "uei": "GHLJX6LSQET8",
       "cage": "69K56",
       "hgPath": "https://www.highergov.com/awardee/katmai-integrated-solutions-llc-10002944/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Teresa Derrickson",
+        "title": "Chief Ethics & Comp Officer",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6afe39a6f8": {
     "contacts": [],
@@ -28082,7 +31401,21 @@
       "uei": "XNRAGDML64A8",
       "cage": "5QXC5",
       "hgPath": "https://www.highergov.com/awardee/interagency-readiness-solutions-llc-10002865/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Derek A Myers",
+        "title": "Director of Operations",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Anthony Riscica",
+        "title": "VP",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-2857d65ff9": {
     "contacts": [
@@ -28164,7 +31497,15 @@
       "uei": "D3DYHNPJ6W14",
       "cage": "821D8",
       "hgPath": "https://www.highergov.com/awardee/great-hill-solutions-llc-12512157/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "TJ Rodebaugh",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-bd1744812d": {
     "contacts": [],
@@ -28298,7 +31639,15 @@
       "uei": "N14DPDAU18H4",
       "cage": "91MW8",
       "hgPath": "https://www.highergov.com/awardee/leisnoi-professional-services-llc-12775424/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Tamie Taylor",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9845f6c482": {
     "contacts": [],
@@ -28328,7 +31677,15 @@
       "uei": "ZRNYZUB8ZF44",
       "cage": "07N78",
       "hgPath": "https://www.highergov.com/awardee/nfb-management-consultants-llc-966944596/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Fogle",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-1a14d82451": {
     "contacts": [],
@@ -28390,7 +31747,15 @@
       "uei": "SMNWM6HN79X5",
       "cage": "07MU1",
       "hgPath": "https://www.highergov.com/awardee/general-dynamics-information-technology-inc-10115071/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Bianca Maheia",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-5f68220436": {
     "contacts": [],
@@ -28408,7 +31773,21 @@
       "uei": "DRB4CPKGSA45",
       "cage": "95CR6",
       "hgPath": "https://www.highergov.com/awardee/summome-native-ventures-llc-12787021/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Nicholas B Dunn",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jill Gravatt",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-a00064deec": {
     "contacts": [
@@ -28466,7 +31845,15 @@
       "uei": "G3MDK3Z5GHH7",
       "cage": "7BEG9",
       "hgPath": "https://www.highergov.com/awardee/significance-inc-10006044/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mary M Ahern-Snyder",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e9533650ab": {
     "contacts": [],
@@ -28652,7 +32039,21 @@
       "uei": "S58NJBBDKRF5",
       "cage": "7MX68",
       "hgPath": "https://www.highergov.com/awardee/kadiak-llc-10112561/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joshua Vo",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9073499073": {
     "contacts": [
@@ -28762,7 +32163,21 @@
       "uei": "LE5DMBV7HME5",
       "cage": "8H4J0",
       "hgPath": "https://www.highergov.com/awardee/koniag-professional-services-llc-12695796/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Joshua Vo",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Steven Kutscher",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-dc6c45d94d": {
     "contacts": [],
@@ -28804,7 +32219,15 @@
       "uei": "EKYYYAQFUSV4",
       "cage": "8KNU1",
       "hgPath": "https://www.highergov.com/awardee/cognito-systems-llc-12716485/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Theressa Kim Thomas",
+        "title": "Managing Partner",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-a55078004e": {
     "contacts": [],
@@ -28846,7 +32269,15 @@
       "uei": "V4GVJZF4S263",
       "cage": "81GP1",
       "hgPath": "https://www.highergov.com/awardee/nakupuna-solutions-llc-10001183/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Fogle",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-7dbd899bdb": {
     "contacts": [
@@ -28872,7 +32303,15 @@
       "uei": "MQ2ETHPEB7T6",
       "cage": "8TBG2",
       "hgPath": "https://www.highergov.com/awardee/goldbelt-apex-llc-12313853/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jasmine Stewart",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-e24aef4377": {
     "contacts": [],
@@ -28890,7 +32329,21 @@
       "uei": "DMAEU39PEEK5",
       "cage": "9SPJ3",
       "hgPath": "https://www.highergov.com/awardee/chenega-supply-chain-solutions-llc-680152766/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "C.A. Turner",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Allison Hoover",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-413eae1540": {
     "contacts": [],
@@ -28928,7 +32381,15 @@
       "uei": "TMEKKBCYLSR1",
       "cage": "3D060",
       "hgPath": "https://www.highergov.com/awardee/the-columbia-group-inc-10117082/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Martin Arase",
+        "title": "Contracts Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-a31ebed389": {
     "contacts": [],
@@ -28966,7 +32427,15 @@
       "uei": "SB4JFX2NASL4",
       "cage": "8GT86",
       "hgPath": "https://www.highergov.com/awardee/imaq-resources-llc-12704667/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Geoff Wheeler",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-831d610d01": {
     "contacts": [],
@@ -29008,7 +32477,15 @@
       "uei": "F1QZXZNLZJF2",
       "cage": "7QNG6",
       "hgPath": "https://www.highergov.com/awardee/skylight-inc-10010384/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Eleanor Hyman",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-9653379e50": {
     "contacts": [
@@ -29034,7 +32511,21 @@
       "uei": "PG4AHPP8MDN6",
       "cage": "3HHD4",
       "hgPath": "https://www.highergov.com/awardee/cma-technology-inc-10001201/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Gina Brown",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jun Kim",
+        "title": "Director of Finance",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-4826ed173f": {
     "contacts": [
@@ -29136,7 +32627,15 @@
       "uei": "MMLKPW9JLX64",
       "cage": "6XWA8",
       "hgPath": "https://www.highergov.com/awardee/science-applications-international-corporation-10117683/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Dianne Gaspar",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-93ca5faa8c": {
     "contacts": [
@@ -29174,7 +32673,21 @@
       "uei": "DRB4CPKGSA45",
       "cage": "95CR6",
       "hgPath": "https://www.highergov.com/awardee/summome-native-ventures-llc-12787021/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Nicholas B Dunn",
+        "title": "Mr.",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Jill Gravatt",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8d5636e42a": {
     "contacts": [
@@ -29252,7 +32765,15 @@
       "uei": "N3GDEB78RNF8",
       "cage": "7VP89",
       "hgPath": "https://www.highergov.com/awardee/galapagos-federal-systems-llc-10005273/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Todd P Lawson",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c1c2226fc4": {
     "contacts": [],
@@ -29302,7 +32823,8 @@
       "uei": "N5ZXE5L9UC66",
       "cage": "1D611",
       "hgPath": "https://www.highergov.com/awardee/pricewaterhousecoopers-llp-10009976/"
-    }
+    },
+    "companyContacts": []
   },
   "RA-f889faaff8": {
     "contacts": [],
@@ -29544,7 +33066,21 @@
       "uei": "XNRAGDML64A8",
       "cage": "5QXC5",
       "hgPath": "https://www.highergov.com/awardee/interagency-readiness-solutions-llc-10002865/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Derek A Myers",
+        "title": "Director of Operations",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Anthony Riscica",
+        "title": "VP",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-5c0401f1e4": {
     "contacts": [
@@ -29602,7 +33138,21 @@
       "uei": "LS7WLM8JFW99",
       "cage": "34GA1",
       "hgPath": "https://www.highergov.com/awardee/definitive-logic-corporation-10001909/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Zachary Butcher",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Shawn Lee",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-56decf1d16": {
     "contacts": [],
@@ -29696,7 +33246,21 @@
       "uei": "NE4LCFKM1T44",
       "cage": "58LL9",
       "hgPath": "https://www.highergov.com/awardee/quiet-professionals-llc-10003772/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Jones",
+        "title": "Director of Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Danielle Gonzalez",
+        "title": "Contracts Manager",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-d44a05d30a": {
     "contacts": [],
@@ -29746,7 +33310,21 @@
       "uei": "JY2BDT2K58Z6",
       "cage": "5N741",
       "hgPath": "https://www.highergov.com/awardee/mantech-advanced-systems-international-inc-10106796/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Zachary Butcher",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Shawn Lee",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-3ac1a21b00": {
     "contacts": [],
@@ -29796,7 +33374,15 @@
       "uei": "WT7KNDWBFLK5",
       "cage": "5AJF6",
       "hgPath": "https://www.highergov.com/awardee/tm3-solutions-inc-10004966/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Thomas Moore",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8185723a82": {
     "contacts": [],
@@ -29826,7 +33412,21 @@
       "uei": "K8RNMK1CCQW3",
       "cage": "7BV53",
       "hgPath": "https://www.highergov.com/awardee/paragon-professional-services-llc-10020692/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Christopher Smith",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "Rhonda Gildersleeve",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-19e3f2eae9": {
     "contacts": [],
@@ -29924,7 +33524,15 @@
       "uei": "KEAWJJVFPP16",
       "cage": "9W9Y5",
       "hgPath": "https://www.highergov.com/awardee/horizon-defense-solutions-llc-810733483/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Brian Benz",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-c829a27aad": {
     "contacts": [],
@@ -30046,7 +33654,15 @@
       "uei": "DUMUHNHQJZG5",
       "cage": "7WED0",
       "hgPath": "https://www.highergov.com/awardee/alaska-northstar-resources-llc-10003300/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "PTARMICA GARNICK",
+        "title": "CAO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-33532c497c": {
     "contacts": [],
@@ -30200,7 +33816,15 @@
       "uei": "V4GVJZF4S263",
       "cage": "81GP1",
       "hgPath": "https://www.highergov.com/awardee/nakupuna-solutions-llc-10001183/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Michael Fogle",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-2e4d7b1582": {
     "contacts": [],
@@ -30230,7 +33854,15 @@
       "uei": "CJLPYEGMQXA7",
       "cage": "5RKE0",
       "hgPath": "https://www.highergov.com/awardee/moss-cape-llc-10002014/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Jeffrey Babos",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-236a7c10b1": {
     "contacts": [],
@@ -30304,7 +33936,15 @@
       "uei": "NAY6BAD7UDX4",
       "cage": "7FQZ7",
       "hgPath": "https://www.highergov.com/awardee/tanaq-government-services-llc-10120421/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Mark Thomas",
+        "title": "General Manager",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-57b953d11a": {
     "contacts": [
@@ -30354,7 +33994,15 @@
       "uei": "ZA4KHNKGQRJ4",
       "cage": "7VA75",
       "hgPath": "https://www.highergov.com/awardee/po-okela-solutions-llc-10010863/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Scott Carroll",
+        "title": "President",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-6b4c04d79d": {
     "contacts": [],
@@ -30396,7 +34044,15 @@
       "uei": "HL7QQSRNYHZ3",
       "cage": "49ZN6",
       "hgPath": "https://www.highergov.com/awardee/apptricity-corporation-10007308/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Timothy D Garcia",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-a8913f1c9d": {
     "contacts": [],
@@ -30466,7 +34122,21 @@
       "uei": "E9ZSCXRLCMX7",
       "cage": "3HC76",
       "hgPath": "https://www.highergov.com/awardee/community-development-institute-10002624/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "Sarah Breen",
+        "title": "",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      },
+      {
+        "name": "PATRICIA PERRY",
+        "title": "",
+        "role": "Electronic Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-b4a2458389": {
     "contacts": [],
@@ -30484,7 +34154,15 @@
       "uei": "LG5RFDAHSP43",
       "cage": "1VSM1",
       "hgPath": "https://www.highergov.com/awardee/phacil-llc-10111993/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "John P Cleary",
+        "title": "Vice President, Contracts",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-8f29c5b315": {
     "contacts": [],
@@ -30502,7 +34180,15 @@
       "uei": "LNJANXAXNXG3",
       "cage": "4KGL3",
       "hgPath": "https://www.highergov.com/awardee/data-federal-corporation-10004036/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BABI DAS",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-71988fa0ef": {
     "contacts": [],
@@ -30520,7 +34206,15 @@
       "uei": "LNJANXAXNXG3",
       "cage": "4KGL3",
       "hgPath": "https://www.highergov.com/awardee/data-federal-corporation-10004036/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BABI DAS",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-044cc04156": {
     "contacts": [],
@@ -30538,7 +34232,15 @@
       "uei": "LNJANXAXNXG3",
       "cage": "4KGL3",
       "hgPath": "https://www.highergov.com/awardee/data-federal-corporation-10004036/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BABI DAS",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-3b330e474b": {
     "contacts": [],
@@ -30556,7 +34258,15 @@
       "uei": "LNJANXAXNXG3",
       "cage": "4KGL3",
       "hgPath": "https://www.highergov.com/awardee/data-federal-corporation-10004036/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BABI DAS",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "RA-3ada40665f": {
     "contacts": [],
@@ -30574,7 +34284,15 @@
       "uei": "LNJANXAXNXG3",
       "cage": "4KGL3",
       "hgPath": "https://www.highergov.com/awardee/data-federal-corporation-10004036/"
-    }
+    },
+    "companyContacts": [
+      {
+        "name": "BABI DAS",
+        "title": "CEO",
+        "role": "Government Business POC",
+        "source": "SAM entity"
+      }
+    ]
   },
   "EX-f78133e131": {
     "contacts": [

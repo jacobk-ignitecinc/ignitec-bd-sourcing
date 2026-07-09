@@ -8586,14 +8586,16 @@
     "dateSummarized": "2026-07-08"
   },
   "EX-5528993871": {
-    "summary": "The Air Force Civil Engineer office is modernizing control systems cybersecurity across its facilities and infrastructure. This recompete under General Dynamics Information Technology is a 99 million dollar vehicle expiring May 2027 that addresses the Air Force mission to provide combat support through secure, resilient civil engineering systems.",
-    "outreach_angle": "Contact the Air Force Civil Engineer contracting office directly to position for subcontracting under the incumbent or as a prime alternative, leveraging federal cybersecurity and IT staff augmentation capabilities.",
+    "summary": "The Air Force is modernizing cybersecurity for its civil engineer control systems to protect critical infrastructure and facility operations. This is a recompete of General Dynamics Information Technology's current contract, ending May 2027, valued at approximately 99 million dollars.",
+    "outreach_angle": "Reach the Air Force contracting office and General Dynamics now during the shaping window (18+ months before expiration) to propose IT staffing or cybersecurity managed services under lane 1A or 2E, positioning Ignitec as a subcontractor to the incumbent or a teamed prime.",
+    "fit": "Ignitec has proven performance with Department of Defense and matches the cybersecurity and IT infrastructure scope through lanes 1A (Federal IT Staff Augmentation) and 2E (Federal Cybersecurity and Managed Security Services). Prior subcontracting experience with Deloitte and Accenture on federal IT programs provides a model for engaging large defense primes.",
+    "concerns": "The 99-million-dollar ceiling and General Dynamics' scale suggest Ignitec's role will be as subcontractor rather than prime; early outreach to the incumbent is critical to secure a spot on the recompete team.",
     "lanes": [
       "1A",
       "2E"
     ],
     "model": "claude-haiku-4-5",
-    "dateSummarized": "2026-07-08"
+    "dateSummarized": "2026-07-09"
   },
   "EX-b896c1d530": {
     "summary": "The Agency for Healthcare Research and Quality (AHRQ) manages the CAHPS and SOPS programs, which generate evidence and data on patient experience of care and patient safety culture to support quality improvement efforts across the healthcare system. This is a data collection, analysis, and research support engagement valued at approximately 16.6 million over the contract period ending January 2027. The incumbent is Westat, Inc.",
@@ -23740,6 +23742,73 @@
     "lanes": [
       "1A",
       "2E"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-e1d756a2f2": {
+    "summary": "TM3 Solutions just won a Defense Information Systems Agency contract for Software Asset Management (SWAM) support services through November 2026. DISA delivers global information infrastructure and cybersecurity to the Department of Defense. This is a subcontracting opportunity with TM3 Solutions as the prime on a roughly 13 million dollar award.",
+    "outreach_angle": "Contact TM3 Solutions directly (warm outreach if possible) to offer IT staffing and workforce solutions (Lane 1A) to help scale their SWAM delivery team.",
+    "fit": "Ignitec has real past performance with the Department of Defense and holds the certifications (SDB, Minority-Owned, ISO 27001, TS Facility Clearance) that support federal IT staffing. Lane 1A (Federal IT Staff Augmentation and Workforce Solutions) aligns directly with SWAM support delivery needs.",
+    "concerns": "SWAM is a specialized domain; unclear whether Ignitec has prior Software Asset Management experience or domain depth beyond general IT staffing.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-3429ccb38f": {
+    "summary": "The Department of the Army awarded Total Computer Solutions, Inc. a contract for programmatic and logistics services under NAICS 541611 (Administrative Management and General Management Consulting Services). The work supports Army operations through consulting and administrative functions, with performance running through March 2027.",
+    "outreach_angle": "Pursue Total Computer Solutions as a warm subcontracting channel in lane 1D (DoD Contract Management and Acquisition Support), leveraging Ignitec's prior Army and Defense prime/sub experience.",
+    "fit": "Lane 1D aligns with DoD contract management and acquisition support. Ignitec has proven past performance with the Department of Defense and prior subcontracting relationships with major primes. The contract size and service type fit a subcontractor model.",
+    "concerns": "The specific scope of programmatic and logistics services is not detailed; if this requires domain expertise outside 1D or clearances beyond TS, fit may be weaker than apparent.",
+    "lanes": [
+      "1D"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-cd87295d08": {
+    "summary": "The Centers for Medicare and Medicaid Services is modernizing end-user IT support infrastructure and services under the ECIS 2.0 program. Leidos Inc. won a large, multi-year contract to deliver help desk, IT service desk operations, and user support across CMS. This is a prime contractor award where Ignitec can pursue subcontracting opportunities in IT staffing and service delivery.",
+    "outreach_angle": "Approach Leidos directly as a subcontractor in lane 1A (Federal IT Staff Augmentation) and lane 1C (Federal Help Desk and IT Service Desk Operations), leveraging Ignitec's SDB status and proven past performance with HHS and CMS.",
+    "fit": "Ignitec has real past performance with HHS and holds SDB certification. Lane 1A (IT Staff Augmentation) and lane 1C (Help Desk and IT Service Desk Operations) directly align with the end-user support and workforce staffing core of ECIS 2.0. This is a natural fit for staffing subcontracts under Leidos.",
+    "concerns": "Award value is very large (151M); Ignitec's realistic role is subcontractor, not prime. No known prior subcontracting relationship with Leidos to warm the outreach.",
+    "lanes": [
+      "1A",
+      "1C"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-e7d93e6b1f": {
+    "summary": "The Centers for Disease Control and Prevention awarded TANAQ Government Services a contract to provide technical support services for the Morbidity and Mortality Weekly Report (MMWR), a flagship CDC publication. HHS works to protect public health and provide essential health services. This is a technical staffing and support engagement within the health agency.",
+    "outreach_angle": "Contact TANAQ directly as a recent award winner to propose IT staff augmentation and technical support subcontracting under lane 1A, leveraging Ignitec's proven relationship with health agencies.",
+    "fit": "Ignitec has delivered IT staffing services to HHS and related health agencies, and 1A (IT Staff Augmentation) is a core strength. The MMWR support mission is straightforward technical work that fits the staffing and services model.",
+    "concerns": "TANAQ is a new relationship; outreach timing is critical to position before subcontracting decisions are locked in. No indication of clearance or specialized domain requirements beyond technical support.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-cfd2f3b9f1": {
+    "summary": "GSA awarded Planned Systems International a task order for C2MS III Command Control Mission Systems support to Air Force Special Operations Command. The work involves command, control, and mission systems development and integration for AFSOC operations.",
+    "outreach_angle": "Target Planned Systems International directly for IT staffing and workforce augmentation (Lane 1A) under this 83.7 million dollar award to GSA, leveraging Ignitec's proven past performance with GSA and federal IT staffing capabilities.",
+    "fit": "This is a strong fit for Lane 1A (Federal IT Staff Augmentation). GSA is a proven agency for Ignitec, and the scope (command control systems support) typically requires sustained staff augmentation; a subcontract role is realistic on an 83 million dollar vehicle.",
+    "concerns": "AFSOC is Department of Defense and may require higher security clearances (Secret/Top Secret) or specialized DoD experience beyond Ignitec's documented past performance agencies, which do not prominently include DoD prime contracts.",
+    "lanes": [
+      "1A"
+    ],
+    "model": "claude-haiku-4-5",
+    "dateSummarized": "2026-07-09"
+  },
+  "RA-e924207b82": {
+    "summary": "General Services Administration (GSA) provides integrated acquisition and technology solutions across federal agencies. Parsons Government Services Inc. won a $50.7M award to provide Command, Control, Communications, Computers (C4) capabilities development and related services through the Federal Acquisition Service, running through February 2027.",
+    "outreach_angle": "Contact Parsons directly as a subcontractor via warm channel (GSA is proven agency for Ignitec) in lane 1A (Federal IT Staff Augmentation), positioning Ignitec to backfill or augment Parsons' delivery team on C4 staffing needs.",
+    "fit": "Ignitec has real past performance with GSA and lane 1A aligns with federal IT staff augmentation; the large award value and C4 scope suggest Parsons will need staffing support or body shops to meet delivery obligations.",
+    "concerns": "C4 capabilities development may require specialized defense or military systems knowledge beyond typical IT staffing; unknown whether Parsons will pursue subs or deliver primarily with internal resources.",
+    "lanes": [
+      "1A"
     ],
     "model": "claude-haiku-4-5",
     "dateSummarized": "2026-07-09"

@@ -2,7 +2,7 @@
 
 Source: `output/all_leads.json`  |  Recent Awards (aligned): 1282  |  Expiring Contracts (aligned): 856  |  Out-of-lane filtered out: 179
 
-**Priority: Tier A 200 (review first)  |  Tier B 776 (worth a look)  |  Tier C 1162 (long tail).** Rows below are ranked by priority score (0-100).
+**Priority: Tier A 200 (review first)  |  Tier B 774 (worth a look)  |  Tier C 1164 (long tail).** Rows below are ranked by priority score (0-100).
 
 > Priority score blends capability-lane fit, experience affinity (agencies, NAICS, and primes Ignitec has actually won or subcontracted under), relationship/route, and opportunity fit (value, shaping window, set-aside). Capability prefilter: only opportunities that map to an Ignitec lane are shown. Warm = winning prime / incumbent is an existing Ignitec channel. Contact is the contracting-office POC from HigherGov; the outreach target is the prime (awards) or incumbent (expiring).
 
