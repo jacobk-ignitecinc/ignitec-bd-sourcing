@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.8";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.9";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -279,6 +279,7 @@ const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","note
 let master = {}, dirty = false;
 let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {}, ENRICHMENT = {};
 let EXP = {}, TIER_A_MIN = 60, TIER_B_MIN = 40;   // experience profile + priority tier cutoffs
+let CERTS = {}, CLEARANCES = [], VEHICLES = [], METRICS = {};   // company facts for outreach email
 let PIPELINE = {};   // leadId -> pursuit record {stage, owner, nextAction, nextActionDate, notes, pursuedDate, stageSince, activities[], lastTouched}
 
 const $ = s => document.querySelector(s);
@@ -611,6 +612,7 @@ async function loadConfig(branch){
   for(const u of cands){ try{ const r=await fetch(u,{cache:"no-store"}); if(!r.ok)continue;
     const j=await r.json(); const p=j.profile||{}; const c=j.crawl||{};
     LANES=p.lanes||[]; AGENCY_TIERS=p.agency_tiers||{};
+    CERTS=j.certifications||{}; CLEARANCES=j.clearances||[]; VEHICLES=j.vehicles||[]; METRICS=j.company_metrics||{};
     WARM_PARTNERS=(p.warm_partners||c.warm_partners||[]).map(x=>x.toLowerCase());
     CORE_NAICS=new Set(c.naics_codes||[]);
     EXP=p.experience||{}; const sc=p.scoring||{};
@@ -993,7 +995,35 @@ function renderPipeline(){
    bracketed placeholder. Sender/meeting-contact details are stored per browser. */
 const LS_EMAILCFG="ignitec-bd-emailcfg-v1";
 const EMAILCFG_DEFAULT={fromName:"[Your name]",fromTitle:"[Your title]",fromEmail:"[you@ignitec-inc.com]",
-  fromPhone:"[Your phone]",principal:"Howie [last name]",principalTitle:"[title]",schedulingLink:""};
+  fromPhone:"[Your phone]",principal:"Howie Huang",principalTitle:"President and CEO",schedulingLink:""};
+// Concrete, opportunity-facing capability statements per lane (what Ignitec does and
+// how), used instead of the internal lane title/id so the POC sees specific offerings.
+const LANE_CAP={
+ "1A":"cleared IT professionals across the full stack, from service desk to senior engineers, analysts, and program staff, delivered on labor-hour, T&M, and surge task orders",
+ "1B":"ServiceNow design, implementation, and managed development across ITSM, ITOM, ITAM, CMDB, CSM, Discovery, and Service Mapping",
+ "1C":"24x7 tiered help desk and IT service desk operations (Tier 1 through Tier 3), ITIL-aligned, with measurable SLAs and ticket-quality metrics",
+ "1D":"acquisition and contract management support, including FAR, DFARS, and AIDAR analysis, source selection, and SOW and PWS development",
+ "1E":"PPBE and IT budget analysis, including POM and BES build, cPROBE and APMS support, and IT portfolio management",
+ "2A":"DoD financial systems support across OneStream, Oracle EBS, and Deltek Costpoint, including consolidation and audit remediation",
+ "2B":"cloud engineering and DevSecOps on AWS and Azure, including Kubernetes, CI/CD pipelines, and Terraform automation",
+ "2C":"IBM mainframe sustainment and legacy modernization (z/OS, COBOL, JCL, and VSAM)",
+ "2D":"federal HR and personnel security operations, including SF-86 and SF-85 processing, NBIS, and DISS",
+ "2E":"managed cybersecurity, including SIEM and SOAR engineering (Microsoft Sentinel and Swimlane), DLP, and continuous monitoring",
+ "3-AI":"AI and machine learning development, including NLP, generative AI, document intelligence, and MLOps",
+ "3-GIS":"GIS and geospatial services on ArcGIS and Esri platforms",
+ "3-BH":"behavioral and psychological health research staffing",
+ "3-RAIL":"rail and transit IT support",
+ "3-SLED":"state, local, and commercial IT services"};
+function joinList(a){a=a.filter(Boolean); if(a.length<=1)return a[0]||""; if(a.length===2)return a[0]+" and "+a[1]; return a.slice(0,-1).join(", ")+", and "+a[a.length-1];}
+function vehicleShort(s){return String(s||"").replace(/\s*\(.*$/,"").replace(/\s+[A-Z0-9-]{7,}.*$/,"").trim();}
+function certLine(){const held=(CERTS.held||[]); const q=held.filter(c=>/CMMI|ISO/i.test(c)); return q.length?joinList(q):"";}
+const AGENCY_NAMES={commerce:"the Department of Commerce","social security":"the Social Security Administration",ssa:"the Social Security Administration",treasury:"the Department of the Treasury",defense:"the Department of Defense",justice:"the Department of Justice","general services":"the General Services Administration",gsa:"the General Services Administration",education:"the Department of Education",energy:"the Department of Energy",health:"the Department of Health and Human Services",dha:"the Defense Health Agency"};
+function credibilityAgencies(l){
+  const names=[]; (EXP.proven_agencies||[]).forEach(a=>{const n=AGENCY_NAMES[a]; if(n&&!names.includes(n))names.push(n);});
+  return names.slice(0,4);
+}
+function agencyThe(name){name=String(name||"").trim();
+  return (name && /Department|Administration|Agency|Bureau|Command|Office|Service/i.test(name) && !/^the /i.test(name)) ? "the "+name : name;}
 let EMAILCFG=Object.assign({},EMAILCFG_DEFAULT);
 function loadEmailCfg(){try{EMAILCFG=Object.assign({},EMAILCFG_DEFAULT,JSON.parse(localStorage.getItem(LS_EMAILCFG)||"{}"));}catch(e){EMAILCFG=Object.assign({},EMAILCFG_DEFAULT);}}
 function saveEmailCfg(){try{localStorage.setItem(LS_EMAILCFG,JSON.stringify(EMAILCFG));}catch(e){}}
@@ -1017,35 +1047,61 @@ function firstNameOf(l,id){
   if(!n){const cc=((ENRICHMENT[id]||{}).companyContacts||[])[0]; n=(cc&&cc.name)||"";}
   n=titleCase(n).trim(); return n?n.split(/\s+/)[0]:"";
 }
+function capBullets(l,id){
+  const s=SUMMARIES[id]||{}; let ids=Array.isArray(s.lanes)?s.lanes.slice():[];
+  if(!ids.length){const m=laneMatch(l); if(m)ids=[m.id];}
+  const seen={}, out=[];
+  ids.forEach(x=>{const c=LANE_CAP[x]; if(c&&!seen[c]){seen[c]=1; out.push("- "+c+".");}});
+  if(!out.length) out.push("- cleared IT professionals and program support across staff augmentation, help desk, and engineering roles.");
+  return out.join("\n");
+}
 function buildEmail(l,id,angle){
   const co=(ENRICHMENT[id]||{}).company||{};
   const company=smartCase(cleanCompany(l.prime||co.legalName||l.incumbent||"your company"));
   const agency=l.agency||"";
   const first=firstNameOf(l,id);
-  const lanes=matchedLaneList(l,id);
-  const capLines=(lanes.length?lanes.map(x=>"- "+x.title+" (Lane "+x.id+")")
-                              :["- Federal IT services, staff augmentation, and program support"]).join("\n");
   const principal=EMAILCFG.principal+(EMAILCFG.principalTitle?" ("+EMAILCFG.principalTitle+")":"");
-  const agencyClause=agency?("supporting "+agency):"on your federal programs";
+  const agencyClause=agency?("supporting "+agencyThe(agency)):"on your federal programs";
   let opening;
-  if(l.source==="Recent Award") opening="Congratulations on "+company+"'s recent award "+agencyClause+". As your team moves into execution, additional qualified capacity often helps deliver on schedule and reduce risk.";
-  else if(l.source==="Expiring Contract") opening="I am reaching out regarding "+company+"'s current work "+agencyClause+". As the recompete approaches, we would value exploring how Ignitec can strengthen your team's position.";
-  else opening="I am reaching out to introduce Ignitec, Inc. and to explore how we can support "+company+"'s work "+agencyClause+".";
-  const intro="Ignitec, Inc. is a small disadvantaged, minority-owned federal IT services and staffing firm (UEI KLHRNT5GPFH5, CAGE 88CY6) with more than $51 million in cumulative realized revenue delivering federal IT programs. Our 8(a) application is pending.";
-  const subPara="On the teaming side, we would welcome the opportunity to support "+company+" as a subcontractor. We would value a brief introductory meeting with "+principal+" to discuss where Ignitec can contribute to delivery on this and related work.";
-  const staffPara="We can also provide staffing and resource delivery support now. Ignitec recruits, clears, and onboards qualified personnel quickly, and we can augment your team to meet current delivery needs.";
-  let cta="Would you be available for a 20 minute call in the next two weeks? I am glad to work around your schedule.";
+  if(l.source==="Recent Award") opening="Congratulations on "+company+"'s recent award "+agencyClause+". As your team staffs up to deliver, we would like to be a resource for the qualified, cleared talent and specialized support these programs depend on.";
+  else if(l.source==="Expiring Contract") opening="I am reaching out regarding "+company+"'s work "+agencyClause+". As the recompete approaches, we would value helping strengthen your team's position and depth of qualified talent.";
+  else opening="I am reaching out to introduce Ignitec, Inc. and how we can support "+company+"'s work "+agencyClause+".";
+  // Grounded credibility line from real company facts (config-sourced). ISO is a
+  // certification; CMMI is a maturity appraisal, so the verbs differ.
+  const vehShort=joinList((VEHICLES||[]).slice(0,2).map(vehicleShort));
+  const held=CERTS.held||[];
+  const iso=held.filter(c=>/ISO/i.test(c)), cmmi=held.find(c=>/CMMI/i.test(c));
+  const credParts=[]; if(iso.length) credParts.push("certified to "+joinList(iso)); if(cmmi) credParts.push("appraised at CMMI Maturity Level 3");
+  const credClause=credParts.length?", "+credParts.join(", and ")+",":"";
+  const placements=METRICS.total_placements||"", ret=METRICS.customer_retention||"";
+  const trackBits=[];
+  if(placements) trackBits.push("more than "+String(placements).replace(/\+.*/,"")+" federal placements since 2018");
+  if(ret) trackBits.push(ret+" customer retention");
+  if(METRICS.contracts_terminated_for_cause===0) trackBits.push("zero contracts terminated for cause");
+  const intro="Ignitec, Inc. is a small disadvantaged, minority-owned (Asian-Pacific American) federal IT services and staffing firm based in Leesburg, VA (UEI KLHRNT5GPFH5, CAGE 88CY6)"
+    +credClause+(trackBits.length?" with "+joinList(trackBits):"")+". Our 8(a) application is pending.";
+  const caps="Specific to this work, Ignitec provides:\n"+capBullets(l,id);
+  // How we deliver: cleared bench, vehicles, proven agencies (certs already stated above).
+  const clr=[]; if(METRICS.secret_cleared_placements) clr.push("Secret ("+String(METRICS.secret_cleared_placements).replace(/\s.*/,"")+")");
+  if(METRICS.ts_tssci_cleared_placements) clr.push("TS/SCI ("+String(METRICS.ts_tssci_cleared_placements).replace(/\s.*/,"")+")");
+  const agList=credibilityAgencies(l);
+  const how="How we deliver: we mobilize a pre-vetted, security-cleared bench"
+    +(clr.length?", including professionals cleared to "+joinList(clr):"")
+    +(vehShort?", and contract quickly through vehicles including "+vehShort:"")
+    +"."+(agList.length?" We support programs across agencies including "+joinList(agList)+".":"");
+  const subPara="On teaming: we would welcome the opportunity to support "+company+" as a subcontractor on this and related work, and to bring the capabilities above to your bid or current delivery. We would value a brief introductory meeting with "+principal+" to explore where we fit.";
+  const staffPara="On staffing and resource delivery: we can stand up qualified, cleared talent for your team now, typically sourcing candidates in days rather than weeks, to cover surge needs, hard-to-fill roles, and immediate delivery gaps.";
+  let cta="Would you be available for a 20 minute call in the next two weeks? I am glad to work around your schedule, and I can share relevant past performance and candidate profiles ahead of time.";
   if(EMAILCFG.schedulingLink) cta+=" You can also book a time directly here: "+EMAILCFG.schedulingLink+".";
   const sig=[EMAILCFG.fromName,(EMAILCFG.fromTitle?EMAILCFG.fromTitle+", ":"")+"Ignitec, Inc.",EMAILCFG.fromEmail,EMAILCFG.fromPhone].filter(x=>x&&x.trim()).join("\n");
-  const parts=[(first?"Dear "+first+",":"Hello,"),"",opening,"",intro,"",
-    "Our capabilities align with this work in these areas:",capLines,""];
+  const parts=[(first?"Dear "+first+",":"Hello,"),"",opening,"",intro,"",caps,"",how,""];
   if(angle!=="staffing") parts.push(subPara,"");
   if(angle!=="subcontracting") parts.push(staffPara,"");
   parts.push(cta,"","Best regards,",sig);
   let subject;
-  if(angle==="subcontracting") subject="Ignitec, Inc.: subcontracting and teaming with "+company;
-  else if(angle==="staffing") subject="Ignitec, Inc.: staffing and resource delivery for "+company;
-  else subject="Ignitec, Inc.: teaming and staffing support for "+company;
+  if(angle==="subcontracting") subject="Subcontracting and teaming with "+company+" on "+(agency||"your federal work");
+  else if(angle==="staffing") subject="Cleared IT staffing and resource delivery for "+company;
+  else subject="Ignitec, Inc.: teaming and cleared IT staffing for "+company;
   return {subject, body:parts.join("\n")};
 }
 function emailSection(l,id){
