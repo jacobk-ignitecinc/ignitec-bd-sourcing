@@ -115,7 +115,7 @@
   .pcard .mini{font-size:10.5px;padding:1px 7px;border-radius:20px;background:var(--greybg);color:var(--grey);white-space:nowrap}
   .pcard .mini.warm{background:var(--warmbg);color:var(--warm)} .pcard .mini.cold{background:var(--coldbg);color:var(--cold)}
   .pcard .mini.due{background:#fde9e9;color:var(--red)} .pcard .mini.ok{background:var(--warmbg);color:var(--warm)}
-  .pcard .nav{display:flex;justify-content:space-between;margin-top:7px;gap:6px}
+  .pcard .nav{display:flex;justify-content:space-between;margin-top:7px;gap:6px;flex-wrap:wrap;row-gap:4px}
   .pcard .nav button{padding:2px 8px;font-size:11px;background:#fff;color:var(--navy);border:1px solid var(--line)}
   .pcard .nav button:disabled{opacity:.3;cursor:default}
   /* modal */
@@ -276,7 +276,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.10";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.11";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -532,7 +532,13 @@ function pipeEdit(id,field,value){ const p=PIPELINE[id]; if(!p)return; p[field]=
 function setStage(id,stage,logNote){
   const p=PIPELINE[id]; if(!p||p.stage===stage)return;
   p.stage=stage; p.stageSince=today();
-  p.activities=p.activities||[]; p.activities.push({type:"Stage change",date:today(),note:(logNote||("Moved to "+stage))});
+  let note=logNote||("Moved to "+stage);
+  // Prompt for an owner the first time an opportunity is Assigned.
+  if(stage==="Assigned" && !String(p.owner||"").trim()){
+    const who=(prompt("Assign this opportunity to (owner name):","")||"").trim();
+    if(who){ p.owner=who; note="Assigned to "+who; }
+  }
+  p.activities=p.activities||[]; p.activities.push({type:"Stage change",date:today(),note:note});
   touchPipe(id); markPipeDirty(); renderPipeline();
 }
 function addActivity(id,type,date,note){
@@ -973,9 +979,14 @@ function pcard(id){
   const fwd=el("button",null,"▶"); fwd.title="Advance";
   fwd.disabled=(ai===-1 || ai>=ACTIVE.length-1);
   fwd.addEventListener("click",e=>{e.stopPropagation(); if(ai>-1 && ai<ACTIVE.length-1) setStage(id,ACTIVE[ai+1]);});
-  const outc=el("button",null,"⋯"); outc.title="Set outcome (Meeting, Dead, Success)"; outc.style.marginLeft="auto";
-  outc.addEventListener("click",e=>{e.stopPropagation(); openPursuit(id);});
-  nav.appendChild(back); nav.appendChild(fwd); nav.appendChild(outc);
+  // Quick outcome buttons: mark Success or Dead in one click from the board.
+  const winB=el("button",null,"✓ Success"); winB.title="Mark Success"; winB.style.cssText="margin-left:auto;color:#1a7f37;font-weight:600";
+  winB.disabled=(p.stage==="Success");
+  winB.addEventListener("click",e=>{e.stopPropagation(); setStage(id,"Success");});
+  const deadB=el("button",null,"✕ Dead"); deadB.title="Mark Dead (cadence went stale)"; deadB.style.cssText="color:#b91c1c;font-weight:600";
+  deadB.disabled=(p.stage==="Dead");
+  deadB.addEventListener("click",e=>{e.stopPropagation(); setStage(id,"Dead");});
+  nav.appendChild(back); nav.appendChild(fwd); nav.appendChild(winB); nav.appendChild(deadB);
   card.appendChild(nav);
   card.addEventListener("click",()=>openPursuit(id));
   return card;
