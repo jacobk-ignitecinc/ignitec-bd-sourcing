@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.3";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.4";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -328,6 +328,20 @@ function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.inclu
    cleaned company name and, when known, the Government Business POC's name, so a
    click lands on the actual person. No API, no data stored. */
 function titleCase(s){return (s||"").toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());}
+/* ZoomInfo app search deep-link. Its router carries the search as base64(JSON) in
+   the #fragment (verified from real logged-in search URLs): filters.fullName finds a
+   person, filters.companyName scopes to a company; set both to land on a specific
+   person at a company. searchType 0 = people. Defaults mirror ZoomInfo's own payload.
+   No data leaves the page; this just opens ZoomInfo (viewer must be logged in). */
+function b64utf8(s){return btoa(unescape(encodeURIComponent(s)));}
+function ziPeople(fullName,companyName){
+  const f={page:1,companyPastOrPresent:"1",isCertified:"include",sortBy:"Relevance",sortOrder:"desc",
+    excludeDefunctCompanies:true,confidenceScoreMin:75,confidenceScoreMax:99,outputCurrencyCode:"USD",
+    inputCurrencyCode:"USD",excludeNoCompany:"false",returnOnlyBoardMembers:false,excludeBoardMembers:false};
+  if(fullName)f.fullName=fullName;
+  if(companyName)f.companyName=companyName;
+  return "https://app.zoominfo.com/#/apps/search/v2/results/person?query="+b64utf8(JSON.stringify({filters:f,searchType:0}));
+}
 function cleanCompany(name){
   let n=(name||"").trim();
   n=n.split(",")[0];                                                   // drop ", INC. - FEDERAL" tails
@@ -358,9 +372,10 @@ function contactLinks(l){
   const liP=s=>"https://www.linkedin.com/search/results/people/?keywords="+q(s);
   const liC=s=>"https://www.linkedin.com/search/results/companies/?keywords="+q(s);
   const links=[];
-  if(poc) links.push([titleCase(poc)+" · LinkedIn", liP(poc+" "+company)]);
+  if(poc){ links.push([titleCase(poc)+" · LinkedIn", liP(poc+" "+company)]);
+           links.push([titleCase(poc)+" · ZoomInfo", ziPeople(titleCase(poc), company)]); }
   links.push(["People · LinkedIn", liP(company+" business development contracts")]);
-  links.push(["Company · LinkedIn", liC(company)]);
+  links.push(["People · ZoomInfo", ziPeople("", company)]);
   // SAM.gov entity deep-link by UEI: goes straight to the incumbent's registration.
   if(uei) links.push(["SAM.gov entity","https://sam.gov/entity/"+q(uei)+"/coreData?status=Active"]);
   if(dom) links.push(["Website","https://"+dom]);
