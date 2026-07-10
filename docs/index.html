@@ -260,13 +260,23 @@ const CONFIG = {
   pipelinePath: "output/pipeline.json"
 };
 /* Kanban stages (order = left to right). Won/Lost/Parked are terminal. */
-const STAGES = ["Pursue","Researching","First contact","In discussion","Teaming/RFI","Submitted","Won","Lost","Parked"];
-const TERMINAL = new Set(["Won","Lost","Parked"]);
+// Outreach-cadence stages: pull in, assign, run a contact cadence, land a meeting,
+// then close as Success (partnership/agreement) or Dead (cadence went stale).
+const STAGES = ["Review and Assign","Assigned","First Contact","Second Contact (Follow Up)","Meeting","Meeting Follow Up","Dead","Success"];
+const TERMINAL = new Set(["Dead","Success"]);
+// Map legacy RFP-response stage names onto the cadence stages so existing pipeline
+// items keep rendering after the stage set changed.
+const STAGE_MIGRATE = {"Pursue":"Review and Assign","Researching":"Review and Assign","First contact":"First Contact",
+  "In discussion":"Second Contact (Follow Up)","Teaming/RFI":"Meeting Follow Up","Submitted":"Meeting Follow Up",
+  "Won":"Success","Lost":"Dead","Parked":"Dead"};
+function migrateStage(s){return STAGE_MIGRATE[s]||s;}
+function normalizePipeline(){let ch=false; for(const id in PIPELINE){const p=PIPELINE[id];
+  if(p&&p.stage&&!STAGES.includes(p.stage)){p.stage=migrateStage(p.stage); ch=true;}} return ch;}
 const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting","RFI response",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.9";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.10";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -471,7 +481,7 @@ function mergeLeads(arr){
 
 /* ------------------------------------------------------------ pipeline state */
 function nowISO(){return new Date().toISOString();}
-function loadPipelineLocal(){try{PIPELINE=JSON.parse(localStorage.getItem(LS_PIPELINE)||"{}")||{};}catch(e){PIPELINE={};}}
+function loadPipelineLocal(){try{PIPELINE=JSON.parse(localStorage.getItem(LS_PIPELINE)||"{}")||{};}catch(e){PIPELINE={};} if(normalizePipeline())savePipelineLocal();}
 function savePipelineLocal(){try{localStorage.setItem(LS_PIPELINE,JSON.stringify(PIPELINE));}catch(e){console.warn(e);}}
 /* Merge two pipeline maps: for each lead id, keep the record with the newer lastTouched. */
 function mergePipeline(base, incoming){
@@ -485,7 +495,7 @@ function mergePipeline(base, incoming){
 async function loadPipelineRemote(branch){
   const cands=["../"+CONFIG.pipelinePath, rawURL(branch,CONFIG.pipelinePath)];
   for(const u of cands){ try{ const r=await fetch(u,{cache:"no-store"}); if(!r.ok)continue;
-    const j=await r.json(); if(j && typeof j==="object"){ PIPELINE=mergePipeline(PIPELINE,j); savePipelineLocal(); return true; } }catch(e){} }
+    const j=await r.json(); if(j && typeof j==="object"){ PIPELINE=mergePipeline(PIPELINE,j); normalizePipeline(); savePipelineLocal(); return true; } }catch(e){} }
   return false;
 }
 /* Three decision states per lead: "undecided" (not in PIPELINE),
@@ -497,7 +507,7 @@ function touchPipe(id){ if(PIPELINE[id]) PIPELINE[id].lastTouched=nowISO(); save
 function unsetDecision(id){ delete PIPELINE[id]; savePipelineLocal(); markPipeDirty(); render(); renderPipeline(); }
 function setPursued(id){
   if(!master[id])return;
-  PIPELINE[id]={ stage:"Pursue", owner:"", nextAction:"", nextActionDate:"", notes:"",
+  PIPELINE[id]={ stage:"Review and Assign", owner:"", nextAction:"", nextActionDate:"", notes:"",
     pursuedDate:today(), stageSince:today(),
     activities:[{type:"Decided to pursue", date:today(), note:""}], lastTouched:nowISO() };
   savePipelineLocal(); markPipeDirty(); render(); renderPipeline();
@@ -594,6 +604,7 @@ async function saveToGitHub(){
     else if(g.status!==404){ setGStatus("Read failed ("+g.status+").","err"); return; }
     // 2. Merge remote into local (newer lastTouched per opportunity wins), then persist merged locally.
     PIPELINE=mergePipeline(remote,PIPELINE);
+    normalizePipeline();
     savePipelineLocal();
     // 3. Commit.
     const body={ message:"BD pipeline update "+today(), branch,
@@ -925,9 +936,9 @@ function renderPipeTiles(){
   const val=active.reduce((s,id)=>s+(Number((master[id]||{}).value)||0),0);
   const overdue=active.filter(id=>{const d=PIPELINE[id].nextActionDate; return d && daysUntil(d)<0;}).length;
   const shaping=ids.filter(id=>master[id]&&isShaping(master[id])&&!TERMINAL.has(PIPELINE[id].stage)).length;
-  const won=ids.filter(id=>PIPELINE[id].stage==="Won").length;
+  const won=ids.filter(id=>PIPELINE[id].stage==="Success").length;
   const t=[["",active.length,"Active pursuits"],["",fmtVal(val)||"$0","Pipeline value (active)"],
-    ["shape",shaping,"Shaping window"],["cold",overdue,"Overdue next-action"],["warm",won,"Won"]];
+    ["shape",shaping,"Shaping window"],["cold",overdue,"Overdue next-action"],["warm",won,"Success"]];
   const box=$("#pTiles"); box.innerHTML="";
   for(const [cls,n,l] of t){const d=el("div","tile "+cls); d.appendChild(el("div","n",String(n))); d.appendChild(el("div","l",l)); box.appendChild(d);}
 }
@@ -947,14 +958,24 @@ function pcard(id){
   card.appendChild(row);
   const la=lastActivity(p);
   if(la)card.appendChild(el("div","pm","Last: "+la.type+(la.note?" — "+la.note:"")+" ("+la.date+")"));
-  // move controls
+  // Move controls. Arrows step through the active cadence only; the terminal
+  // outcomes (Dead, Success) are set from the Stage dropdown in the card detail,
+  // so advancing never dumps a live opportunity into Dead. From a terminal stage,
+  // Back reopens it at the last active cadence stage.
   const nav=el("div","nav");
-  const i=STAGES.indexOf(p.stage);
-  const back=el("button",null,"◀"); back.disabled=i<=0; back.title="Move back";
-  back.addEventListener("click",e=>{e.stopPropagation(); if(i>0)setStage(id,STAGES[i-1]);});
-  const fwd=el("button",null,"▶"); fwd.disabled=i>=STAGES.length-1||TERMINAL.has(p.stage); fwd.title="Advance";
-  fwd.addEventListener("click",e=>{e.stopPropagation(); if(i<STAGES.length-1)setStage(id,STAGES[i+1]);});
-  nav.appendChild(back); nav.appendChild(fwd);
+  const ACTIVE=STAGES.filter(s=>!TERMINAL.has(s));
+  const ai=ACTIVE.indexOf(p.stage);   // -1 when terminal
+  const back=el("button",null,"◀"); back.title="Move back";
+  back.disabled=(ai===0);
+  back.addEventListener("click",e=>{e.stopPropagation();
+    if(ai===-1) setStage(id,ACTIVE[ACTIVE.length-1]);
+    else if(ai>0) setStage(id,ACTIVE[ai-1]);});
+  const fwd=el("button",null,"▶"); fwd.title="Advance";
+  fwd.disabled=(ai===-1 || ai>=ACTIVE.length-1);
+  fwd.addEventListener("click",e=>{e.stopPropagation(); if(ai>-1 && ai<ACTIVE.length-1) setStage(id,ACTIVE[ai+1]);});
+  const outc=el("button",null,"⋯"); outc.title="Set outcome (Meeting, Dead, Success)"; outc.style.marginLeft="auto";
+  outc.addEventListener("click",e=>{e.stopPropagation(); openPursuit(id);});
+  nav.appendChild(back); nav.appendChild(fwd); nav.appendChild(outc);
   card.appendChild(nav);
   card.addEventListener("click",()=>openPursuit(id));
   return card;
