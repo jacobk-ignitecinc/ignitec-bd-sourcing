@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.2";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.3";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -347,23 +347,25 @@ function contactLinks(l){
   const inc=(ENRICHMENT[l.id]||{}).incumbent||{};
   const company=cleanCompany(l.prime||l.incumbent||inc.name||co.legalName||"");
   const dom=domainOf(l);
+  const uei=(inc.uei||co.uei||l.awardeeUei||"").trim();
   const poc=(co.govtPOC&&co.govtPOC.name)||"";
   const row=el("div","findc"); row.appendChild(el("span","clabel","Find contact:"));
   if(!company){ row.appendChild(document.createTextNode(" company unknown")); return row; }
   const q=encodeURIComponent;
-  // Route through a search scoped to LinkedIn: profiles/company pages are the one
-  // free source that reliably resolves a name to a reachable person. Scoping to
-  // linkedin.com/in returns individual profiles, not marketing pages.
-  const gi=s=>"https://www.google.com/search?q="+q(s);
+  // Direct on-site searches (viewers are logged in): LinkedIn's people/company
+  // search reads its query straight from the URL, so these run the search on
+  // LinkedIn itself rather than bouncing through a web search.
+  const liP=s=>"https://www.linkedin.com/search/results/people/?keywords="+q(s);
+  const liC=s=>"https://www.linkedin.com/search/results/companies/?keywords="+q(s);
   const links=[];
-  if(poc) links.push([titleCase(poc)+" · LinkedIn",
-      gi('site:linkedin.com/in "'+poc+'" '+company)]);
-  links.push(["People (BD/contracts)",
-      gi('site:linkedin.com/in "'+company+'" (business development OR capture OR contracts OR proposals)')]);
-  links.push(["Company · LinkedIn", gi('site:linkedin.com/company "'+company+'"')]);
+  if(poc) links.push([titleCase(poc)+" · LinkedIn", liP(poc+" "+company)]);
+  links.push(["People · LinkedIn", liP(company+" business development contracts")]);
+  links.push(["Company · LinkedIn", liC(company)]);
+  // SAM.gov entity deep-link by UEI: goes straight to the incumbent's registration.
+  if(uei) links.push(["SAM.gov entity","https://sam.gov/entity/"+q(uei)+"/coreData?status=Active"]);
   if(dom) links.push(["Website","https://"+dom]);
   links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
-    a.title=label.indexOf("Website")<0?"Opens a LinkedIn-scoped search for "+(poc&&label.indexOf(titleCase(poc))===0?poc:company):"Opens "+dom;
+    a.title="Opens "+label.replace(/ · /," on ")+(label.indexOf("LinkedIn")>=0?" (runs the search on LinkedIn)":"");
     a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
   return row;
 }
