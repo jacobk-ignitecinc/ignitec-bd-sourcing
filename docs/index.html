@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.6";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.7";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -359,6 +359,17 @@ function shortBrand(name){
   while(t.length>1 && drop.has((t[t.length-1]||"").toUpperCase().replace(/[^A-Z0-9]/g,""))) t.pop();
   return t.join(" ")||cleanCompany(name);
 }
+// SAM.gov entity search by UEI. The entity page keys off SAM's internal id, so a
+// UEI deep-link 404s; SAM's search instead carries the UEI as a keywordTag (key and
+// value both set to the UEI). Structure confirmed from a real logged-in search URL.
+function samEntityUrl(uei){
+  const u=encodeURIComponent(uei);
+  return "https://sam.gov/search/?page=1&pageSize=25&sort=-relevance&index=ent"
+    +"&sfm%5BsimpleSearch%5D%5BkeywordRadio%5D=ALL"
+    +"&sfm%5BsimpleSearch%5D%5BkeywordTags%5D%5B0%5D%5Bkey%5D="+u
+    +"&sfm%5BsimpleSearch%5D%5BkeywordTags%5D%5B0%5D%5Bvalue%5D="+u
+    +"&sfm%5Bstatus%5D%5Bis_active%5D=true";
+}
 function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
 function busTypesText(bt){return Array.isArray(bt)?bt.map(d=>d&&d.bus_type_description).filter(Boolean).join("; "):(bt||"");}
 function domainOf(l){
@@ -389,10 +400,8 @@ function contactLinks(l){
            links.push([titleCase(poc)+" · ZoomInfo", ziPeople(titleCase(poc), "")]); }
   links.push(["People · LinkedIn", liP(company+" business development contracts")]);
   links.push(["People · ZoomInfo", ziPeople("", shortBrand(company))]);
-  // SAM.gov: the entity page keys off SAM's internal registration id, not the UEI,
-  // so /entity/<UEI> 404s. Route through SAM's entity search pre-filled with the UEI
-  // (unique -> one result) as an interim until the exact address-bar URL is confirmed.
-  if(uei) links.push(["SAM.gov entity","https://sam.gov/search/?index=entity&q="+q(uei)]);
+  // SAM.gov entity search by UEI (unique -> one result). See samEntityUrl().
+  if(uei) links.push(["SAM.gov entity",samEntityUrl(uei)]);
   if(dom) links.push(["Website","https://"+dom]);
   links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
     a.title="Opens "+label.replace(/ · /," on ")+(label.indexOf("LinkedIn")>=0?" (runs the search on LinkedIn)":"");
