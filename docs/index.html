@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.7";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.8";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -983,6 +983,123 @@ function renderPipeline(){
   }
 }
 
+/* ---------------------------------------------- outreach email generator ----
+   Builds an editable intro email per pipeline opportunity, addressed to the
+   company/incumbent POC. Default covers both the subcontracting/teaming angle
+   (meeting with the Ignitec principal) and the staffing/resource delivery angle;
+   a toggle narrows it to one. Capabilities are matched to the opportunity from the
+   AI summary's lane IDs. Facts follow the truth-first guardrails (approved Ignitec
+   identifiers, cumulative realized revenue, 8(a) pending); anything unverified is a
+   bracketed placeholder. Sender/meeting-contact details are stored per browser. */
+const LS_EMAILCFG="ignitec-bd-emailcfg-v1";
+const EMAILCFG_DEFAULT={fromName:"[Your name]",fromTitle:"[Your title]",fromEmail:"[you@ignitec-inc.com]",
+  fromPhone:"[Your phone]",principal:"Howie [last name]",principalTitle:"[title]",schedulingLink:""};
+let EMAILCFG=Object.assign({},EMAILCFG_DEFAULT);
+function loadEmailCfg(){try{EMAILCFG=Object.assign({},EMAILCFG_DEFAULT,JSON.parse(localStorage.getItem(LS_EMAILCFG)||"{}"));}catch(e){EMAILCFG=Object.assign({},EMAILCFG_DEFAULT);}}
+function saveEmailCfg(){try{localStorage.setItem(LS_EMAILCFG,JSON.stringify(EMAILCFG));}catch(e){}}
+loadEmailCfg();
+// Case a company name for prose without mangling acronyms: keep short all-caps
+// tokens (CACI, SAIC, ICF, GDIT) uppercase, title-case the rest (DELOITTE -> Deloitte).
+// NOT_ACRONYM lists short all-caps words that are names, not acronyms.
+const NOT_ACRONYM=new Set(["BOOZ","AMYX"]);
+function smartCase(s){return (s||"").split(/\s+/).map(w=>{const b=w.replace(/[^A-Za-z]/g,"");
+  return (b.length>0 && b.length<=4 && b===b.toUpperCase() && !NOT_ACRONYM.has(b)) ? w : w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(" ");}
+function laneTitleById(idl){const m=(LANES||[]).find(x=>x.id===idl);return m?m.title:"";}
+function matchedLaneList(l,id){
+  const s=SUMMARIES[id]||{}; let ids=Array.isArray(s.lanes)?s.lanes.slice():[];
+  if(!ids.length){const m=laneMatch(l); if(m)ids=[m.id];}
+  const out=[]; ids.forEach(x=>{const t=laneTitleById(x); if(t&&!out.some(o=>o.id===x))out.push({id:x,title:t});});
+  return out;
+}
+function firstNameOf(l,id){
+  const co=(ENRICHMENT[id]||{}).company||{};
+  let n=(co.govtPOC&&co.govtPOC.name)||"";
+  if(!n){const cc=((ENRICHMENT[id]||{}).companyContacts||[])[0]; n=(cc&&cc.name)||"";}
+  n=titleCase(n).trim(); return n?n.split(/\s+/)[0]:"";
+}
+function buildEmail(l,id,angle){
+  const co=(ENRICHMENT[id]||{}).company||{};
+  const company=smartCase(cleanCompany(l.prime||co.legalName||l.incumbent||"your company"));
+  const agency=l.agency||"";
+  const first=firstNameOf(l,id);
+  const lanes=matchedLaneList(l,id);
+  const capLines=(lanes.length?lanes.map(x=>"- "+x.title+" (Lane "+x.id+")")
+                              :["- Federal IT services, staff augmentation, and program support"]).join("\n");
+  const principal=EMAILCFG.principal+(EMAILCFG.principalTitle?" ("+EMAILCFG.principalTitle+")":"");
+  const agencyClause=agency?("supporting "+agency):"on your federal programs";
+  let opening;
+  if(l.source==="Recent Award") opening="Congratulations on "+company+"'s recent award "+agencyClause+". As your team moves into execution, additional qualified capacity often helps deliver on schedule and reduce risk.";
+  else if(l.source==="Expiring Contract") opening="I am reaching out regarding "+company+"'s current work "+agencyClause+". As the recompete approaches, we would value exploring how Ignitec can strengthen your team's position.";
+  else opening="I am reaching out to introduce Ignitec, Inc. and to explore how we can support "+company+"'s work "+agencyClause+".";
+  const intro="Ignitec, Inc. is a small disadvantaged, minority-owned federal IT services and staffing firm (UEI KLHRNT5GPFH5, CAGE 88CY6) with more than $51 million in cumulative realized revenue delivering federal IT programs. Our 8(a) application is pending.";
+  const subPara="On the teaming side, we would welcome the opportunity to support "+company+" as a subcontractor. We would value a brief introductory meeting with "+principal+" to discuss where Ignitec can contribute to delivery on this and related work.";
+  const staffPara="We can also provide staffing and resource delivery support now. Ignitec recruits, clears, and onboards qualified personnel quickly, and we can augment your team to meet current delivery needs.";
+  let cta="Would you be available for a 20 minute call in the next two weeks? I am glad to work around your schedule.";
+  if(EMAILCFG.schedulingLink) cta+=" You can also book a time directly here: "+EMAILCFG.schedulingLink+".";
+  const sig=[EMAILCFG.fromName,(EMAILCFG.fromTitle?EMAILCFG.fromTitle+", ":"")+"Ignitec, Inc.",EMAILCFG.fromEmail,EMAILCFG.fromPhone].filter(x=>x&&x.trim()).join("\n");
+  const parts=[(first?"Dear "+first+",":"Hello,"),"",opening,"",intro,"",
+    "Our capabilities align with this work in these areas:",capLines,""];
+  if(angle!=="staffing") parts.push(subPara,"");
+  if(angle!=="subcontracting") parts.push(staffPara,"");
+  parts.push(cta,"","Best regards,",sig);
+  let subject;
+  if(angle==="subcontracting") subject="Ignitec, Inc.: subcontracting and teaming with "+company;
+  else if(angle==="staffing") subject="Ignitec, Inc.: staffing and resource delivery for "+company;
+  else subject="Ignitec, Inc.: teaming and staffing support for "+company;
+  return {subject, body:parts.join("\n")};
+}
+function emailSection(l,id){
+  const NV="var(--navy,#1F3864)";
+  const wrap=el("div","emailgen"); wrap.style.cssText="margin-top:14px;border-top:1px solid #e2e2e2;padding-top:10px";
+  wrap.appendChild(el("h2",null,"Outreach email"));
+  let angle="both";
+  const seg=el("div"); seg.style.cssText="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap";
+  const subInp=el("input"); subInp.type="text"; subInp.style.cssText="width:100%;margin-bottom:6px;font-weight:600;padding:5px";
+  const ta=el("textarea"); ta.style.cssText="width:100%;min-height:280px;font-family:inherit;font-size:13px;white-space:pre-wrap;padding:8px;line-height:1.4";
+  function regen(){const e=buildEmail(l,id,angle); subInp.value=e.subject; ta.value=e.body;}
+  const abtns=[];
+  [["both","Both (default)"],["subcontracting","Subcontracting"],["staffing","Staffing"]].forEach(([val,label])=>{
+    const b=el("button",null,label); b.type="button";
+    function paint(){b.style.cssText="padding:4px 10px;border:1px solid "+NV+";border-radius:6px;cursor:pointer;background:"+(val===angle?NV:"#fff")+";color:"+(val===angle?"#fff":NV);}
+    paint();
+    b.addEventListener("click",()=>{angle=val; abtns.forEach(p=>p());  regen();});
+    abtns.push(paint); seg.appendChild(b);
+  });
+  wrap.appendChild(seg);
+  // sender + meeting-contact settings, saved per browser
+  const det=el("details"); det.style.margin="4px 0 8px";
+  det.appendChild(el("summary",null,"Signature and meeting contact (fill once, saved in this browser)"));
+  const gg=el("div"); gg.style.cssText="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px";
+  [["fromName","Your name"],["fromTitle","Your title"],["fromEmail","Your email"],["fromPhone","Your phone"],
+   ["principal","Meeting contact (e.g., Howie ...)"],["principalTitle","Meeting contact title"],
+   ["schedulingLink","Scheduling link (optional)"]].forEach(([k,label])=>{
+    const f=el("div"); const lb=el("label",null,label); lb.style.cssText="font-size:11px;display:block;color:#555";
+    const inp=el("input"); inp.type="text"; inp.value=EMAILCFG[k]||""; inp.placeholder=label; inp.style.cssText="width:100%;padding:4px";
+    inp.addEventListener("input",()=>{EMAILCFG[k]=inp.value; saveEmailCfg(); regen();});
+    f.appendChild(lb); f.appendChild(inp); gg.appendChild(f);
+  });
+  det.appendChild(gg); wrap.appendChild(det);
+  wrap.appendChild(subInp); wrap.appendChild(ta);
+  const act=el("div"); act.style.cssText="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap";
+  const copyBtn=el("button",null,"Copy email"); copyBtn.type="button";
+  const mail=el("a",null,"Open in email app"); mail.target="_blank"; mail.rel="noopener";
+  const logBtn=el("button",null,"Log 'Email sent'"); logBtn.type="button";
+  [copyBtn,logBtn].forEach(b=>b.style.cssText="padding:6px 12px;border:1px solid "+NV+";border-radius:6px;background:"+NV+";color:#fff;cursor:pointer");
+  mail.style.cssText="padding:6px 12px;border:1px solid "+NV+";border-radius:6px;color:"+NV+";text-decoration:none;align-self:center";
+  copyBtn.addEventListener("click",()=>{const text="Subject: "+subInp.value+"\n\n"+ta.value;
+    if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>{copyBtn.textContent="Copied ✓"; setTimeout(()=>copyBtn.textContent="Copy email",1500);},()=>{copyBtn.textContent="Copy failed";});
+  });
+  mail.addEventListener("click",()=>{ mail.href="mailto:?subject="+encodeURIComponent(subInp.value)+"&body="+encodeURIComponent(ta.value); });
+  logBtn.addEventListener("click",()=>{ const who=firstNameOf(l,id)||titleCase(cleanCompany(l.prime||(((ENRICHMENT[id]||{}).company)||{}).legalName||"POC"));
+    addActivity(id,"Email",today(),"Sent "+angle+" intro to "+who); openPursuit(id); renderPipeline(); });
+  act.appendChild(copyBtn); act.appendChild(mail); act.appendChild(logBtn);
+  wrap.appendChild(act);
+  const note=el("div","hint","We do not store the POC email; use the Find contact links above to get it, then paste this in. Bracketed items are placeholders to fill. The text is fully editable before you send.");
+  note.style.cssText="font-size:11px;color:#777;margin-top:6px"; wrap.appendChild(note);
+  regen();
+  return wrap;
+}
+
 /* ------------------------------------------------------------ pursuit modal */
 function closeModal(){ $("#modalRoot").innerHTML=""; }
 function openPursuit(id){
@@ -1054,6 +1171,9 @@ function openPursuit(id){
     body.appendChild(ro);
   }
   const fc=contactLinks(l); fc.style.marginTop="8px"; body.appendChild(fc);
+
+  // outreach email generator (subcontracting + staffing intro to the company POC)
+  body.appendChild(emailSection(l,id));
 
   // activity timeline
   body.appendChild(el("h2",null,"Activity"));
