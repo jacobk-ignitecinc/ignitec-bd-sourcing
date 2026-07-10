@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.1";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.2";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -1003,7 +1003,7 @@ function openPursuit(id){
       ["Employees",co.employeeCount],["Founded",co.yearFounded],
       ["Primary NAICS",co.primaryNaics],["Business types",busTypesText(co.busTypes)],
       ["UEI",co.uei],["CAGE",co.cage],
-      ["Govt business POC",co.govtPOC?(co.govtPOC.name+(co.govtPOC.title?" ("+co.govtPOC.title+")":"")):""]];
+      ["Incumbent/company POC",co.govtPOC?(titleCase(co.govtPOC.name)+(co.govtPOC.title?" ("+titleCase(co.govtPOC.title)+")":"")):""]];
     for(const [k,v] of rows){ if(!v)continue; const r=el("div","row");
       r.appendChild(el("div","k",k)); r.appendChild(el("div","v",String(v))); ro.appendChild(r); }
     if(co.website){ const r=el("div","row"); r.appendChild(el("div","k","Website"));
