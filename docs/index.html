@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.4";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.5";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -348,6 +348,17 @@ function cleanCompany(name){
   n=n.replace(/\b(INC|LLC|L\.?L\.?C|CORP|CORPORATION|COMPANY|CO|LP|LLP|PLC|LTD)\.?$/i,"").trim();
   return n||(name||"").trim();
 }
+// ZoomInfo/LinkedIn list a company by its short brand ("Deloitte"), not the full
+// awardee legal name ("Deloitte Consulting LLP"), so an exact company filter drops
+// matches. Strip trailing generic descriptors down to the brand core.
+function shortBrand(name){
+  const drop=new Set(["CONSULTING","SERVICES","SERVICE","SOLUTIONS","SYSTEMS","TECHNOLOGIES",
+    "TECHNOLOGY","FEDERAL","INTERNATIONAL","ENTERPRISES","ENTERPRISE","ASSOCIATES","PARTNERS",
+    "HOLDINGS","INDUSTRIES","GROUP","GLOBAL","MANAGEMENT","CORPORATION","INCORPORATED","COMPANY","GOVERNMENT"]);
+  let t=cleanCompany(name).split(/\s+/);
+  while(t.length>1 && drop.has((t[t.length-1]||"").toUpperCase().replace(/[^A-Z0-9]/g,""))) t.pop();
+  return t.join(" ")||cleanCompany(name);
+}
 function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
 function busTypesText(bt){return Array.isArray(bt)?bt.map(d=>d&&d.bus_type_description).filter(Boolean).join("; "):(bt||"");}
 function domainOf(l){
@@ -373,9 +384,11 @@ function contactLinks(l){
   const liC=s=>"https://www.linkedin.com/search/results/companies/?keywords="+q(s);
   const links=[];
   if(poc){ links.push([titleCase(poc)+" · LinkedIn", liP(poc+" "+company)]);
-           links.push([titleCase(poc)+" · ZoomInfo", ziPeople(titleCase(poc), company)]); }
+           // Person search by name only: an exact company filter over-constrains
+           // (awardee legal name != ZoomInfo brand) and drops the person.
+           links.push([titleCase(poc)+" · ZoomInfo", ziPeople(titleCase(poc), "")]); }
   links.push(["People · LinkedIn", liP(company+" business development contracts")]);
-  links.push(["People · ZoomInfo", ziPeople("", company)]);
+  links.push(["People · ZoomInfo", ziPeople("", shortBrand(company))]);
   // SAM.gov entity deep-link by UEI: goes straight to the incumbent's registration.
   if(uei) links.push(["SAM.gov entity","https://sam.gov/entity/"+q(uei)+"/coreData?status=Active"]);
   if(dom) links.push(["Website","https://"+dom]);
