@@ -266,7 +266,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-09.7";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-10.1";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -321,11 +321,19 @@ function saText(l){return saValue(l).toUpperCase();}
 function isSetAside(l){const s=saText(l); return !!s && !s.includes("NO SET ASIDE") && s!=="NONE";}
 function is8a(l){const s=saText(l); return s.includes("8(A)")||s.includes("8A")||s.includes("8 A");}
 function isSB(l){const s=saText(l); return s.includes("SMALL BUSINESS")||s.includes("SMALL DISADVANTAGED")||s.includes("SDB")||is8a(l);}
-/* Bridge links to find a BD/company contact using existing tools. ZoomInfo and
-   SAM.gov are single-page apps that ignore a query in the URL (they open a blank
-   search), so those go through a site-scoped Google search that lands on the
-   company's actual ZoomInfo / SAM.gov page. LinkedIn's people search does accept
-   a keyword query, so it stays a direct link. No API, no data stored. */
+/* Bridge links to find a NAMED BD/contracts contact at the company. ZoomInfo and
+   SAM.gov are single-page apps that ignore a URL query (they open a blank search),
+   and a generic web search returns marketing pages, so both are dropped. Instead we
+   scope searches to linkedin.com/in (individual profiles) and /company, keyed off a
+   cleaned company name and, when known, the Government Business POC's name, so a
+   click lands on the actual person. No API, no data stored. */
+function titleCase(s){return (s||"").toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase());}
+function cleanCompany(name){
+  let n=(name||"").trim();
+  n=n.split(",")[0];                                                   // drop ", INC. - FEDERAL" tails
+  n=n.replace(/\b(INC|LLC|L\.?L\.?C|CORP|CORPORATION|COMPANY|CO|LP|LLP|PLC|LTD)\.?$/i,"").trim();
+  return n||(name||"").trim();
+}
 function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
 function busTypesText(bt){return Array.isArray(bt)?bt.map(d=>d&&d.bus_type_description).filter(Boolean).join("; "):(bt||"");}
 function domainOf(l){
@@ -335,24 +343,28 @@ function domainOf(l){
   return w.includes(".")?w:"";
 }
 function contactLinks(l){
+  const co=companyOf(l);
   const inc=(ENRICHMENT[l.id]||{}).incumbent||{};
-  const company=(l.prime||l.incumbent||inc.name||"").trim();
-  const uei=inc.uei||"";
+  const company=cleanCompany(l.prime||l.incumbent||inc.name||co.legalName||"");
   const dom=domainOf(l);
+  const poc=(co.govtPOC&&co.govtPOC.name)||"";
   const row=el("div","findc"); row.appendChild(el("span","clabel","Find contact:"));
   if(!company){ row.appendChild(document.createTextNode(" company unknown")); return row; }
   const q=encodeURIComponent;
-  const g=s=>"https://www.google.com/search?q="+q(s);
-  // A known domain makes ZoomInfo/LinkedIn far more precise than a name match.
-  const links=[
-    ["LinkedIn","https://www.linkedin.com/search/results/people/?keywords="+q((dom||company)+" business development capture")],
-    ["ZoomInfo",g((dom||company)+" site:zoominfo.com")],
-    ["SAM.gov",g((uei||company)+" site:sam.gov")],
-    ["Google",g('"'+company+'" '+(dom?dom+" ":"")+"business development contact email")]
-  ];
+  // Route through a search scoped to LinkedIn: profiles/company pages are the one
+  // free source that reliably resolves a name to a reachable person. Scoping to
+  // linkedin.com/in returns individual profiles, not marketing pages.
+  const gi=s=>"https://www.google.com/search?q="+q(s);
+  const links=[];
+  if(poc) links.push([titleCase(poc)+" · LinkedIn",
+      gi('site:linkedin.com/in "'+poc+'" '+company)]);
+  links.push(["People (BD/contracts)",
+      gi('site:linkedin.com/in "'+company+'" (business development OR capture OR contracts OR proposals)')]);
+  links.push(["Company · LinkedIn", gi('site:linkedin.com/company "'+company+'"')]);
   if(dom) links.push(["Website","https://"+dom]);
   links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
-    a.title="Opens "+(label==="Website"?dom:"a search for "+(dom||company)); a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
+    a.title=label.indexOf("Website")<0?"Opens a LinkedIn-scoped search for "+(poc&&label.indexOf(titleCase(poc))===0?poc:company):"Opens "+dom;
+    a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
   return row;
 }
 
@@ -676,11 +688,20 @@ function leadCard(l){
     if(cbits.length){ const cl=el("div","companyline"); cl.appendChild(el("span","clabel","Company: "));
       cl.appendChild(document.createTextNode(cbits.join("  ·  "))); grow.appendChild(cl); }
   }
-  if(enr && (enr.companyContacts||[]).length){
-    const cc=el("div","contacts"); cc.appendChild(el("span","clabel","Company POC:"));
-    enr.companyContacts.slice(0,3).forEach(c=>{ const s=el("span","contact");
-      s.textContent=c.name+(c.title?" ("+c.title+")":""); cc.appendChild(s); });
-    grow.appendChild(cc);
+  // Named company contacts on the card face: prefer the SAM-registered Government
+  // Business POC (~94% coverage from HigherGov) as the primary named person, then
+  // add any SAM entity POC names, de-duped.
+  {
+    const co3=(enr&&enr.company)||{};
+    const pocs=[];
+    if(co3.govtPOC&&co3.govtPOC.name) pocs.push({name:co3.govtPOC.name,title:co3.govtPOC.title||""});
+    ((enr&&enr.companyContacts)||[]).forEach(c=>{ if(c&&c.name&&!pocs.some(p=>p.name===c.name)) pocs.push({name:c.name,title:c.title||""}); });
+    if(pocs.length){
+      const cc=el("div","contacts"); cc.appendChild(el("span","clabel","Company POC: "));
+      pocs.slice(0,3).forEach(p=>{ const s=el("span","contact");
+        s.textContent=titleCase(p.name)+(p.title?" ("+titleCase(p.title)+")":""); cc.appendChild(s); });
+      grow.appendChild(cc);
+    }
   }
   grow.appendChild(contactLinks(l));
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
