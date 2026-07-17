@@ -277,7 +277,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-13.4";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-13.5";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -403,6 +403,17 @@ function domainOf(l){
   if(!w)return "";
   w=w.replace(/^https?:\/\//,"").replace(/^www\./,"").replace(/\/.*$/,"");
   return w.includes(".")?w:"";
+}
+// Opportunity record links: USASpending award page (l.url) and the HigherGov
+// contract/IDV record (enrichment.hgPath). Returns a row, or null if neither.
+function oppLinksEl(l){
+  const enr=ENRICHMENT[l.id]||{};
+  const links=[]; if(l.url) links.push(["USASpending",l.url]); if(enr.hgPath) links.push(["HigherGov",enr.hgPath]);
+  if(!links.length) return null;
+  const row=el("div","findc"); row.appendChild(el("span","clabel","Opportunity: "));
+  links.forEach(([label,url])=>{ const a=el("a",null,label); a.href=url; a.target="_blank"; a.rel="noopener";
+    a.addEventListener("click",e=>e.stopPropagation()); row.appendChild(a); });
+  return row;
 }
 function contactLinks(l){
   const co=companyOf(l);
@@ -785,6 +796,7 @@ function leadCard(l){
       grow.appendChild(cc);
     }
   }
+  { const opp=oppLinksEl(l); if(opp) grow.appendChild(opp); }
   grow.appendChild(contactLinks(l));
   const r=route(l); const badge=el("span","badge "+(r==="Warm"?"b-warm":"b-cold"), r==="Warm"?"Warm - route via channel":"Cold outreach");
   const st=pipeState(l.id);
@@ -832,8 +844,12 @@ function leadCard(l){
     ["Date added",l.dateAdded],["Lead id",l.id]];
   for(const [k,v] of rows){ if(v==null||v===""||v==="-")continue;
     const row=el("div","row"); row.appendChild(el("div","k",k)); row.appendChild(el("div","v",String(v))); ro.appendChild(row); }
-  if(l.url){ const row=el("div","row"); row.appendChild(el("div","k","Opportunity"));
-    const v=el("div","v"); const a=el("a",null,"open in USASpending"); a.href=l.url; a.target="_blank"; a.rel="noopener"; v.appendChild(a); row.appendChild(v); ro.appendChild(row); }
+  if(l.url||enr.hgPath){ const row=el("div","row"); row.appendChild(el("div","k","Opportunity"));
+    const v=el("div","v");
+    if(l.url){ const a=el("a",null,"open in USASpending"); a.href=l.url; a.target="_blank"; a.rel="noopener"; v.appendChild(a); }
+    if(l.url&&enr.hgPath) v.appendChild(document.createTextNode("  ·  "));
+    if(enr.hgPath){ const a=el("a",null,"open in HigherGov"); a.href=enr.hgPath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); }
+    row.appendChild(v); ro.appendChild(row); }
   if(co){
     const dom=domainOf(l);
     const crows=[["Company",co.legalName],["Location",[co.city,co.state].filter(Boolean).join(", ")],
@@ -1334,6 +1350,7 @@ function openPursuit(id){
       const v=el("div","v"); const a=el("a",null,"open in HigherGov"); a.href=co.hgAwardeePath; a.target="_blank"; a.rel="noopener"; v.appendChild(a); r.appendChild(v); ro.appendChild(r); }
     body.appendChild(ro);
   }
+  { const opp=oppLinksEl(l); if(opp){ opp.style.marginTop="8px"; body.appendChild(opp); } }
   const fc=contactLinks(l); fc.style.marginTop="8px"; body.appendChild(fc);
 
   // outreach email generator (subcontracting + staffing intro to the company POC)
