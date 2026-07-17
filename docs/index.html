@@ -199,6 +199,7 @@
     <select id="fSetAside" title="Set-aside (applies to expiring/recompete)">
       <option value="">Set-aside: any</option>
       <option value="sb">SB or 8(a) set-aside</option>
+      <option value="sbonly">Small business (not 8(a))</option>
       <option value="8a">8(a) set-aside</option>
       <option value="has">Any set-aside</option>
       <option value="none">No set-aside</option>
@@ -276,7 +277,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-13.3";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-13.4";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -884,6 +885,7 @@ function matches(l,f){
     if(f.setAside==="has" && !isSetAside(l)) return false;
     if(f.setAside==="none" && isSetAside(l)) return false;
     if(f.setAside==="sb" && !isSB(l)) return false;
+    if(f.setAside==="sbonly" && !(isSB(l) && !is8a(l))) return false;   // small business, excluding 8(a)
     if(f.setAside==="8a" && !is8a(l)) return false;
   }
   const v=Number(l.value)||0;
