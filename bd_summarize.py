@@ -40,6 +40,11 @@ PROFILE = _cfg.get("profile", {})
 CERTS = (_cfg.get("certifications", {}) or {})
 EXPERIENCE = PROFILE.get("experience", {})
 MAX_PER_RUN = int((_cfg.get("crawl", {}) or {}).get("max_summaries_per_run", 1000))
+# Hard cap on how long to wait for the Anthropic batch to finish. The batches API can
+# intermittently hang for an hour; without a bound the summaries step blocks the commit
+# of the crawl/enrich results indefinitely. On timeout we keep existing summaries and
+# let report + commit proceed; the new summaries backfill on a later run.
+SUMMARY_MAX_WAIT = int((_cfg.get("crawl", {}) or {}).get("summary_max_wait_secs", 1500))
 
 LANE_LINES = "\n".join(
     f"- {l.get('id')} (Tier {l.get('tier')}): {l.get('title')}" for l in PROFILE.get("lanes", [])
@@ -214,14 +219,23 @@ def main():
     batch = client.messages.batches.create(requests=reqs)
 
     import time
+    deadline = time.time() + SUMMARY_MAX_WAIT
+    timed_out = False
     while True:
         b = client.messages.batches.retrieve(batch.id)
         if b.processing_status == "ended":
             break
+        if time.time() > deadline:
+            timed_out = True
+            print(f"  AI summaries: batch {batch.id} did not finish within {SUMMARY_MAX_WAIT}s "
+                  f"(status {b.processing_status}). Leaving existing summaries in place so the "
+                  f"crawl and enrichment results still commit; new summaries backfill next run.")
+            break
         time.sleep(20)
 
     added = 0
-    for result in client.messages.batches.results(batch.id):
+    results = [] if timed_out else client.messages.batches.results(batch.id)
+    for result in results:
         if result.result.type != "succeeded":
             continue
         msg = result.result.message

@@ -87,6 +87,8 @@
     "crawl_deadline_secs": 1500,
     "_usa_reliability_note": "usa_timeout_secs caps each USASpending request; crawl_deadline_secs is a hard wall-clock cap on the whole USASpending crawl so a degraded upstream cannot run the crawl for an hour. Partial results are still enriched and committed.",
     "max_summaries_per_run": 1500,
+    "summary_max_wait_secs": 1500,
+    "_summary_wait_note": "Hard cap on waiting for the Anthropic summaries batch. On timeout the step keeps existing summaries and lets the crawl/enrich results commit; new summaries backfill next run. Prevents an intermittent batch hang from blocking commits.",
     "run_enrichment": true,
     "max_enrich_per_run": 1500,
     "_enrich_note": "HigherGov enrichment (bd_enrich.py) looks up each aligned award/expiring lead by government Award ID and backfills contracting-office contacts, incumbent identity (UEI/CAGE), and vehicle. Incremental (skips already-enriched ids). Base usage is 10,000 records/month; the per-run cap and incremental skip keep spend bounded. Needs HIGHERGOV_API_KEY.",
