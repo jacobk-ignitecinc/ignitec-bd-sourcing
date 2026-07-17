@@ -276,7 +276,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-13.2";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-13.3";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -878,15 +878,19 @@ function matches(l,f){
   if(f.lane){ const m=laneMatch(l); if(!m||m.id!==f.lane) return false; }
   if(f.agency && l.agency!==f.agency) return false;
   if(f.heldVeh && !l.vehicleHeld) return false;
-  if(f.setAside==="has" && !isSetAside(l)) return false;
-  if(f.setAside==="none" && isSetAside(l)) return false;
-  if(f.setAside==="sb" && !isSB(l)) return false;
-  if(f.setAside==="8a" && !is8a(l)) return false;
+  // Set-aside / horizon / award-age are play-scoped: they only narrow the play they
+  // apply to, so they compose with the feed toggle instead of hiding the other play.
+  if(f.setAside && l.source==="Expiring Contract"){
+    if(f.setAside==="has" && !isSetAside(l)) return false;
+    if(f.setAside==="none" && isSetAside(l)) return false;
+    if(f.setAside==="sb" && !isSB(l)) return false;
+    if(f.setAside==="8a" && !is8a(l)) return false;
+  }
   const v=Number(l.value)||0;
   if(!isNaN(f.valMin) && v<f.valMin*1e6) return false;
   if(!isNaN(f.valMax) && f.valMax>0 && v>f.valMax*1e6) return false;
-  if(f.expiry){ if(l.source!=="Expiring Contract"||expiryHorizon(l)!==f.expiry) return false; }
-  if(f.awardAge){ if(l.source!=="Recent Award"||awardAgeBucket(l)!==f.awardAge) return false; }
+  if(f.expiry && l.source==="Expiring Contract" && expiryHorizon(l)!==f.expiry) return false;
+  if(f.awardAge && l.source==="Recent Award" && awardAgeBucket(l)!==f.awardAge) return false;
   if(f.q){ const hay=(l.title+" "+l.agency+" "+l.prime+" "+l.incumbent+" "+l.awardId+" "+l.notes).toLowerCase();
     if(!hay.includes(f.q)) return false; }
   if(f.exclude){ const terms=f.exclude.split(",").map(t=>t.trim()).filter(Boolean);
@@ -1386,6 +1390,11 @@ function init(){
   loadMaster(); loadPipelineLocal();
   setBuildStamp();
   $("#branchInput").value=localStorage.getItem(LS_BRANCH)||CONFIG.branch;
+  // Default the landing view to the expiring recompete board, led by near-term
+  // (3-6mo) SB/8(a) set-asides (the CO-outreach sweet spot). The feed toggle
+  // switches to Recent awards or Both plays; horizon/set-aside are play-scoped so
+  // they compose with it. Clear filters resets everything.
+  $("#fSource").value="Expiring Contract"; $("#fExpiry").value="near"; $("#fSetAside").value="sb";
   setDirty(false);
   $("#reloadBtn").addEventListener("click",reload);
   $("#exportBtn").addEventListener("click",exportJSON);
