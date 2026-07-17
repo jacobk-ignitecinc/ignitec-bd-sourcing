@@ -242,9 +242,13 @@ def fetch_record(session, api_key, award_id, parent_id, parent_cache, stats):
 
 def enrich_record(record, kind, match_level):
     """Contract/IDV-level facts we can only get from HigherGov: the contract
-    set-aside (the USASpending award search does not return it) and the vehicle
-    name. The company profile and contacts come from the company pass, keyed off
-    the awardee UEI USASpending gives us directly."""
+    set-aside (the USASpending award search does not return it), the vehicle name,
+    and the FPDS government contacts (the contracting officer / procurement officer
+    who authored and approved the contract action, with .gov/.mil email and phone).
+    The incumbent company profile comes from the company pass, keyed off the awardee
+    UEI USASpending gives us directly. Government contacts drive the expiring-contract
+    recompete-shaping play (getting a capability statement in front of the CO/COR);
+    the incumbent company POC drives the subcontracting play."""
     pop_end = (record.get("period_of_performance_current_end_date")
                or record.get("ordering_period_end_date") or "")
     return {
@@ -253,6 +257,7 @@ def enrich_record(record, kind, match_level):
         "setAside": record.get("type_of_set_aside") or "",
         "popEnd": pop_end,
         "hgPath": _full_url(record.get("path")),
+        "contacts": _contacts_from(record),
         "source": kind,
         "matchLevel": match_level,
         "dateEnriched": TODAY,
@@ -467,10 +472,13 @@ def main():
             if l.get("source") not in ("Recent Award", "Expiring Contract"):
                 continue
             lead_id = l.get("id")
-            # Skip only leads already resolved at the contract/IDV level (they have
-            # matchLevel); a company-only record from a prior run still needs its
-            # set-aside/vehicle, so it is not skipped here.
-            if not lead_id or (enrichment.get(lead_id) or {}).get("matchLevel"):
+            rec0 = enrichment.get(lead_id) or {}
+            # Skip fully-enriched leads. Expiring leads additionally re-enrich once to
+            # backfill the FPDS government CO/COR contacts (restored for the recompete-
+            # shaping play); recent-award leads keep the lighter company-focused record.
+            # A company-only record from a prior run (no matchLevel) is never skipped.
+            needs_contacts = l.get("source") == "Expiring Contract" and rec0.get("contacts") is None
+            if not lead_id or (rec0.get("matchLevel") and not needs_contacts):
                 continue
             if not aligned(l):
                 continue

@@ -276,7 +276,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-10.11";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-13.1";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -383,6 +383,20 @@ function samEntityUrl(uei){
 }
 function companyOf(l){return (ENRICHMENT[l.id]||{}).company||{};}
 function busTypesText(bt){return Array.isArray(bt)?bt.map(d=>d&&d.bus_type_description).filter(Boolean).join("; "):(bt||"");}
+// Government contracting officer(s) from the FPDS record (name, title, .gov/.mil
+// email, phone) — the target for the expiring-contract recompete-shaping play.
+// Returns a DOM row with a mailto per contact, or null if none.
+function govContactsEl(enr,max){
+  const cs=(enr&&enr.contacts)||[]; if(!cs.length)return null;
+  const row=el("div","contacts"); row.appendChild(el("span","clabel","Contracting officer: "));
+  cs.slice(0,max||2).forEach(c=>{
+    const s=el("span","contact"); s.textContent=titleCase(c.name||"")+(c.title?" ("+c.title+")":"");
+    if(c.email){ const a=el("a",null," ✉"); a.href="mailto:"+c.email; a.title=c.email; a.rel="noopener";
+      a.addEventListener("click",e=>e.stopPropagation()); s.appendChild(a); }
+    row.appendChild(s);
+  });
+  return row;
+}
 function domainOf(l){
   let w=(companyOf(l).website||"").trim().toLowerCase();
   if(!w)return "";
@@ -747,6 +761,13 @@ function leadCard(l){
     if(busTypesText(co.busTypes))cbits.push(busTypesText(co.busTypes).slice(0,70));
     if(cbits.length){ const cl=el("div","companyline"); cl.appendChild(el("span","clabel","Company: "));
       cl.appendChild(document.createTextNode(cbits.join("  ·  "))); grow.appendChild(cl); }
+  }
+  // Expiring-contract recompete play: surface the government contracting officer
+  // (from the FPDS record) as the primary target, with a mailto on the .gov/.mil
+  // email so we can get a capability statement in front of the CO/COR early.
+  if(l.source==="Expiring Contract"){
+    const gc=govContactsEl(enr,2);
+    if(gc) grow.appendChild(gc);
   }
   // Named company contacts on the card face: prefer the SAM-registered Government
   // Business POC (~94% coverage from HigherGov) as the primary named person, then
@@ -1233,6 +1254,20 @@ function openPursuit(id){
   body.appendChild(grid);
 
   const enr=ENRICHMENT[id]||{};
+  // Government contracting officer(s) from FPDS: the recompete-shaping target for
+  // expiring contracts. Full detail here (title, email, phone) with a mailto.
+  if((enr.contacts||[]).length){
+    const go=el("div","ro"); go.style.marginTop="10px"; go.appendChild(el("h2",null,"Government contracting office (FPDS)"));
+    if(enr.agency){ const r=el("div","row"); r.appendChild(el("div","k","Office / agency")); r.appendChild(el("div","v",String(enr.agency))); go.appendChild(r); }
+    (enr.contacts||[]).slice(0,4).forEach(c=>{
+      const r=el("div","row"); r.appendChild(el("div","k", c.title||"Contact"));
+      const v=el("div","v"); v.appendChild(document.createTextNode(titleCase(c.name||"")+(c.role?" — "+c.role:"")));
+      if(c.email){ v.appendChild(document.createElement("br")); const a=el("a",null,c.email); a.href="mailto:"+c.email; a.rel="noopener"; v.appendChild(a); }
+      if(c.phone){ v.appendChild(document.createTextNode("  ·  "+c.phone)); }
+      r.appendChild(v); go.appendChild(r);
+    });
+    body.appendChild(go);
+  }
   if((enr.companyContacts||[]).length){
     const cc=el("div","contacts"); cc.style.marginTop="8px"; cc.appendChild(el("span","clabel","Company POC (SAM):"));
     (enr.companyContacts||[]).slice(0,4).forEach(c=>{ const s=el("span","contact");
