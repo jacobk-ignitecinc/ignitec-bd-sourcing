@@ -276,7 +276,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-13.1";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-13.2";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -1147,6 +1147,28 @@ function buildEmail(l,id,angle){
   let cta="Would you be available for a 20 minute call in the next two weeks? I am glad to work around your schedule, and I can share relevant past performance and candidate profiles ahead of time.";
   if(EMAILCFG.schedulingLink) cta+=" You can also book a time directly here: "+EMAILCFG.schedulingLink+".";
   const sig=[EMAILCFG.fromName,(EMAILCFG.fromTitle?EMAILCFG.fromTitle+", ":"")+"Ignitec, Inc.",EMAILCFG.fromEmail,EMAILCFG.fromPhone].filter(x=>x&&x.trim()).join("\n");
+  // Contracting-officer mode: recompete-shaping note to the CO/COR on an expiring
+  // contract, offering a small business capability statement ahead of the follow-on.
+  if(angle==="co"){
+    const enr0=ENRICHMENT[id]||{}; const coc=(enr0.contacts||[])[0]||{};
+    const coFirst=titleCase(coc.name||"").split(/\s+/)[0]||"";
+    const greet=coFirst?("Dear "+coFirst+","):(coc.title?("Dear "+coc.title+","):"Hello,");
+    const piid=(l.awardId||"").trim();
+    const popEnd=String(enr0.popEnd||l.popEnd||"").slice(0,10);
+    const coOpen="I am writing regarding the requirement currently performed under "
+      +(piid?("contract "+piid):"the incumbent contract")+(popEnd?(", set to expire around "+popEnd):"")+". "
+      +(agency?("As "+agencyThe(agency)+" plans the follow-on, "):"")
+      +"I would like to introduce Ignitec, Inc. as a capable small business for this work.";
+    const saRaw=String(enr0.setAside||l.setAside||"").toLowerCase();
+    let saLine="As a small disadvantaged, minority-owned business (our 8(a) application is pending), Ignitec is positioned to compete on small business set-asides, as a prime or as a teaming partner.";
+    if(saRaw.indexOf("8(a)")>=0||saRaw.indexOf("8a")>=0) saLine+=" We understand this requirement has been performed under an 8(a) set-aside, and we would value the opportunity to compete as it transitions.";
+    const askPara="We would welcome the opportunity to share our capability statement for your market research and to be considered on the recompete. If helpful, we can provide relevant past performance and a capability statement tailored to this requirement.";
+    let coCta="Would you have 15 minutes in the coming weeks to discuss the upcoming requirement? I am glad to work around your schedule.";
+    if(EMAILCFG.schedulingLink) coCta+=" You can also book a time here: "+EMAILCFG.schedulingLink+".";
+    const coParts=[greet,"",coOpen,"",intro,"",caps,"",how,"",saLine,"",askPara,"",coCta,"","Respectfully,",sig];
+    const subj="Ignitec, Inc.: small business capability statement for the "+(agency||"upcoming")+" recompete"+(piid?" ("+piid+")":"");
+    return {subject:subj, body:coParts.join("\n")};
+  }
   const parts=[(first?"Dear "+first+",":"Hello,"),"",opening,"",intro,"",caps,"",how,""];
   if(angle!=="staffing") parts.push(subPara,"");
   if(angle!=="subcontracting") parts.push(staffPara,"");
@@ -1161,13 +1183,19 @@ function emailSection(l,id){
   const NV="var(--navy,#1F3864)";
   const wrap=el("div","emailgen"); wrap.style.cssText="margin-top:14px;border-top:1px solid #e2e2e2;padding-top:10px";
   wrap.appendChild(el("h2",null,"Outreach email"));
-  let angle="both";
+  // Expiring contracts with a government CO/COR default to the contracting-officer
+  // capability-statement note; everything else defaults to the company both-angle.
+  const coEmail=(((ENRICHMENT[id]||{}).contacts||[])[0]||{}).email||"";
+  const hasCO=(l.source==="Expiring Contract") && !!(((ENRICHMENT[id]||{}).contacts||[]).length);
+  let angle=hasCO?"co":"both";
   const seg=el("div"); seg.style.cssText="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap";
   const subInp=el("input"); subInp.type="text"; subInp.style.cssText="width:100%;margin-bottom:6px;font-weight:600;padding:5px";
   const ta=el("textarea"); ta.style.cssText="width:100%;min-height:280px;font-family:inherit;font-size:13px;white-space:pre-wrap;padding:8px;line-height:1.4";
   function regen(){const e=buildEmail(l,id,angle); subInp.value=e.subject; ta.value=e.body;}
   const abtns=[];
-  [["both","Both (default)"],["subcontracting","Subcontracting"],["staffing","Staffing"]].forEach(([val,label])=>{
+  let opts=[["both","Both"],["subcontracting","Subcontracting"],["staffing","Staffing"]];
+  if(hasCO) opts=[["co","Contracting Officer"]].concat(opts);
+  opts.forEach(([val,label])=>{
     const b=el("button",null,label); b.type="button";
     function paint(){b.style.cssText="padding:4px 10px;border:1px solid "+NV+";border-radius:6px;cursor:pointer;background:"+(val===angle?NV:"#fff")+";color:"+(val===angle?"#fff":NV);}
     paint();
@@ -1198,12 +1226,19 @@ function emailSection(l,id){
   copyBtn.addEventListener("click",()=>{const text="Subject: "+subInp.value+"\n\n"+ta.value;
     if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>{copyBtn.textContent="Copied ✓"; setTimeout(()=>copyBtn.textContent="Copy email",1500);},()=>{copyBtn.textContent="Copy failed";});
   });
-  mail.addEventListener("click",()=>{ mail.href="mailto:?subject="+encodeURIComponent(subInp.value)+"&body="+encodeURIComponent(ta.value); });
-  logBtn.addEventListener("click",()=>{ const who=firstNameOf(l,id)||titleCase(cleanCompany(l.prime||(((ENRICHMENT[id]||{}).company)||{}).legalName||"POC"));
-    addActivity(id,"Email",today(),"Sent "+angle+" intro to "+who); openPursuit(id); renderPipeline(); });
+  // In CO mode we have the contracting officer's .gov/.mil email, so pre-fill the
+  // recipient; company modes have no stored email, so the user adds it.
+  mail.addEventListener("click",()=>{ const to=(angle==="co")?coEmail:"";
+    mail.href="mailto:"+to+"?subject="+encodeURIComponent(subInp.value)+"&body="+encodeURIComponent(ta.value); });
+  const ANGLE_LABEL={co:"CO capability statement",both:"intro (teaming + staffing)",subcontracting:"subcontracting intro",staffing:"staffing intro"};
+  logBtn.addEventListener("click",()=>{ const who=(angle==="co")?(titleCase((((ENRICHMENT[id]||{}).contacts||[])[0]||{}).name||"contracting officer"))
+      :(firstNameOf(l,id)||titleCase(cleanCompany(l.prime||(((ENRICHMENT[id]||{}).company)||{}).legalName||"POC")));
+    addActivity(id,"Email",today(),"Sent "+(ANGLE_LABEL[angle]||angle)+" to "+who); openPursuit(id); renderPipeline(); });
   act.appendChild(copyBtn); act.appendChild(mail); act.appendChild(logBtn);
   wrap.appendChild(act);
-  const note=el("div","hint","We do not store the POC email; use the Find contact links above to get it, then paste this in. Bracketed items are placeholders to fill. The text is fully editable before you send.");
+  const note=el("div","hint",hasCO
+    ? "Contracting Officer mode pre-fills the CO's .gov/.mil email in Open in email app. For company outreach, use the Find contact links above to get the email. Bracketed items are placeholders; the text is fully editable before you send."
+    : "We do not store the company POC email; use the Find contact links above to get it, then paste this in. Bracketed items are placeholders to fill. The text is fully editable before you send.");
   note.style.cssText="font-size:11px;color:#777;margin-top:6px"; wrap.appendChild(note);
   regen();
   return wrap;
