@@ -36,18 +36,29 @@ import requests
 # ============================================================ CONFIG =========
 # Defaults below are overridden by config/ignitec.json ("crawl" block) when that
 # file is present, so targeting can be tuned without editing code.
-NAICS_CODES = ["541512", "541511", "541513", "541611", "541618", "561320"]
+# Defaults mirror config/ignitec.json (v1.4). The config still overrides these at
+# runtime; keeping the fallbacks current means a failed config load degrades to the
+# right targeting instead of a stale six-NAICS / $1M profile.
+NAICS_CODES = ["541512", "541511", "541513", "541611", "541618", "561320",
+               "541330", "518210", "541519"]
 
 TARGET_AGENCIES = [
     "Department of Defense",
     "Department of Health and Human Services",
     "Department of Justice",
     "General Services Administration",
+    "Department of the Treasury",
+    "Department of Commerce",
+    "Department of Education",
+    "Department of Energy",
+    "Department of Homeland Security",
+    "Department of Veterans Affairs",
+    "Department of Transportation",
 ]
 
 # Motion B: recent awards
 RECENT_AWARDS_LOOKBACK_DAYS = 30
-MIN_AWARD_VALUE = 1_000_000
+MIN_AWARD_VALUE = 250_000
 
 # Motion A: expiring contracts
 RUN_EXPIRING_PASS = True
@@ -68,7 +79,9 @@ RUN_SAM_PASS = True
 SAM_LOOKBACK_DAYS = 14
 SAM_PTYPES = ["r", "s"]   # r = Sources Sought, s = Special Notice (RFIs appear under both)
 
-WARM_PARTNERS = ["deloitte", "accenture", "amyx", "icf", "optum"]
+WARM_PARTNERS = ["accenture", "deloitte", "amyx", "tetra tech", "icf", "optum", "omnisolve",
+                 "ntt data", "alphasix", "infolock", "nsi", "rsdc", "tjfact", "ctec",
+                 "chenega", "astraeus", "articus"]
 
 # Vehicles Ignitec holds (a match is a strong sub angle) and recipient names to
 # exclude (self-awards). Overridden from config.
@@ -142,7 +155,7 @@ def lead(source, key, **fields):
         "popStart": "", "popEnd": "", "posture": "", "tier": "", "lane": "",
         "setAside": "", "vehicle": "", "vehicleHeld": False, "incumbent": "", "routing": "", "url": "",
         "actionDate": "", "awardeeUei": "",
-        "gates": [None, None, None, None, None, None],
+        "gates": [None, None, None, None, None],
         "status": "Tracking", "owner": "", "nextAction": "", "nextActionDate": "",
         "notes": "", "dateAdded": TODAY, "lastTouched": TODAY,
     }

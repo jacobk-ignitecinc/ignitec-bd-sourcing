@@ -277,7 +277,7 @@ const ACTIVITY_TYPES = ["Decided to pursue","Research","Call","Email","Meeting",
   "Quote / proposal","Teaming","Stage change","Note","Won","Lost"];
 const LS_PIPELINE = "ignitec-bd-pipeline-v1";
 const LS_TOKEN = "ignitec-bd-gh-token";
-const BUILD = "2026-07-13.5";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
+const BUILD = "2026-07-17.1";   // bump when the dashboard changes; shown in the header so you can confirm you have the latest
 const LS_MASTER = "ignitec-bd-master-v2";
 const LS_BRANCH = "ignitec-bd-branch";
 const POSTURES = ["", "Warm - route via channel", "Cold outreach", "Shape", "Position", "Compete/Team"];
@@ -290,6 +290,7 @@ const EDITABLE = ["posture","status","owner","nextAction","nextActionDate","note
 let master = {}, dirty = false;
 let LANES = [], AGENCY_TIERS = {}, WARM_PARTNERS = [], CORE_NAICS = new Set(), SUMMARIES = {}, ENRICHMENT = {};
 let EXP = {}, TIER_A_MIN = 60, TIER_B_MIN = 40;   // experience profile + priority tier cutoffs
+let CANNOT_PRIME = [];   // set-asides Ignitec cannot hold (from config crawl.cannot_prime_set_asides)
 let CERTS = {}, CLEARANCES = [], VEHICLES = [], METRICS = {};   // company facts for outreach email
 let PIPELINE = {};   // leadId -> pursuit record {stage, owner, nextAction, nextActionDate, notes, pursuedDate, stageSince, activities[], lastTouched}
 
@@ -311,14 +312,26 @@ function laneMatch(l){
   for(const lane of LANES){
     const kw=(lane.keywords||[]).some(k=>hay.includes(k));
     const nx=naics && (lane.naics||[]).includes(naics);
-    if(kw||nx){ const t=lane.tier||3; if(!best||t<best.tier) best={tier:t,id:lane.id}; }
+    if(!(kw||nx)) continue;
+    // A keyword hit is a stronger capability signal than a NAICS-only overlap. A
+    // generic NAICS (e.g. 541519) sits on several lanes and must not let a Tier 1
+    // lane outrank a specialized lane that actually matched on keywords.
+    const rank=kw?0:1; const t=lane.tier||3;
+    if(!best || rank<best.rank || (rank===best.rank && t<best.tier)){
+      best={rank,tier:t,id:lane.id};
+    }
   }
-  return best;
+  return best ? {tier:best.tier,id:best.id} : null;
 }
 function pscInLane(psc){const c=String(psc||"").charAt(0).toUpperCase(); return c==="D"||c==="R"||c==="H";}
 function aligned(l){ return !!laneMatch(l) || CORE_NAICS.has(String(l.naics||"")) || pscInLane(l.psc); }
 function laneLabel(l){const m=laneMatch(l); if(m)return m.id+" (T"+m.tier+")";
   if(CORE_NAICS.has(String(l.naics||"")))return "NAICS "+l.naics; if(pscInLane(l.psc))return "PSC "+l.psc; return "-";}
+/* caution string for the matched lane: sub-only scope, NDA gate, or non-compete.
+   Surfaced in the score reasons so the flag rides with the lead in the cockpit. */
+function laneCaution(l){const m=laneMatch(l); if(!m)return "";
+  const lane=(LANES||[]).find(x=>x.id===m.id); return (lane&&lane.caution)||"";}
+function cannotPrime(l){const s=saText(l); return !!s && CANNOT_PRIME.some(t=>t&&s.includes(t));}
 function isShaping(l){const d=daysUntil(l.popEnd); return l.source==="Expiring Contract" && d!=null && d>=270 && d<=540;}
 /* recent-award recency: days since the latest action (Last Modified Date), fallback to when we first saw it */
 function awardAgeDays(l){const d=l.actionDate||l.dateAdded; if(!d)return null; const t=Date.parse(d); if(isNaN(t))return null; return Math.round((Date.now()-t)/86400000);}
@@ -470,19 +483,35 @@ function scoreLead(l){
   const target=l.prime||l.incumbent;
   if(anyIncl(target,EXP.prime_relationships)){s+=25; why.push("we sub to this prime");}
   else if(isWarm(target)){s+=14; why.push("warm partner");}
-  // 4) opportunity fit
+  // 4) opportunity fit. Ignitec's prime references are mostly under $2M and its SDB
+  //    edge is sharpest on task-order-sized work, so the sweet spot is weighted low.
   const v=Number(l.value)||0;
-  if(v>=1e6&&v<5e7){s+=8; why.push("value sweet spot");}
-  else if(v>=5e7&&v<2.5e8){s+=4;}
-  else if(v>=2.5e8){s+=2;}
+  if(v>=2.5e5&&v<5e6){s+=8; why.push("value sweet spot (SDB-competitive task-order size)");}
+  else if(v>=5e6&&v<5e7){s+=5; why.push("mid value");}
+  else if(v>=5e7&&v<2.5e8){s+=3;}
+  else if(v>=2.5e8){s+=1;}
   if(isShaping(l)){s+=8; why.push("shaping window");}
-  // Set-aside matters for the expiring/recompete play (prime-able, and 8(a)
-  // incumbents graduating or contracts coming off 8(a) are prime targets).
-  // Recent awards are a subcontracting play, so set-aside is not scored there.
+  // Set-aside logic is track-specific.
+  //  - Recent Award (subcontracting play): set-aside is irrelevant; subbing under
+  //    any prime is fine regardless of the prime's set-aside.
+  //  - Expiring Contract (recompete/prime play): the set-aside decides whether
+  //    Ignitec can PRIME. A set-aside Ignitec cannot hold (8(a), SDVOSB, WOSB,
+  //    HUBZone) is a SUB-ONLY target: flag it, keep it in the queue, do not reward
+  //    it as a prime opportunity.
   if(l.source==="Expiring Contract"){
-    if(is8a(l)){s+=12; why.push("8(a) set-aside (graduation/off-ramp)");}
-    else if(isSB(l)){s+=8; why.push("SB set-aside");}
+    if(cannotPrime(l)){
+      if(is8a(l)){s+=4; why.push("SUB-ONLY: 8(a) recompete (cannot prime; sub or teaming target)");}
+      else{s+=3; why.push("SUB-ONLY: set-aside Ignitec cannot hold (sub or teaming target)");}
+    }
+    else if(saText(l).includes("SMALL DISADVANTAGED")||saText(l).includes("SDB")){
+      s+=12; why.push("SDB set-aside (Ignitec can prime)");
+    }
+    else if(saText(l).includes("SMALL BUSINESS")){
+      s+=8; why.push("SB set-aside (Ignitec can prime)");
+    }
   }
+  const caution=laneCaution(l);
+  if(caution) why.push("CAUTION "+caution);
   s=Math.min(100,s);
   const tier = s>=TIER_A_MIN?"A":(s>=TIER_B_MIN?"B":"C");
   return {score:s, tier, why};
@@ -658,6 +687,7 @@ async function loadConfig(branch){
     CERTS=j.certifications||{}; CLEARANCES=j.clearances||[]; VEHICLES=j.vehicles||[]; METRICS=j.company_metrics||{};
     WARM_PARTNERS=(p.warm_partners||c.warm_partners||[]).map(x=>x.toLowerCase());
     CORE_NAICS=new Set(c.naics_codes||[]);
+    CANNOT_PRIME=(c.cannot_prime_set_asides||[]).map(x=>String(x).toUpperCase());
     EXP=p.experience||{}; const sc=p.scoring||{};
     TIER_A_MIN=sc.tier_a_min||60; TIER_B_MIN=sc.tier_b_min||40;
     return true; }catch(e){} }
@@ -1083,12 +1113,13 @@ const LANE_CAP={
  "2B":"cloud engineering and DevSecOps on AWS and Azure, including Kubernetes, CI/CD pipelines, and Terraform automation",
  "2C":"IBM mainframe sustainment and legacy modernization (z/OS, COBOL, JCL, and VSAM)",
  "2D":"federal HR and personnel security operations, including SF-86 and SF-85 processing, NBIS, and DISS",
- "2E":"managed cybersecurity, including SIEM and SOAR engineering (Microsoft Sentinel and Swimlane), DLP, and continuous monitoring",
+ "2E-1":"managed cybersecurity operations and monitoring, including SIEM and SOAR engineering (Microsoft Sentinel and Swimlane), DLP, and continuous monitoring",
+ "2E-2":"product and platform security engineering",
+ "2F":"state, local, and utility IT services and staffing",
  "3-AI":"AI and machine learning development, including NLP, generative AI, document intelligence, and MLOps",
  "3-GIS":"GIS and geospatial services on ArcGIS and Esri platforms",
  "3-BH":"behavioral and psychological health research staffing",
- "3-RAIL":"rail and transit IT support",
- "3-SLED":"state, local, and commercial IT services"};
+ "3-RAIL":"rail and transit IT support"};
 function joinList(a){a=a.filter(Boolean); if(a.length<=1)return a[0]||""; if(a.length===2)return a[0]+" and "+a[1]; return a.slice(0,-1).join(", ")+", and "+a[a.length-1];}
 function vehicleShort(s){return String(s||"").replace(/\s*\(.*$/,"").replace(/\s+[A-Z0-9-]{7,}.*$/,"").trim();}
 function certLine(){const held=(CERTS.held||[]); const q=held.filter(c=>/CMMI|ISO/i.test(c)); return q.length?joinList(q):"";}

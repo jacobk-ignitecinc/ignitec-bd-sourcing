@@ -53,11 +53,15 @@ SECTION_CAP = 30   # rows shown per bucket; overflow is reported, never silently
 # Load the Ignitec profile (lanes, agency tiers, warm partners). Falls back to
 # built-in heuristics if config/ignitec.json is missing.
 PROFILE = {}
+CRAWL_CFG = {}
 try:
     with open("config/ignitec.json") as _f:
-        PROFILE = (json.load(_f) or {}).get("profile", {})
+        _cfg = json.load(_f) or {}
+        PROFILE = _cfg.get("profile", {})
+        CRAWL_CFG = _cfg.get("crawl", {})
 except (FileNotFoundError, json.JSONDecodeError, OSError):
     PROFILE = {}
+    CRAWL_CFG = {}
 
 LANES = PROFILE.get("lanes", [])
 AGENCY_TIERS = PROFILE.get("agency_tiers", {})
@@ -93,15 +97,37 @@ def lane_match(lead):
     lane keywords and NAICS. Returns (tier, lane_id, lane_title) or (None, None, None)."""
     hay = ((lead.get("title") or "") + " " + (lead.get("notes") or "")).lower()
     naics = str(lead.get("naics") or "")
-    best = None
+    best = None  # (match_rank, tier, id, title); match_rank 0 = keyword, 1 = NAICS-only
     for lane in LANES:
         kw_hit = any(k in hay for k in lane.get("keywords", []))
-        naics_hit = naics and naics in lane.get("naics", [])
-        if kw_hit or naics_hit:
-            t = lane.get("tier", 3)
-            if best is None or t < best[0]:
-                best = (t, lane.get("id"), lane.get("title"))
-    return best or (None, None, None)
+        naics_hit = bool(naics) and naics in lane.get("naics", [])
+        if not (kw_hit or naics_hit):
+            continue
+        # A keyword hit is a stronger capability signal than a NAICS-only overlap.
+        # A generic NAICS (for example 541519) sits on several lanes and must not let
+        # a Tier 1 lane outrank a specialized lane that actually matched on keywords.
+        match_rank = 0 if kw_hit else 1
+        t = lane.get("tier", 3)
+        cand = (match_rank, t, lane.get("id"), lane.get("title"))
+        if best is None or cand[:2] < best[:2]:
+            best = cand
+    if best is None:
+        return (None, None, None)
+    return (best[1], best[2], best[3])
+
+
+def lane_caution(lead):
+    """Return the 'caution' string for the lane a lead matched, if any. Lanes with a
+    caution are sub-only, NDA-gated, or non-compete-restricted (2E RMF scope, 2E-2 and
+    2G commercial-only, 3-ITAD non-compete, 3-DONOR NDA). Surfaced in the score reasons
+    so the flag rides with the lead and nothing gets pursued blind."""
+    _, lid, _ = lane_match(lead)
+    if not lid:
+        return ""
+    for lane in LANES:
+        if lane.get("id") == lid:
+            return lane.get("caution", "") or ""
+    return ""
 
 
 # PSC classes that indicate IT / professional-services work (support our lanes).
@@ -156,25 +182,46 @@ def score_lead(lead):
     elif is_warm(target):
         s += 14; why.append("warm partner")
 
+    # Value affinity. Ignitec's prime references are mostly under $2M and its SDB
+    # edge is sharpest on task-order-sized work, so the sweet spot is weighted low.
     v = to_num(lead.get("value"))
-    if 1e6 <= v < 5e7:
-        s += 8; why.append("value sweet spot")
+    if 2.5e5 <= v < 5e6:
+        s += 8; why.append("value sweet spot (SDB-competitive task-order size)")
+    elif 5e6 <= v < 5e7:
+        s += 5; why.append("mid value")
     elif 5e7 <= v < 2.5e8:
-        s += 4
+        s += 3
     elif v >= 2.5e8:
-        s += 2
+        s += 1
     d = days_until(lead.get("popEnd"))
     if lead.get("source") == "Expiring Contract" and d is not None and 270 <= d <= 540:
         s += 8; why.append("shaping window")
-    # Set-aside matters for the expiring/recompete play only (recent awards are a
-    # subcontracting play). 8(a) ranks highest: incumbents graduating or contracts
-    # coming off 8(a) are prime targets.
+
+    # Set-aside logic is track-specific.
+    #  - Recent Award (subcontracting play): set-aside is irrelevant. Subbing under
+    #    any prime is allowed regardless of the prime's set-aside.
+    #  - Expiring Contract (recompete/prime play): the set-aside decides whether
+    #    Ignitec can PRIME the recompete at all. A set-aside Ignitec cannot hold
+    #    (8(a), SDVOSB, WOSB, HUBZone) makes this a SUB-ONLY target, per the user's
+    #    2026-07 decision: flag it, keep it in the queue, do not filter it out.
     if lead.get("source") == "Expiring Contract":
         sa = set_aside_of(lead).upper()
-        if "8(A)" in sa or "8A" in sa:
-            s += 12; why.append("8(a) set-aside (graduation/off-ramp)")
-        elif "SMALL BUSINESS" in sa or "SMALL DISADVANTAGED" in sa or "SDB" in sa:
-            s += 8; why.append("SB set-aside")
+        cannot = [x.upper() for x in (CRAWL_CFG.get("cannot_prime_set_asides") or [])]
+        if sa and any(tok and tok in sa for tok in cannot):
+            # Ignitec cannot prime this recompete. Still a real sub target; do not
+            # reward it as a prime opportunity, and label it clearly.
+            if "8(A)" in sa or "8A" in sa:
+                s += 4; why.append("SUB-ONLY: 8(a) recompete (cannot prime; sub or teaming target)")
+            else:
+                s += 3; why.append("SUB-ONLY: set-aside Ignitec cannot hold (sub or teaming target)")
+        elif "SMALL DISADVANTAGED" in sa or "SDB" in sa:
+            s += 12; why.append("SDB set-aside (Ignitec can prime)")
+        elif "SMALL BUSINESS" in sa:
+            s += 8; why.append("SB set-aside (Ignitec can prime)")
+
+    caution = lane_caution(lead)
+    if caution:
+        why.append(f"CAUTION {caution}")
 
     s = min(100, s)
     t = "A" if s >= TIER_A_MIN else ("B" if s >= TIER_B_MIN else "C")

@@ -1,17 +1,21 @@
 {
   "_meta": {
     "purpose": "Single source of truth for BD sourcing targeting and pre-vet scoring. The crawler reads the 'crawl' block; bd_report.py reads the 'profile' block. Edit this file to tune targeting without touching code.",
-    "reconciled_to": ["Master Narrative Library v2.5", "BD Capture Playbook v1.2", "Pursuit Priority v1.2", "Target Agency Tracker v1.2", "Quick Reference v3"],
+    "reconciled_to": [
+      "Master Narrative Library v2.9",
+      "BD Capture Playbook v1.4",
+      "Quick Reference v4",
+      "Proposal Style Guide v1.2",
+      "Go/No-Go Evaluation Prompt v2.0"
+    ],
     "authoritative_note": "Certifications, clearances, and past-performance claims below are transcribed from the authoritative documents above. Do not add a claim that is not in those documents. Anand owns all pricing. Flag, do not silently change, anything affecting a defensibility posture."
   },
-
   "identifiers": {
     "uei": "KLHRNT5GPFH5",
     "cage": "88CY6",
     "location": "Leesburg, VA",
     "duns_note": "DUNS 081557884 is retired (2022). Never use DUNS in any output or document."
   },
-
   "certifications": {
     "held": [
       "Small Disadvantaged Business (SDB)",
@@ -22,63 +26,109 @@
       "TS Facility Clearance",
       "DOT DBE"
     ],
-    "pending": ["8(a)"],
-    "readiness_only_not_certified": ["CMMC Level 1 / IL-4 / IL-5 readiness"],
-    "do_not_claim": ["8(a) active or certified", "SDVOSB", "WOSB", "EDWOSB", "HUBZone", "CMMC certified", "DCAA-approved", "DCAA-audited"]
+    "pending": [
+      "8(a)"
+    ],
+    "readiness_only_not_certified": [
+      "CMMC Level 1 / IL-4 / IL-5 readiness"
+    ],
+    "do_not_claim": [
+      "8(a) active or certified",
+      "SDVOSB",
+      "WOSB",
+      "EDWOSB",
+      "HUBZone",
+      "CMMC certified",
+      "DCAA-approved",
+      "DCAA-audited"
+    ]
   },
-
   "clearances": [
-    "Secret", "Top Secret", "TS/SCI (via Deloitte OARS bench)",
-    "Public Trust", "Trustworthy Determination / Tier 3", "DHA Suitability"
+    "Secret",
+    "Top Secret",
+    "TS/SCI (via Deloitte OARS bench)",
+    "Public Trust",
+    "Trustworthy Determination / Tier 3",
+    "DHA Suitability"
   ],
-
   "vehicles": [
-    "GSA MAS 47QTCA24D0060 (ceiling $500K, active to 2029)",
-    "SeaPort-NxG N0017825D7445 (Navy, $4B ceiling)",
-    "Alliant 2 (via IBM/OmniSolve)",
-    "CIO-SP3 (via ICF/Accenture channels)",
-    "PB-ITS BPA"
+    "GSA MAS 47QTCA24D0060 (active through 03/05/2044; active SINs 54151S and 518210C; SIN mod in progress)",
+    "SeaPort-NxG N0017825D7445 (Navy)",
+    "[CONFIRM] GSA MAS ceiling: prior config stated $500K. Confirm current ceiling before using it to gate any PRIME opportunity. Subcontracting under another prime does NOT consume Ignitec's ceiling, so the recent-awards sub play is not ceiling-limited."
   ],
-
   "company_metrics": {
-    "note": "Cumulative and realized. $51M is cumulative realized customer revenue 2019-Apr 2026 (accrual basis), never annual. Use for grounded AI summaries only; do not inject into lead records.",
-    "total_customer_revenue": "$51M+ cumulative realized (2019-Apr 2026)",
-    "total_placements": "1,529+ (2018-present)",
-    "active_contracts": 14,
-    "active_placements": 180,
+    "note": "Cumulative and realized. $51.1M is cumulative realized customer revenue 2019-Apr 2026 (accrual basis), never annual. Placement and customer counts are from Consolidated Data through June 30, 2026 (CTH Projects and DH Hybrid tabs only; Sheet1 is a duplicate subset and excluded). Use for grounded AI summaries only; do not inject into lead records.",
+    "total_customer_revenue": "$51.1M+ cumulative realized (2019-Apr 2026)",
+    "total_placements": "960+ (2019-Jun 2026)",
+    "active_contracts": "14 active contracts and engagements (as of May 31, 2026)",
+    "active_placements": "62 (as of May 31, 2026)",
     "customer_retention": "100%",
     "placement_retention": "95%+",
     "secret_cleared_placements": "60+",
     "ts_tssci_cleared_placements": "8+",
     "contracts_terminated_for_cause": 0,
-    "primes_and_direct_clients": 68
+    "primes_and_direct_clients": "78 named customers",
+    "unique_individuals_placed": "590",
+    "cy2026_placements_ytd": "99 (through Jun 30, 2026)",
+    "unique_lcats": "329",
+    "prior_figure_retired": "The 1,529 placement figure double-counted the Sheet1 tab and is retired."
   },
-
   "crawl": {
     "_note": "Seeded from the current crawler values so behavior is unchanged when this file is first read. recommended_naics_additions are NOT yet applied to naics_codes; move them up once confirmed (adding NAICS only widens the crawl, it never drops existing leads).",
     "run_recent_awards": true,
     "run_expiring_pass": true,
     "run_sam_pass": false,
     "_feeds_note": "RFI/Sources Sought (SAM) paused per direction 2026-07. Set run_sam_pass true to resume. Recent awards and expiring contracts are the active plays.",
-    "naics_codes": ["541512", "541511", "541513", "541611", "541618", "561320"],
+    "naics_codes": [
+      "541512",
+      "541511",
+      "541513",
+      "541611",
+      "541618",
+      "561320",
+      "541330",
+      "518210",
+      "541519"
+    ],
     "recommended_naics_additions": {
-      "codes": ["541330", "518210", "541519"],
-      "reason": "[CONFIRM] 541330 Engineering Services and 518210 Data Processing/Hosting appear in Quick Reference / Pursuit tool NAICS; 541519 Other Computer Related covers cyber. Add to naics_codes to widen coverage."
+      "codes": [],
+      "reason": "Applied to naics_codes in the v1.4 update: 541330 Engineering Services, 518210 Data Processing and Hosting, 541519 Other Computer Related (cyber). Adding NAICS only widens the crawl."
     },
     "target_agencies": [
       "Department of Defense",
       "Department of Health and Human Services",
       "Department of Justice",
-      "General Services Administration"
+      "General Services Administration",
+      "Department of the Treasury",
+      "Department of Commerce",
+      "Department of Education",
+      "Department of Energy",
+      "Department of Homeland Security",
+      "Department of Veterans Affairs",
+      "Department of Transportation"
     ],
     "warm_partners": [
-      "accenture", "deloitte", "amyx", "tetra tech", "icf", "optum",
-      "omnisolve", "ntt data", "alphasix", "infolock", "nsi", "rsdc",
-      "tjfact", "ctec"
+      "accenture",
+      "deloitte",
+      "amyx",
+      "tetra tech",
+      "icf",
+      "optum",
+      "omnisolve",
+      "ntt data",
+      "alphasix",
+      "infolock",
+      "nsi",
+      "rsdc",
+      "tjfact",
+      "ctec",
+      "chenega",
+      "astraeus",
+      "articus"
     ],
     "recent_awards_lookback_days": 120,
     "_recent_lookback_note": "Days back to scan for recent award ACTIONS (mods/obligations/options). 120 lets the cockpit bucket by action age: 0-30, 30-90, and 90+ days. Raise to widen the 90+ bucket.",
-    "min_award_value": 1000000,
+    "min_award_value": 250000,
     "expiring_min_days": 90,
     "expiring_max_days": 730,
     "_expiring_window_note": "90 = at least 3 months of lead time (never forecast tighter). 730 = out to 24 months. Cockpit buckets: near-term 3-6mo (90-180d), mid-term 6-12mo (180-365d), long-term 12mo+ (365d+).",
@@ -95,106 +145,564 @@
     "run_sam_poc": true,
     "max_sam_poc_per_run": 1500,
     "_sam_poc_note": "Company enrichment runs for EVERY aligned lead using the awardee UEI USASpending returns directly (Recipient UEI), so company info lands on all cards, not just HigherGov-matched ones. Per UEI: (1) HigherGov /awardee/ -> company profile (website, location, employees, founded, business/socioeconomic types, HigherGov company page); (2) SAM.gov Entity API -> company POC names (public tier: names/titles only). The website/domain drives precise ZoomInfo/LinkedIn lookups. Government contracting-office POCs are intentionally NOT collected; focus is the company and its contacts. Needs HIGHERGOV_API_KEY and SAM_API_KEY (Entity read-public). Incumbent identity is set for all leads immediately; profiles fill as max_sam_poc_per_run allows.",
-    "held_vehicle_piids": ["47QTCA24D0060", "N0017825D7445"],
-    "exclude_recipient_names": ["ignitec"],
-    "prime_set_asides": ["", "NO SET ASIDE USED.", "SMALL BUSINESS SET ASIDE - TOTAL",
-                          "SMALL BUSINESS SET ASIDE - PARTIAL", "SMALL DISADVANTAGED BUSINESS SET-ASIDE"],
-    "cannot_prime_set_asides": ["SERVICE-DISABLED VETERAN-OWNED SMALL BUSINESS SET-ASIDE",
-                                 "WOMEN-OWNED SMALL BUSINESS", "8(A)", "HUBZONE", "VETERAN-OWNED"]
+    "held_vehicle_piids": [
+      "47QTCA24D0060",
+      "N0017825D7445"
+    ],
+    "exclude_recipient_names": [
+      "ignitec"
+    ],
+    "prime_set_asides": [
+      "",
+      "NO SET ASIDE USED.",
+      "SMALL BUSINESS SET ASIDE - TOTAL",
+      "SMALL BUSINESS SET ASIDE - PARTIAL",
+      "SMALL DISADVANTAGED BUSINESS SET-ASIDE"
+    ],
+    "cannot_prime_set_asides": [
+      "SERVICE-DISABLED VETERAN-OWNED SMALL BUSINESS SET-ASIDE",
+      "SERVICE-DISABLED VETERAN-OWNED",
+      "WOMEN-OWNED SMALL BUSINESS",
+      "WOSB",
+      "EDWOSB",
+      "8(A)",
+      "8A",
+      "HUBZONE",
+      "VETERAN-OWNED"
+    ],
+    "_min_award_note": "Lowered from $1M to $250K in v1.4. Most Ignitec prime references are under $2M, and task-order-sized work is where SDB status is most competitive. The cockpit still buckets by value; a low floor widens the funnel without forcing pursuit.",
+    "_set_aside_note": "cannot_prime_set_asides are set-asides Ignitec is not eligible to hold (8(a) pending not active; no SDVOSB/WOSB/HUBZone). On the EXPIRING/recompete play these are sub-only targets, flagged in scoring, NOT filtered out. On the RECENT-AWARD play set-aside is irrelevant since subbing under any prime is allowed."
   },
-
   "profile": {
     "gate_bands": {
-      "pursue": 2.8, "pursue_as_sub": 2.4, "conditional": 2.0,
-      "note": "2.8+ pursue (prime/preferred sub); 2.4-2.7 pursue as sub; 2.0-2.3 conditional/RFI only; below 2.0 no-bid. Any single gate at 0 is an immediate no-bid. RFI/Sources Sought touching a Tier 1 or Tier 2 lane responds regardless of score."
+      "pursue": 2.6,
+      "pursue_as_sub": 2.2,
+      "conditional": 2.0,
+      "framework": "five-gate (v1.4)",
+      "gates": [
+        "1 Core Lane Alignment",
+        "2 Past Performance Defensibility",
+        "3 Clearance and Compliance",
+        "4 Competitive Position",
+        "5 Effort vs Probability of Win"
+      ],
+      "feasibility_check": "Run before scoring, not scored. Binary. Any failure is an immediate no-bid: submission mechanics, pricing gate (Anand sign-off), mandatory artifacts, named personnel, legal restrictions. Current workload/capacity is NOT scored; it is filtered at sourcing.",
+      "note": "2.6+ pursue (prime/preferred sub); 2.2-2.5 pursue as sub; 2.0-2.1 conditional/RFI only; below 2.0 no-bid. Any single gate at 0 is an immediate no-bid. Feasibility failure is an immediate no-bid and is not scored. RFI/Sources Sought touching a Tier 1 or Tier 2 lane responds regardless of score."
     },
-
     "experience": {
-      "_note": "Data-grounded past performance for priority scoring. Prime awards and reported subawards pulled from Ignitec UEI KLHRNT5GPFH5 on USASpending (2026-07), reconciled with the authoritative profile docs. proven_agencies/naics/psc raise an opportunity's experience-affinity score; prime_relationships are primes Ignitec has actually subcontracted to (strongest signal for the subcontracting play). Substring, case-insensitive matching.",
-      "proven_agencies": ["commerce", "social security", "ssa", "treasury", "defense", "justice",
-                           "general services", "gsa", "education", "energy", "health", "dha"],
-      "proven_naics": ["541330", "541511", "541512"],
-      "proven_psc": ["R499", "DB02", "DA01"],
-      "prime_relationships": ["accenture", "deloitte", "optum"]
+      "_note": "Data-grounded past performance for priority scoring, reconciled to MNL v2.9 (2026-07). proven_agencies/naics/psc raise experience-affinity; prime_relationships are primes Ignitec has actually subcontracted to (strongest signal for the subcontracting play). Substring, case-insensitive.",
+      "proven_agencies": [
+        "commerce",
+        "social security",
+        "ssa",
+        "treasury",
+        "defense",
+        "justice",
+        "general services",
+        "gsa",
+        "education",
+        "energy",
+        "health",
+        "dha"
+      ],
+      "proven_naics": [
+        "541330",
+        "541511",
+        "541512"
+      ],
+      "proven_psc": [
+        "R499",
+        "DB02",
+        "DA01"
+      ],
+      "prime_relationships": [
+        "accenture",
+        "deloitte",
+        "optum",
+        "amyx",
+        "icf",
+        "omnisolve",
+        "alphasix",
+        "ntt data",
+        "chenega",
+        "astraeus",
+        "articus"
+      ]
     },
-
     "scoring": {
       "_note": "Priority score 0-100 -> tiers. Data lists live in 'experience'; these are the tier cutoffs. Tier A = review first, B = worth a look, C = long tail (hidden by default in the cockpit). Tune the cutoffs to widen or tighten the review queue.",
       "tier_a_min": 70,
       "tier_b_min": 60
     },
-
     "lanes": [
-      {"id": "1A", "tier": 1, "title": "Federal IT Staff Augmentation and Workforce Solutions",
-       "keywords": ["staff augmentation", "staffing", "workforce", "labor hour", "t&m", "time and materials", "it professional", "placement", "help desk staffing", "surge", "lcat"],
-       "naics": ["561320", "541512", "541511"]},
-      {"id": "1B", "tier": 1, "title": "ServiceNow Development and Implementation",
-       "keywords": ["servicenow", "itsm", "itom", "itam", "cmdb", "csm", "service mapping", "discovery", "service catalog"],
-       "naics": ["541512", "541511"]},
-      {"id": "1C", "tier": 1, "title": "Federal Help Desk and IT Service Desk Operations",
-       "keywords": ["help desk", "service desk", "tier 1", "tier 2", "tier 3", "24x7", "24/7", "ticketing", "itil", "end user support", "call center", "customer care"],
-       "naics": ["541513", "541519", "561320"]},
-      {"id": "1D", "tier": 1, "title": "DoD Contract Management and Acquisition Support",
-       "keywords": ["contract analyst", "acquisition support", "far", "dfars", "aidar", "source selection", "sow", "pws", "igce", "dcma", "dcaa", "subcontract", "pre-award", "post-award"],
-       "naics": ["541611", "541618"]},
-      {"id": "1E", "tier": 1, "title": "Army PPBE and IT Budget Analysis",
-       "keywords": ["ppbe", "pom", "bes", "cprobe", "apms", "budget", "resource analysis", "portfolio management", "g-6", "g-8", "cost benefit", "bca"],
-       "naics": ["541611", "541618"]},
-
-      {"id": "2A", "tier": 2, "title": "DoD Financial Systems (OneStream, Oracle EBS)",
-       "keywords": ["onestream", "oracle ebs", "financial system", "financial consolidation", "deltek", "costpoint", "erp", "audit remediation"],
-       "naics": ["541511", "541512"]},
-      {"id": "2B", "tier": 2, "title": "Cloud Engineering and DevOps (AWS/Azure)",
-       "keywords": ["cloud", "aws", "azure", "devops", "devsecops", "kubernetes", "ci/cd", "terraform", "microservices", "infrastructure as code", "databricks"],
-       "naics": ["541512", "541519"]},
-      {"id": "2C", "tier": 2, "title": "IBM Mainframe and Legacy Systems",
-       "keywords": ["mainframe", "z/os", "cobol", "z14", "jcl", "legacy modernization", "vsam"],
-       "naics": ["541512", "541513"]},
-      {"id": "2D", "tier": 2, "title": "Federal HR and Personnel Operations / Personnel Security",
-       "keywords": ["human resources", "hr ", "personnel security", "persec", "sf-86", "sf-85", "nbis", "diss", "e-app", "classification", "vetting", "ecq", "ses"],
-       "naics": ["541611", "561110", "561320"]},
-      {"id": "2E", "tier": 2, "title": "Federal Cybersecurity and Managed Security Services",
-       "keywords": ["cybersecurity", "cyber", "soar", "siem", "sentinel", "swimlane", "dlp", "infosec", "managed security", "mssp", "incident response", "vulnerability"],
-       "naics": ["541512", "541519"]},
-
-      {"id": "3-AI", "tier": 3, "title": "AI/ML Development",
-       "keywords": ["artificial intelligence", "machine learning", "ai/ml", "nlp", "generative ai", "mlops", "document intelligence"],
-       "naics": ["541512"]},
-      {"id": "3-GIS", "tier": 3, "title": "GIS / Geospatial",
-       "keywords": ["gis", "arcgis", "geospatial", "esri", "mapping"],
-       "naics": ["541512", "541370"]},
-      {"id": "3-BH", "tier": 3, "title": "Behavioral Health Research",
-       "keywords": ["behavioral health", "psychological health", "mental health", "research scientist"],
-       "naics": ["541720", "541611"]},
-      {"id": "3-RAIL", "tier": 3, "title": "Rail / Transit IT",
-       "keywords": ["rail", "transit", "hart"],
-       "naics": ["541512"]},
-      {"id": "3-SLED", "tier": 3, "title": "SLED / Commercial IT",
-       "keywords": ["state", "county", "municipal", "water utility"],
-       "naics": ["541512"]}
+      {
+        "id": "1A",
+        "tier": 1,
+        "title": "Federal IT Staff Augmentation and Workforce Solutions",
+        "keywords": [
+          "staff augmentation",
+          "staffing",
+          "workforce",
+          "labor hour",
+          "t&m",
+          "time and materials",
+          "it professional",
+          "placement",
+          "help desk staffing",
+          "surge",
+          "lcat"
+        ],
+        "naics": [
+          "561320",
+          "541512",
+          "541511"
+        ]
+      },
+      {
+        "id": "1B",
+        "tier": 1,
+        "title": "ServiceNow Development and Implementation",
+        "keywords": [
+          "servicenow",
+          "itsm",
+          "itom",
+          "itam",
+          "cmdb",
+          "csm",
+          "service mapping",
+          "discovery",
+          "service catalog"
+        ],
+        "naics": [
+          "541512",
+          "541511"
+        ]
+      },
+      {
+        "id": "1C",
+        "tier": 1,
+        "title": "Federal Help Desk and IT Service Desk Operations",
+        "keywords": [
+          "help desk",
+          "service desk",
+          "tier 1",
+          "tier 2",
+          "tier 3",
+          "24x7",
+          "24/7",
+          "ticketing",
+          "itil",
+          "end user support",
+          "call center",
+          "customer care"
+        ],
+        "naics": [
+          "541513",
+          "541519",
+          "561320"
+        ]
+      },
+      {
+        "id": "1D",
+        "tier": 1,
+        "title": "DoD Contract Management and Acquisition Support",
+        "keywords": [
+          "contract analyst",
+          "acquisition support",
+          "far",
+          "dfars",
+          "aidar",
+          "source selection",
+          "sow",
+          "pws",
+          "igce",
+          "dcma",
+          "dcaa",
+          "subcontract",
+          "pre-award",
+          "post-award"
+        ],
+        "naics": [
+          "541611",
+          "541618"
+        ]
+      },
+      {
+        "id": "1E",
+        "tier": 1,
+        "title": "Army PPBE and IT Budget Analysis",
+        "keywords": [
+          "ppbe",
+          "pom",
+          "bes",
+          "cprobe",
+          "apms",
+          "budget",
+          "resource analysis",
+          "portfolio management",
+          "g-6",
+          "g-8",
+          "cost benefit",
+          "bca"
+        ],
+        "naics": [
+          "541611",
+          "541618"
+        ],
+        "caution": "[CONFIRM current Amyx engagement status before present-tense claims. Single-reference lane (AMYX-02). See Playbook v1.4 Lane 1E status check.]"
+      },
+      {
+        "id": "2A",
+        "tier": 2,
+        "title": "DoD Financial Systems (OneStream, Oracle EBS)",
+        "keywords": [
+          "onestream",
+          "oracle ebs",
+          "financial system",
+          "financial consolidation",
+          "deltek",
+          "costpoint",
+          "erp",
+          "audit remediation"
+        ],
+        "naics": [
+          "541511",
+          "541512"
+        ]
+      },
+      {
+        "id": "2B",
+        "tier": 2,
+        "title": "Cloud Engineering and DevOps (AWS/Azure)",
+        "keywords": [
+          "cloud",
+          "aws",
+          "azure",
+          "devops",
+          "devsecops",
+          "kubernetes",
+          "ci/cd",
+          "terraform",
+          "microservices",
+          "infrastructure as code",
+          "databricks"
+        ],
+        "naics": [
+          "541512",
+          "541519"
+        ]
+      },
+      {
+        "id": "2C",
+        "tier": 2,
+        "title": "IBM Mainframe and Legacy Systems",
+        "keywords": [
+          "mainframe",
+          "z/os",
+          "cobol",
+          "z14",
+          "jcl",
+          "legacy modernization",
+          "vsam"
+        ],
+        "naics": [
+          "541512",
+          "541513"
+        ]
+      },
+      {
+        "id": "2D",
+        "tier": 2,
+        "title": "Federal HR and Personnel Operations / Personnel Security",
+        "keywords": [
+          "human resources",
+          "hr ",
+          "personnel security",
+          "persec",
+          "sf-86",
+          "sf-85",
+          "nbis",
+          "diss",
+          "e-app",
+          "classification",
+          "vetting",
+          "ecq",
+          "ses"
+        ],
+        "naics": [
+          "541611",
+          "561110",
+          "561320"
+        ]
+      },
+      {
+        "id": "2E-1",
+        "tier": 2,
+        "title": "Cybersecurity Operations and Managed Security Services",
+        "keywords": [
+          "cybersecurity",
+          "cyber",
+          "soar",
+          "siem",
+          "sentinel",
+          "swimlane",
+          "dlp",
+          "infosec",
+          "managed security",
+          "mssp",
+          "incident response",
+          "vulnerability"
+        ],
+        "naics": [
+          "541512",
+          "541519"
+        ],
+        "caution": "[SUB-ONLY for RMF/ATO/CSAM/POA&M/FISMA/ISSO scope. No MNL v2.9 reference closes that gap. See Playbook v1.4 Lane 2E scope boundary.]"
+      },
+      {
+        "id": "2E-2",
+        "tier": 2,
+        "title": "Product and Platform Security Engineering",
+        "keywords": [
+          "pki",
+          "certificate",
+          "hsm",
+          "private ca",
+          "certificate authority",
+          "key management",
+          "secure device identity",
+          "device identity",
+          "csr provisioning",
+          "iot security",
+          "embedded security",
+          "code signing",
+          "secure provisioning"
+        ],
+        "naics": [
+          "541511",
+          "541512",
+          "541519"
+        ],
+        "caution": "[Commercial/OEM references (Crestron, Shure). Do NOT offer as federal cybersecurity past performance without a federal analog. NDA release gates apply.]"
+      },
+      {
+        "id": "2F",
+        "tier": 2,
+        "title": "State, Local, and Utility IT Services and Staffing",
+        "keywords": [
+          "state",
+          "county",
+          "municipal",
+          "water utility",
+          "utility",
+          "local government",
+          "govtech",
+          "revenue administration",
+          "tax and licensing",
+          "citizen engagement"
+        ],
+        "naics": [
+          "541512",
+          "541511",
+          "541513"
+        ]
+      },
+      {
+        "id": "2G",
+        "tier": 2,
+        "title": "Commercial Product and Platform Engineering",
+        "keywords": [
+          "sdk",
+          "platform engineering",
+          "product engineering",
+          "software development kit",
+          "localization",
+          "cloud platform",
+          "full stack",
+          "java platform",
+          "work management migration"
+        ],
+        "naics": [
+          "541511",
+          "541512"
+        ],
+        "caution": "[Commercial/OEM only (Crestron, Shure, Avenu, DonorIQ). Does not establish federal IT services past performance. NDA release gates apply.]"
+      },
+      {
+        "id": "3-AI",
+        "tier": 3,
+        "title": "AI/ML Development",
+        "keywords": [
+          "artificial intelligence",
+          "machine learning",
+          "ai/ml",
+          "nlp",
+          "generative ai",
+          "mlops",
+          "document intelligence"
+        ],
+        "naics": [
+          "541512"
+        ]
+      },
+      {
+        "id": "3-GIS",
+        "tier": 3,
+        "title": "GIS / Geospatial",
+        "keywords": [
+          "gis",
+          "arcgis",
+          "geospatial",
+          "esri",
+          "mapping"
+        ],
+        "naics": [
+          "541512",
+          "541370"
+        ]
+      },
+      {
+        "id": "3-BH",
+        "tier": 3,
+        "title": "Behavioral Health Research",
+        "keywords": [
+          "behavioral health",
+          "psychological health",
+          "mental health",
+          "research scientist"
+        ],
+        "naics": [
+          "541720",
+          "541611"
+        ]
+      },
+      {
+        "id": "3-RAIL",
+        "tier": 3,
+        "title": "Rail / Transit IT",
+        "keywords": [
+          "rail",
+          "transit",
+          "hart"
+        ],
+        "naics": [
+          "541512"
+        ]
+      },
+      {
+        "id": "3-ITAD",
+        "tier": 3,
+        "title": "ITAD and Secure Media Destruction",
+        "keywords": [
+          "itad",
+          "it asset disposition",
+          "media destruction",
+          "data sanitization",
+          "hard drive destruction",
+          "electronic asset disposition",
+          "degauss",
+          "sanitization"
+        ],
+        "naics": [
+          "561210",
+          "423430"
+        ],
+        "caution": "[CITATION BLOCKED and NON-COMPETE. CHEN-01 FBI MDSS under Subcontract 940007 Sections 16, 25.10, 25.11. RFI only, and only where the Articus restriction does not apply. See Playbook v1.4.]"
+      },
+      {
+        "id": "3-DONOR",
+        "tier": 3,
+        "title": "Healthcare Donation and Transplantation Systems",
+        "keywords": [
+          "donation",
+          "transplant",
+          "tissue bank",
+          "allograft",
+          "donor",
+          "organ procurement",
+          "aatb"
+        ],
+        "naics": [
+          "541511",
+          "541512",
+          "621991"
+        ],
+        "caution": "[DIQ-01. Present as engagements not contracts, never aggregate above $300K. NDA release gates. Closest match for DLA/NDLR.]"
+      }
     ],
-
     "agency_tiers": {
-      "_note": "Tier 1 = Agency Tracker Tier A (P1/P2). Tier 2 = Tracker Tier B. maintain = Tracker Tier D reference assets. Match is case-insensitive substring against the lead's agency string.",
+      "_note": "Tier 1 = Agency Tracker Tier A (P1/P2). Tier 2 = Tracker Tier B. maintain = Tracker Tier D reference assets. Added FBI and Department of State/INL (CHEN-01 footprint) to tier1. Case-insensitive substring against the lead's agency string. NOTE: 'state' matches Department of State but also substrings like 'real estate'; scoring is a triage aid, verify agency on the card.",
       "tier1": [
-        "defense health", "dha", "army", "g-6", "g6", "navy", "nesd", "nswc", "navsea",
-        "air force", "military onesource", "osit", "nih", "national library of medicine", "ncats",
-        "general services administration", "gsa", "justice", "usao", "dea"
+        "defense health",
+        "dha",
+        "army",
+        "g-6",
+        "g6",
+        "navy",
+        "nesd",
+        "nswc",
+        "navsea",
+        "air force",
+        "military onesource",
+        "osit",
+        "nih",
+        "national library of medicine",
+        "ncats",
+        "general services administration",
+        "gsa",
+        "justice",
+        "usao",
+        "dea",
+        "fbi",
+        "federal bureau of investigation",
+        "state",
+        "international narcotics",
+        "inl"
       ],
       "tier2": [
-        "treasury", "irs", "occ", "commerce", "uspto", "ntia", "noaa", "census",
-        "education", "federal student aid", "fsa", "homeland security", "dhs",
-        "veterans affairs", "transportation", "faa", "disa"
+        "treasury",
+        "irs",
+        "occ",
+        "commerce",
+        "uspto",
+        "ntia",
+        "noaa",
+        "census",
+        "education",
+        "federal student aid",
+        "fsa",
+        "homeland security",
+        "dhs",
+        "veterans affairs",
+        "transportation",
+        "faa",
+        "disa"
       ],
       "maintain": [
-        "tennessee valley authority", "tva", "nasa goddard", "bureau of labor statistics",
-        "library of congress", "wssc"
+        "tennessee valley authority",
+        "tva",
+        "nasa goddard",
+        "bureau of labor statistics",
+        "library of congress",
+        "wssc"
       ]
     },
-
     "warm_partners": [
-      "accenture", "deloitte", "amyx", "tetra tech", "icf", "optum",
-      "omnisolve", "ntt data", "alphasix", "infolock", "nsi", "rsdc", "tjfact", "ctec"
-    ]
+      "accenture",
+      "deloitte",
+      "amyx",
+      "tetra tech",
+      "icf",
+      "optum",
+      "omnisolve",
+      "ntt data",
+      "alphasix",
+      "infolock",
+      "nsi",
+      "rsdc",
+      "tjfact",
+      "ctec"
+    ],
+    "_lanes_note": "Rebuilt to MNL v2.9 / Playbook v1.4 in the v1.4 config update. 2E split into 2E-1 (cyber ops/MSSP) and 2E-2 (product/platform security). Added 2F (SLED, promoted from Tier 3) and 2G (commercial product engineering). Added Tier 3 ITAD and Healthcare Donation. 'caution' fields flag sub-only scope, NDA gates, and non-competes; scoring reads them to append a warning, never to silently drop."
   }
 }
