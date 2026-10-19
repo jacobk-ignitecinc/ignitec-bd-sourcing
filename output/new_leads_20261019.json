@@ -1,0 +1,1016 @@
+[
+  {
+    "id": "RA-94ddf01271",
+    "source": "Recent Award",
+    "title": "ECS FEDERAL, LLC award at General Services Administration",
+    "prime": "ECS FEDERAL, LLC",
+    "agency": "General Services Administration",
+    "subAgency": "Federal Acquisition Service",
+    "value": 14571553.42,
+    "awardId": "47QFCA19F0025",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "D399",
+      "description": "IT AND TELECOM- OTHER IT AND TELECOMMUNICATIONS"
+    },
+    "popStart": "2019-05-24",
+    "popEnd": "2020-05-23",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "IGF::OT::IGF CDM DASHBOARD ECOSYSTEM TO",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-61026a7002",
+    "source": "Recent Award",
+    "title": "BOOZ ALLEN HAMILTON INC award at Department of Health and Human Services",
+    "prime": "BOOZ ALLEN HAMILTON INC",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Centers for Disease Control and Prevention",
+    "value": 14182428.02,
+    "awardId": "75D30121F10510",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2021-06-16",
+    "popEnd": "2023-09-26",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "SCALED ENTERPRISE DATA ANALYTICS AND VISUALIZATION (SEDAV)",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-4cc82ef1c4",
+    "source": "Recent Award",
+    "title": "GENERAL DYNAMICS INFORMATION TECHNOLOGY, INC. award at General Services Administration",
+    "prime": "GENERAL DYNAMICS INFORMATION TECHNOLOGY, INC.",
+    "agency": "General Services Administration",
+    "subAgency": "Federal Acquisition Service",
+    "value": 14115496.53,
+    "awardId": "47QFSA24F0091",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DA10",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SOFTWARE AS A SERVICE"
+    },
+    "popStart": "2024-09-23",
+    "popEnd": "2026-12-12",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "NAVY NEPTUNE ENTERPRISE CLOUD MANAGEMENT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-cac964bbf8",
+    "source": "Recent Award",
+    "title": "AUDACIOUS INQUIRY LLC award at Department of Health and Human Services",
+    "prime": "AUDACIOUS INQUIRY LLC",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Office of the Assistant Secretary for Administration",
+    "value": 10527260.6,
+    "awardId": "75P00120F37004",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2020-07-02",
+    "popEnd": "2025-07-01",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "ONC HEALTH IT CERTIFICATION PROGRAM SUPPORT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-dc6601db16",
+    "source": "Recent Award",
+    "title": "THE ONE 23 GROUP INC. award at Department of Justice",
+    "prime": "THE ONE 23 GROUP INC.",
+    "agency": "Department of Justice",
+    "subAgency": "Offices, Boards and Divisions",
+    "value": 4530336.52,
+    "awardId": "15JPSS26F00000836",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DD01",
+      "description": "IT AND TELECOM - SERVICE DELIVERY SUPPORT SERVICES: ITSM, OPERATIONS CENTER, PROJECT/PM (LABOR)"
+    },
+    "popStart": "2026-04-01",
+    "popEnd": "2027-03-31",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "FY26 NETWORK OPS SERVICES",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-6b84cebdde",
+    "source": "Recent Award",
+    "title": "RESEARCH TRIANGLE INSTITUTE award at Department of Health and Human Services",
+    "prime": "RESEARCH TRIANGLE INSTITUTE",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Centers for Medicare and Medicaid Services",
+    "value": 4073623.0,
+    "awardId": "75FCMC25FJ040",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2025-04-01",
+    "popEnd": "2027-03-31",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "THE PURPOSE OF THIS TASK ORDER IS TO CONTINUE THE NATIONAL IMPLEMENTATION OF THE HOSPITAL OUTPATIENT DEPARTMENTS (HOPDS) AND AMBULATORY SURGERY CENTERS (ASCS) CONSUMER ASSESSMENT OF HEALTHCARE PROVIDERS AND SYSTEMS(R) (OAS CAHPS) SURVEY BY APPROVED O",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-492ab84168",
+    "source": "Recent Award",
+    "title": "NAVA PBC award at General Services Administration",
+    "prime": "NAVA PBC",
+    "agency": "General Services Administration",
+    "subAgency": "Federal Acquisition Service",
+    "value": 2032668.8,
+    "awardId": "47QACA26F0128",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DA10",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SOFTWARE AS A SERVICE"
+    },
+    "popStart": "2026-05-05",
+    "popEnd": "2027-05-04",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "HIPDS WEB APPLICATION DEVELOPMENT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-3d56342c7e",
+    "source": "Recent Award",
+    "title": "MATHEMATICA INC. award at Department of Health and Human Services",
+    "prime": "MATHEMATICA INC.",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Office of the Assistant Secretary for Administration",
+    "value": 1809405.0,
+    "awardId": "HHSP23337019T",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R408",
+      "description": "SUPPORT- PROFESSIONAL: PROGRAM MANAGEMENT/SUPPORT"
+    },
+    "popStart": "2016-09-30",
+    "popEnd": "2020-09-29",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "IGF::OT::IGF THE ADMINISTRATION FOR CHILDREN AND FAMILIES OFFICE OF FAMILY ASSISTANCE: RAPID CYCLE EVALUATION TRAINING AND TECHNICAL ASSISTANCE",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-1e03497d2a",
+    "source": "Recent Award",
+    "title": "EAGLE HILL CONSULTING, LLC award at Department of Health and Human Services",
+    "prime": "EAGLE HILL CONSULTING, LLC",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Food and Drug Administration",
+    "value": 1534757.86,
+    "awardId": "75F40123F19052",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R406",
+      "description": "SUPPORT- PROFESSIONAL: POLICY REVIEW/DEVELOPMENT"
+    },
+    "popStart": "2023-01-25",
+    "popEnd": "2025-04-01",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "OGD TALENT DEVELOPMENT PROGRAM",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-66931f49cc",
+    "source": "Recent Award",
+    "title": "SCOPE INFOTECH INC award at Department of Health and Human Services",
+    "prime": "SCOPE INFOTECH INC",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Centers for Medicare and Medicaid Services",
+    "value": 1308638.16,
+    "awardId": "75FCMC20F0002",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "D308",
+      "description": "IT AND TELECOM- PROGRAMMING"
+    },
+    "popStart": "2020-03-30",
+    "popEnd": "2025-03-29",
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "MIGRATE THE EXISTING ENTERPRISE CONTENT MANAGEMENT (ECM) SYSTEM FROM THE BALTIMORE DATA CENTER (BDC) TO THE CLOUD PLATFORM.",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-d233e7d4ca",
+    "source": "Recent Award",
+    "title": "DELOITTE CONSULTING LLP award at Department of Justice",
+    "prime": "DELOITTE CONSULTING LLP",
+    "agency": "Department of Justice",
+    "subAgency": "Offices, Boards and Divisions",
+    "value": 1033441.28,
+    "awardId": "15JPSS26F00001387",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2026-07-01",
+    "popEnd": "2027-06-30",
+    "posture": "Warm - route via channel",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "PROGRAM SUPPORT SERVICES - MANAGEMENT INFORMATION SYSTEM (MIS)",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "RA-a631c90897",
+    "source": "Recent Award",
+    "title": "COMMUNITY DEVELOPMENT INSTITUTE award at Department of Health and Human Services",
+    "prime": "COMMUNITY DEVELOPMENT INSTITUTE",
+    "agency": "Department of Health and Human Services",
+    "subAgency": "Office of the Assistant Secretary for Administration",
+    "value": 74557569.16,
+    "awardId": "HHSP233201700041C",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2017-09-22",
+    "popEnd": null,
+    "posture": "Cold outreach",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "",
+    "nextActionDate": "",
+    "notes": "IGF::OT::IGF OFFICE OF HEAD START NATIONAL INTERIM MANAGEMENT PROGRAM",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-4902d81e94",
+    "source": "Expiring Contract",
+    "title": "Recompete: SCIENCE APPLICATIONS INTERNATIONAL CORPORATION at Department of Defense (ends 2027-08-08)",
+    "prime": "SCIENCE APPLICATIONS INTERNATIONAL CORPORATION",
+    "agency": "Department of Defense",
+    "subAgency": "Department of the Air Force",
+    "value": 369407276.47,
+    "awardId": "FA873022F0071",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "DA01",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2022-03-24",
+    "popEnd": "2027-08-08",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "THE FALCONER SERVICE CONTRACT PROVIDES THE CONTINUED SUSTAINMENT AND SUPPORT OF THE 10.1 WEAPON SYSTEM AND THE APPLICATION TRANSFORMATION TO BLOCK 20 FOR THE AIR OPERATIONS CENTER WEAPON SYSTEM",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-fcec459695",
+    "source": "Expiring Contract",
+    "title": "Recompete: ADVANCIA AERONAUTICS, LLC at Department of Defense (ends 2027-08-16)",
+    "prime": "ADVANCIA AERONAUTICS, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Health Agency",
+    "value": 77275064.29,
+    "awardId": "HT942523C0077",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R703",
+      "description": "SUPPORT- MANAGEMENT: ACCOUNTING"
+    },
+    "popStart": "2023-08-17",
+    "popEnd": "2027-08-16",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "PROGRAMMING, PLANNING, BUDGET, AND EXECUTION (PPBE) - AND FINANCIAL IMPROVEMENT AUDIT READINESS (FIAR) SUPPORT SERVICES",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-c342ef555e",
+    "source": "Expiring Contract",
+    "title": "Recompete: OMNI FED LLC at Department of Defense (ends 2027-08-31)",
+    "prime": "OMNI FED LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Counterintelligence and Security Agency",
+    "value": 54930306.09,
+    "awardId": "HS002125FE047",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DD01",
+      "description": "IT AND TELECOM - SERVICE DELIVERY SUPPORT SERVICES: ITSM, OPERATIONS CENTER, PROJECT/PM (LABOR)"
+    },
+    "popStart": "2025-06-09",
+    "popEnd": "2027-08-31",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "TO PROVIDE A SECURE CLOUD LANDING ZONE AND DEVELOPMENT, SECURITY AND OPERATIONS (DEVSECOPS) CAPABILITIES TO SUPPORT THE MODERNIZATION OF THE NATIONAL BACKGROUND INVESTIGATION SERVICES (NBIS).",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-15185b7f7d",
+    "source": "Expiring Contract",
+    "title": "Recompete: CACI, INC. - FEDERAL at Department of Defense (ends 2027-08-26)",
+    "prime": "CACI, INC. - FEDERAL",
+    "agency": "Department of Defense",
+    "subAgency": "Department of the Army",
+    "value": 53707396.08,
+    "awardId": "W519TC23F0281",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "DF01",
+      "description": "IT AND TELECOM - IT MANAGEMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2023-07-25",
+    "popEnd": "2027-08-26",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "HQDA G-6 SUPPORT FOR NETWORK COMMAND, CONTROL, COMM, AND COMPUTERS (C4) SERVICES INTEGRATION (NC4SI) SERVICES TASKS TO IMPLEMENT ARMY REGULATION (AR) 25-1: ARMY INFO TECHNOLOGY AND ITS GOVERNING DEPT OF DEFENSE (DOD) DIRECTIVES AND INSTRUCTIONS.",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-4feb76b1c8",
+    "source": "Expiring Contract",
+    "title": "Recompete: LMI CONSULTING, LLC at Department of Defense (ends 2027-07-22)",
+    "prime": "LMI CONSULTING, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Washington Headquarters Services",
+    "value": 33960860.6,
+    "awardId": "HQ003425FE232",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2025-07-23",
+    "popEnd": "2027-07-22",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "RESEARCH AND BUSINESS PROCESS ANALYTICAL SUPPORT SERVICES TO THE OFFICE OF THE UNDERSECRETARY OF DEFENSE FOR ACQUISITION AND SUSTAINMENT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-2857d65ff9",
+    "source": "Expiring Contract",
+    "title": "Recompete: THREAT TEC, LLC at Department of Defense (ends 2027-08-12)",
+    "prime": "THREAT TEC, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "U.S. Special Operations Command",
+    "value": 21791410.96,
+    "awardId": "H9240022F0095",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R499",
+      "description": "SUPPORT- PROFESSIONAL: OTHER"
+    },
+    "popStart": "2022-08-13",
+    "popEnd": "2027-08-12",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "1ST SFC LREC INSTRUCTORS",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-7ccb141edb",
+    "source": "Expiring Contract",
+    "title": "Recompete: CONCEPT PLUS, LLC at Department of Defense (ends 2027-06-22)",
+    "prime": "CONCEPT PLUS, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Washington Headquarters Services",
+    "value": 19068473.3,
+    "awardId": "HQ003426FE338",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DA01",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2026-07-23",
+    "popEnd": "2027-06-22",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "PROVIDE A BROAD RANGE OF ENTERPRISE INFORMATION TECHNOLOGY SUPPORT SERVICES FOR THE ENTIRE WARFIGHTING ACQUISITION UNIVERSITY.",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-ae2f0c9d1d",
+    "source": "Expiring Contract",
+    "title": "Recompete: JOHNSON CONTROLS BUILDING AUTOMATION SYSTEMS, LLC at Department of Defense (ends 2027-07-31)",
+    "prime": "JOHNSON CONTROLS BUILDING AUTOMATION SYSTEMS, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Department of the Army",
+    "value": 18839330.78,
+    "awardId": "W912DY24F0231",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "N059",
+      "description": "INSTALLATION OF EQUIPMENT- ELECTRICAL AND ELECTRONIC EQUIPMENT COMPONENTS"
+    },
+    "popStart": "2024-08-01",
+    "popEnd": "2027-07-31",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "M&S CBC AT ABERDEEN PROVING GROUND, MD",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-894777e8ca",
+    "source": "Expiring Contract",
+    "title": "Recompete: DATA SYSTEMS ANALYSTS INC at Department of Defense (ends 2027-07-31)",
+    "prime": "DATA SYSTEMS ANALYSTS INC",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Information Systems Agency",
+    "value": 17661598.69,
+    "awardId": "HC104724F0034",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "DA01",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2024-06-14",
+    "popEnd": "2027-07-31",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "THIS CONTRACT ENSURES THE CONTINUOUS OPERATION OF CRITICAL COMMAND AND CONTROL MESSAGING SYSTEMS. IT INCLUDES SOFTWARE AND HARDWARE MAINTENANCE, DEVELOPMENT, SECURITY UPDATES, AND SUPPORT FOR COMMUNICATION ACROSS MILITARY BRANCHES, GOVERNMENT AGENCIES, AND ALLIES.",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-981b24ffc5",
+    "source": "Expiring Contract",
+    "title": "Recompete: WESTERN DOOR FEDERAL, LLC at Department of Defense (ends 2027-07-22)",
+    "prime": "WESTERN DOOR FEDERAL, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Health Agency",
+    "value": 14746826.76,
+    "awardId": "HT001124C0020",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541611",
+      "description": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+    },
+    "psc": {
+      "code": "R408",
+      "description": "SUPPORT- PROFESSIONAL: PROGRAM MANAGEMENT/SUPPORT"
+    },
+    "popStart": "2024-07-23",
+    "popEnd": "2027-07-22",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "DEPARTMENT OF DEFENSE HIV/AIDS PREVENTION PROGRAM PROJECT MANAGEMENT SUPPORT SERVICES",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-dc1409f682",
+    "source": "Expiring Contract",
+    "title": "Recompete: ENLIGHTEN IT CONSULTING LLC at Department of Defense (ends 2027-04-21)",
+    "prime": "ENLIGHTEN IT CONSULTING LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Department of the Air Force",
+    "value": 12761296.62,
+    "awardId": "FA830724FB068",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DA01",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2024-04-22",
+    "popEnd": "2027-04-21",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "UNIFIED PLATFORM DATA MANAGEMENT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-189eb42351",
+    "source": "Expiring Contract",
+    "title": "Recompete: TEKSYNAP CORPORATION at Department of Defense (ends 2027-07-31)",
+    "prime": "TEKSYNAP CORPORATION",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Threat Reduction Agency",
+    "value": 11618462.7,
+    "awardId": "HDTRA124F0001",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541513",
+      "description": "COMPUTER FACILITIES MANAGEMENT SERVICES"
+    },
+    "psc": {
+      "code": "DE01",
+      "description": "IT and Telecom - End User: Help Desk; Tier 1-2, Workspace, Print, Output, Productivity Tools (Labor)"
+    },
+    "popStart": "2024-08-01",
+    "popEnd": "2027-07-31",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "IT SERVICE SUPPORT",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-9d4bc4b110",
+    "source": "Expiring Contract",
+    "title": "Recompete: CREDENCE MANAGEMENT SOLUTIONS LIMITED LIABILITY COMPANY at Department of Defense (ends 2027-09-24)",
+    "prime": "CREDENCE MANAGEMENT SOLUTIONS LIMITED LIABILITY COMPANY",
+    "agency": "Department of Defense",
+    "subAgency": "Defense Logistics Agency",
+    "value": 11364624.0,
+    "awardId": "SP470125C0100",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541511",
+      "description": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+    },
+    "psc": {
+      "code": "DA01",
+      "description": "IT AND TELECOM - BUSINESS APPLICATION/APPLICATION DEVELOPMENT SUPPORT SERVICES (LABOR)"
+    },
+    "popStart": "2025-09-25",
+    "popEnd": "2027-09-24",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "PROCUREMENT INTEGRATED ENTERPRISE ENVIRONMENT ARTIFICIAL INTELLIGENCE MACHINE LEARNING TRANSFORMATION",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  },
+  {
+    "id": "EX-95be65526c",
+    "source": "Expiring Contract",
+    "title": "Recompete: BOWHEAD TOTAL ENTERPRISE SOLUTIONS, LLC at Department of Defense (ends 2027-06-30)",
+    "prime": "BOWHEAD TOTAL ENTERPRISE SOLUTIONS, LLC",
+    "agency": "Department of Defense",
+    "subAgency": "Department of the Navy",
+    "value": 11014239.89,
+    "awardId": "N0042124C0055",
+    "solicitationNumber": "",
+    "naics": {
+      "code": "541512",
+      "description": "COMPUTER SYSTEMS DESIGN SERVICES"
+    },
+    "psc": {
+      "code": "R708",
+      "description": "SUPPORT- MANAGEMENT: PUBLIC RELATIONS"
+    },
+    "popStart": "2024-07-01",
+    "popEnd": "2027-06-30",
+    "posture": "Position",
+    "tier": "",
+    "lane": "",
+    "gates": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "status": "Tracking",
+    "owner": "",
+    "nextAction": "Confirm shaping window and request current contract via FOIA",
+    "nextActionDate": "",
+    "notes": "BASE YEAR-LABOR",
+    "dateAdded": "2026-10-19",
+    "lastTouched": "2026-10-19"
+  }
+]
